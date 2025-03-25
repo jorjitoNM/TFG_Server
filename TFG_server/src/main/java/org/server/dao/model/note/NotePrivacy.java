@@ -1,4 +1,4 @@
-package org.server.domain.model.note;
+package org.server.dao.model.note;
 
 public enum NotePrivacy {
     PUBLIC,FOLLOWERS,PRIVATE
