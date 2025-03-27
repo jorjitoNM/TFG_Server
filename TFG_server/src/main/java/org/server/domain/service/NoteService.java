@@ -3,6 +3,7 @@ package org.server.domain.service;
 import org.server.dao.model.note.Event;
 import org.server.dao.model.note.Note;
 import org.server.dao.repositories.NoteRepository;
+import org.server.ui.model.EventNoteDTO;
 import org.server.ui.model.NoteDTO;
 import org.springframework.stereotype.Service;
 
@@ -85,7 +86,16 @@ public class NoteService {
             return null;
         }
 
-        NoteDTO dto = new NoteDTO();
+        NoteDTO dto;
+        if (note instanceof Event event) {
+            EventNoteDTO eventDto = new EventNoteDTO();
+            eventDto.setStart(event.getStart());
+            eventDto.setEnd(event.getEnd());
+            dto = eventDto;
+        } else {
+            dto = new NoteDTO();
+        }
+
         dto.setId(note.getId());
         dto.setTitle(note.getTitle());
         dto.setContent(note.getContent());
@@ -98,14 +108,8 @@ public class NoteService {
         dto.setLongitude(note.getLongitude());
         dto.setType(note.getType());
 
-        if (note instanceof Event event) {
-            dto.setStart(event.getStart());
-            dto.setEnd(event.getEnd());
-        }
-
         return dto;
     }
-
     private List<NoteDTO> toDTOList(List<Note> notes) {
         return notes.stream()
                 .map(this::toDTO)
