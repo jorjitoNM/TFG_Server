@@ -1,4 +1,8 @@
 package org.server.domain.service;
+import org.server.domain.errors.NoteNotAccessException;
+import org.server.domain.errors.NoteNotBelongUserException;
+import org.server.domain.errors.NoteNotFoundException;
+import org.server.domain.errors.RatingOutOfBoundsException;
 import org.server.dao.repositories.NoteRepository;
 import org.springframework.stereotype.Service;
 import org.server.dao.model.note.Event;
@@ -36,11 +40,11 @@ public class NoteService {
 
     public Note updateNote(int noteId, Note updatedNote, String username) {
         Note existingNote = noteRepository.findById(noteId)
-                .orElseThrow(() -> new RuntimeException("Note not found with id: " + noteId));
+                .orElseThrow(() -> new NoteNotFoundException("Note not found with id: " + noteId));
 
 
         if (!existingNote.getOwner().getUsername().equals(username)) {
-            throw new RuntimeException("You don't have permission to edit this note");
+            throw new NoteNotBelongUserException("You don't have permission to edit this note");
         }
         existingNote.setTitle(updatedNote.getTitle());
         existingNote.setContent(updatedNote.getContent());
@@ -55,12 +59,12 @@ public class NoteService {
     public Note rateNote(int noteId, int rating, String username) {
 
         if (rating < 0 || rating > 10) {
-            throw new IllegalArgumentException("Rating must be between 0 and 10");
+            throw new RatingOutOfBoundsException("Rating must be between 0 and 10");
         }
 
 
         Note note = noteRepository.findByIdAndOwnerUsername(noteId, username)
-                .orElseThrow(() -> new RuntimeException("Note not found or you don't have permission to rate it"));
+                .orElseThrow(() -> new NoteNotAccessException("Note not found or you don't have permission to rate it"));
 
 
         note.setRating(rating);
