@@ -14,6 +14,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NotasController {
 
+
+
     private final NoteService noteService;
 
     @GetMapping("/area")
