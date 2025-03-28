@@ -13,6 +13,9 @@ public class ExceptionHandlers {
         return buildResponseEntity(new ApiError(message), HttpStatus.FORBIDDEN);
     }
 
+
+
+
     @ExceptionHandler(NoteNotAccessException.class)
     public ResponseEntity<ApiError> handleNoteNotAccessException(NoteNotAccessException ex) {
         String message = ex.getMessage();
