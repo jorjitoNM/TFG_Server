@@ -1,9 +1,7 @@
 package org.server.domain.service;
+import org.server.dao.model.user.User;
 import org.server.dao.repositories.UserRepository;
-import org.server.domain.errors.NoteNotAccessException;
-import org.server.domain.errors.NoteNotBelongUserException;
-import org.server.domain.errors.NoteNotFoundException;
-import org.server.domain.errors.RatingOutOfBoundsException;
+import org.server.domain.errors.*;
 import org.server.dao.repositories.NoteRepository;
 import org.springframework.stereotype.Service;
 import org.server.dao.model.note.Event;
@@ -12,6 +10,7 @@ import org.server.dao.model.note.Note;
 import org.server.ui.model.EventNoteDTO;
 import org.server.ui.model.NoteDTO;
 
+import java.time.LocalDateTime;
 import java.util.List;
 @Service
 public class NoteService {
@@ -114,7 +113,13 @@ public class NoteService {
     }
 
     public Note addNote(Note note, String username) {
-        note.setOwner(userRepository.findByUsername(username));
-        return noteRepository.save(note);
+        User user = userRepository.findByUsername(username);
+        if(user == null){
+            throw new NoValidUserException("This user is not valid");
+        }else{
+            note.setOwner(user);
+            note.setCreated(LocalDateTime.now());
+            return noteRepository.save(note);
+        }
     }
 }
