@@ -1,4 +1,5 @@
 package org.server.domain.service;
+import org.server.dao.repositories.UserRepository;
 import org.server.domain.errors.NoteNotAccessException;
 import org.server.domain.errors.NoteNotBelongUserException;
 import org.server.domain.errors.NoteNotFoundException;
@@ -15,10 +16,13 @@ import java.util.List;
 @Service
 public class NoteService {
     private final NoteRepository noteRepository;
+    private final UserRepository userRepository;
 
-    public NoteService(NoteRepository noteRepository) {
+    public NoteService(NoteRepository noteRepository, UserRepository userRepository) {
         this.noteRepository = noteRepository;
+        this.userRepository = userRepository;
     }
+
 
     public List<NoteDTO> findNotesByGeographicArea(double latitude, double longitude, double radiusKm) {
         //lo saque de v0
@@ -109,4 +113,8 @@ public class NoteService {
                 .toList();
     }
 
+    public Note addNote(Note note, String username) {
+        note.setOwner(userRepository.findByUsername(username));
+        return noteRepository.save(note);
+    }
 }

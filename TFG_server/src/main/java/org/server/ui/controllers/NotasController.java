@@ -2,6 +2,7 @@ package org.server.ui.controllers;
 
 
 import lombok.RequiredArgsConstructor;
+import org.server.common.Constantes;
 import org.server.dao.model.note.Note;
 import org.server.domain.service.NoteService;
 import org.server.ui.model.NoteDTO;
@@ -36,7 +37,7 @@ public class NotasController {
     public ResponseEntity<Note> updateNote(
             @PathVariable int id,
             @RequestBody Note note,
-            @RequestHeader("X-Username") String username
+            @RequestHeader(Constantes.X_USERNAME) String username
     ) {
         Note updatedNote = noteService.updateNote(id, note, username);
         return ResponseEntity.ok(updatedNote);
@@ -46,9 +47,19 @@ public class NotasController {
     public ResponseEntity<Note> rateNote(
             @PathVariable int id,
             @RequestParam int rating,
-            @RequestHeader("X-Username") String username
+            @RequestHeader(Constantes.X_USERNAME) String username
     ) {
         Note ratedNote = noteService.rateNote(id, rating, username);
         return ResponseEntity.ok(ratedNote);
     }
+
+    @PostMapping("/addNota")
+    public ResponseEntity<Note> addNote(
+            @RequestBody Note note,
+            @RequestHeader(Constantes.X_USERNAME) String username
+    ) {
+        Note createdNote = noteService.addNote(note, username);
+        return ResponseEntity.status(201).body(createdNote);
+    }
+
 }
