@@ -73,6 +73,10 @@ public class NoteService {
         return noteRepository.save(note);
     }
 
+    public List<Note> getAllNotes(){
+        return noteRepository.findAll();
+    }
+
 
     private NoteDTO toDTO(Note note) {
         if (note == null) {

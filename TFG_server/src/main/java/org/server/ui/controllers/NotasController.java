@@ -16,6 +16,11 @@ public class NotasController {
 
     private final NoteService noteService;
 
+    @GetMapping
+    public ResponseEntity<List<Note>> getNotes() {
+        return ResponseEntity.ok(noteService.getAllNotes());
+    }
+
     @GetMapping("/area")
     public ResponseEntity<List<NoteDTO>> getNotesByGeographicArea(
             @RequestParam double latitude,
