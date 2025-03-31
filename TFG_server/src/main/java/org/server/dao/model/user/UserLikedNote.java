@@ -10,7 +10,7 @@ import org.server.dao.model.note.Note;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "user_liked_notes")
+@Table(name = "user_likes_notes")
 public class UserLikedNote {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,4 +23,9 @@ public class UserLikedNote {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "note_id", nullable = false)
     private Note note;
+
+    public UserLikedNote(User user, Note note) {
+        this.user = user;
+        this.note = note;
+    }
 }
