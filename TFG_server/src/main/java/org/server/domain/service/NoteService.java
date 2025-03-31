@@ -1,4 +1,5 @@
 package org.server.domain.service;
+import org.server.dao.model.note.NoteType;
 import org.server.dao.model.user.User;
 import org.server.dao.repositories.UserRepository;
 import org.server.domain.errors.*;
@@ -117,9 +118,28 @@ public class NoteService {
         if(user == null){
             throw new NoValidUserException("This user is not valid");
         }else{
-            note.setOwner(user);
-            note.setCreated(LocalDateTime.now());
-            return noteRepository.save(note);
+            if(checkNote(note)){
+                note.setOwner(user);
+                note.setCreated(LocalDateTime.now());
+                return noteRepository.save(note);
+            }else{
+                throw new InvalidNoteTypeException("Invalid note type");
+            }
+
         }
     }
+
+
+    public boolean checkNote(Note note) {
+        if (note == null || note.getType() == null || note.getTitle().isEmpty()) {
+            return false;
+        }
+        try {
+            NoteType.valueOf(String.valueOf(note.getType()));
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
+
 }

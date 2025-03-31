@@ -59,7 +59,7 @@ public class NotasController {
             @RequestHeader(Constantes.X_USERNAME) String username
     ) {
         Note createdNote = noteService.addNote(note, username);
-        return ResponseEntity.status(201).body(createdNote);
+        return ResponseEntity.ok(createdNote);
     }
 
 }
