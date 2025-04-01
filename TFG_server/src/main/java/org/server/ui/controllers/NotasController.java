@@ -17,18 +17,23 @@ public class NotasController {
     private final NoteService noteService;
 
     @GetMapping
-    public ResponseEntity<List<Note>> getNotes() {
+    public ResponseEntity<List<NoteDTO>> getNotes() {
         return ResponseEntity.ok(noteService.getAllNotes());
     }
 
+    @GetMapping("/{noteId}")
+    public ResponseEntity<NoteDTO> getNote(@PathVariable int noteId) {
+        return ResponseEntity.ok(noteService.getNoteById(noteId));
+    }
+
     @GetMapping("/area")
-    public ResponseEntity<List<NoteDTO>> getNotesByGeographicArea(
+    public ResponseEntity<List<Note>> getNotesByGeographicArea(
             @RequestParam double latitude,
             @RequestParam double longitude,
             @RequestParam(defaultValue = "5.0") double radiusKm
     ) {
 
-        List<NoteDTO> notes = noteService.findNotesByGeographicArea(latitude, longitude, radiusKm);
+        List<Note> notes = noteService.findNotesByGeographicArea(latitude, longitude, radiusKm);
 
         if (notes.isEmpty()) {
             return ResponseEntity.noContent().build();
@@ -37,15 +42,16 @@ public class NotasController {
         return ResponseEntity.ok(notes);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping
     public ResponseEntity<Note> updateNote(
-            @PathVariable int id,
             @RequestBody Note note,
             @RequestHeader("X-Username") String username
     ) {
-        Note updatedNote = noteService.updateNote(id, note, username);
+        Note updatedNote = noteService.updateNote(note, username);
         return ResponseEntity.ok(updatedNote);
     }
+
+
 
     @PatchMapping("/{id}/rate")
     public ResponseEntity<Note> rateNote(

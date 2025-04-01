@@ -1,17 +1,19 @@
 package org.server.domain.service;
+import org.server.dao.model.note.Event;
 import org.server.domain.errors.NoteNotAccessException;
 import org.server.domain.errors.NoteNotBelongUserException;
 import org.server.domain.errors.NoteNotFoundException;
 import org.server.domain.errors.RatingOutOfBoundsException;
 import org.server.dao.repositories.NoteRepository;
-import org.springframework.stereotype.Service;
-import org.server.dao.model.note.Event;
-import org.server.dao.model.note.Note;
-
 import org.server.ui.model.EventNoteDTO;
 import org.server.ui.model.NoteDTO;
+import org.springframework.stereotype.Service;
+import org.server.dao.model.note.Note;
+
+
 
 import java.util.List;
+
 @Service
 public class NoteService {
     private final NoteRepository noteRepository;
@@ -20,7 +22,7 @@ public class NoteService {
         this.noteRepository = noteRepository;
     }
 
-    public List<NoteDTO> findNotesByGeographicArea(double latitude, double longitude, double radiusKm) {
+    public List<Note> findNotesByGeographicArea(double latitude, double longitude, double radiusKm) {
         //lo saque de v0
         // Convert radius from km to degrees (approximate)
         // 1 degree of latitude = ~111 km
@@ -33,14 +35,13 @@ public class NoteService {
         double minLng = longitude - lngDelta;
         double maxLng = longitude + lngDelta;
 
-        List<Note> notes = noteRepository.findNotesByGeographicArea(minLat, maxLat, minLng, maxLng);
-        return toDTOList(notes);
+        return noteRepository.findNotesByGeographicArea(minLat, maxLat, minLng, maxLng);
     }
 
 
-    public Note updateNote(int noteId, Note updatedNote, String username) {
-        Note existingNote = noteRepository.findById(noteId)
-                .orElseThrow(() -> new NoteNotFoundException("Note not found with id: " + noteId));
+    public Note updateNote(Note updatedNote, String username) {
+        Note existingNote = noteRepository.findById(updatedNote.getId())
+                .orElseThrow(() -> new NoteNotFoundException("Note not found with id: " + updatedNote.getId()));
 
 
         if (!existingNote.getOwner().getUsername().equals(username)) {
@@ -73,8 +74,13 @@ public class NoteService {
         return noteRepository.save(note);
     }
 
-    public List<Note> getAllNotes(){
-        return noteRepository.findAll();
+    public List<NoteDTO> getAllNotes(){
+        return noteRepository.findAll().stream().map(this::toDTO).toList();
+    }
+
+    public NoteDTO getNoteById(int noteId) {
+        Note n = noteRepository.findById(noteId).orElseThrow(() -> new NoteNotFoundException("Note not found with id: " + noteId));
+        return toDTO(n);
     }
 
 
@@ -112,5 +118,8 @@ public class NoteService {
                 .map(this::toDTO)
                 .toList();
     }
+
+
+
 
 }

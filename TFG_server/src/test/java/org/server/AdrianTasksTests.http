@@ -15,11 +15,12 @@ GET http://localhost:8080/api/notes/area?latitude=42.0&longitude=-4.0&radiusKm=5
 Accept: application/json
 
 ### Actualizar nota
-PUT http://localhost:8080/api/notes/292
+PUT http://localhost:8080/api/notes/
 Content-Type: application/json
 X-Username: user1
 
 {
+  "id": 548,
   "title": "Updated Note Title",
   "content": "This is the updated content of my note.",
   "privacy": "PRIVATE",
@@ -28,6 +29,14 @@ X-Username: user1
 }
 
 ### Calificar nota
-PATCH http://localhost:8080/api/notes/299/rate?rating=8
+PATCH http://localhost:8080/api/notes/550/rate?rating=8
 Content-Type: application/json
 X-Username: user2
+
+### Obtener notas
+GET http://localhost:8080/api/notes
+Content-Type: application/json
+
+### Obtener notas por id
+GET http://localhost:8080/api/notes/640
+Content-Type: application/json
