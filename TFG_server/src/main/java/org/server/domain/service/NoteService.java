@@ -1,8 +1,8 @@
 package org.server.domain.service;
-import org.server.domain.errors.NoteNotAccessException;
-import org.server.domain.errors.NoteNotBelongUserException;
-import org.server.domain.errors.NoteNotFoundException;
-import org.server.domain.errors.RatingOutOfBoundsException;
+import org.server.dao.model.note.NoteType;
+import org.server.dao.model.user.User;
+import org.server.dao.repositories.UserRepository;
+import org.server.domain.errors.*;
 import org.server.dao.repositories.NoteRepository;
 import org.springframework.stereotype.Service;
 import org.server.dao.model.note.Event;
@@ -11,14 +11,18 @@ import org.server.dao.model.note.Note;
 import org.server.ui.model.EventNoteDTO;
 import org.server.ui.model.NoteDTO;
 
+import java.time.LocalDateTime;
 import java.util.List;
 @Service
 public class NoteService {
     private final NoteRepository noteRepository;
+    private final UserRepository userRepository;
 
-    public NoteService(NoteRepository noteRepository) {
+    public NoteService(NoteRepository noteRepository, UserRepository userRepository) {
         this.noteRepository = noteRepository;
+        this.userRepository = userRepository;
     }
+
 
     public List<NoteDTO> findNotesByGeographicArea(double latitude, double longitude, double radiusKm) {
         //lo saque de v0
@@ -108,4 +112,34 @@ public class NoteService {
                 .map(this::toDTO)
                 .toList();
     }
+
+    public Note addNote(Note note, String username) {
+        User user = userRepository.findByUsername(username);
+        if(user == null){
+            throw new NoValidUserException("This user is not valid");
+        }else{
+            if(checkNote(note)){
+                note.setOwner(user);
+                note.setCreated(LocalDateTime.now());
+                return noteRepository.save(note);
+            }else{
+                throw new InvalidNoteTypeException("Invalid note type");
+            }
+
+        }
+    }
+
+
+    public boolean checkNote(Note note) {
+        if (note == null || note.getType() == null || note.getTitle().isEmpty()) {
+            return false;
+        }
+        try {
+            NoteType.valueOf(String.valueOf(note.getType()));
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
+
 }

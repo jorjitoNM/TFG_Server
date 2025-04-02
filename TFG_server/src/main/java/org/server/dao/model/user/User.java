@@ -53,4 +53,8 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "following_id")
     )
     private List<User> following;
+
+    public void addNote(Note note) {
+        notes.add(note);
+    }
 }
