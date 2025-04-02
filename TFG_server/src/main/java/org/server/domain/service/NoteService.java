@@ -142,4 +142,7 @@ public class NoteService {
         }
     }
 
+    public List<Note> findNotesByType(NoteType type) {
+        return noteRepository.findByType(type);
+    }
 }

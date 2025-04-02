@@ -1,6 +1,7 @@
 package org.server.dao.repositories;
 
 import org.server.dao.model.note.Note;
+import org.server.dao.model.note.NoteType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.Query;
@@ -20,4 +21,8 @@ public interface NoteRepository extends JpaRepository<Note, Integer> {
 
     @Query("SELECT n FROM Note n WHERE n.id = :noteId AND n.owner.username = :username")
     Optional<Note> findByIdAndOwnerUsername(@Param("noteId") int noteId, @Param("username") String username);
+
+    @Query("SELECT n FROM Note n WHERE n.type = :note_type")
+    List<Note> findByType(@Param("note_type") NoteType noteType);
+
 }

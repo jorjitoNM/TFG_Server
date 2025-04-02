@@ -4,6 +4,7 @@ package org.server.ui.controllers;
 import lombok.RequiredArgsConstructor;
 import org.server.common.Constantes;
 import org.server.dao.model.note.Note;
+import org.server.dao.model.note.NoteType;
 import org.server.domain.service.NoteService;
 import org.server.ui.model.NoteDTO;
 import org.springframework.http.ResponseEntity;
@@ -62,6 +63,17 @@ public class NotasController {
     ) {
         Note createdNote = noteService.addNote(note, username);
         return ResponseEntity.ok(createdNote);
+    }
+
+    @GetMapping("/type")
+    public ResponseEntity<List<Note>> getNotesByType(@RequestParam NoteType type) {
+        List<Note> notes = noteService.findNotesByType(type);
+
+        if (notes.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(notes);
     }
 
 }
