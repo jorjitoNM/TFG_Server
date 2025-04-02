@@ -22,7 +22,7 @@ public class NoteService {
         this.noteRepository = noteRepository;
     }
 
-    public List<Note> findNotesByGeographicArea(double latitude, double longitude, double radiusKm) {
+    public List<NoteDTO> findNotesByGeographicArea(double latitude, double longitude, double radiusKm) {
         //lo saque de v0
         // Convert radius from km to degrees (approximate)
         // 1 degree of latitude = ~111 km
@@ -35,7 +35,7 @@ public class NoteService {
         double minLng = longitude - lngDelta;
         double maxLng = longitude + lngDelta;
 
-        return noteRepository.findNotesByGeographicArea(minLat, maxLat, minLng, maxLng);
+        return noteRepository.findNotesByGeographicArea(minLat, maxLat, minLng, maxLng).stream().map(this::toDTO).toList();
     }
 
 
@@ -52,7 +52,6 @@ public class NoteService {
         existingNote.setPrivacy(updatedNote.getPrivacy());
         existingNote.setLatitude(updatedNote.getLatitude());
         existingNote.setLongitude(updatedNote.getLongitude());
-
 
         return noteRepository.save(existingNote);
     }

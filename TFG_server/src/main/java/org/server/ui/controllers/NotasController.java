@@ -27,13 +27,13 @@ public class NotasController {
     }
 
     @GetMapping("/area")
-    public ResponseEntity<List<Note>> getNotesByGeographicArea(
+    public ResponseEntity<List<NoteDTO>> getNotesByGeographicArea(
             @RequestParam double latitude,
             @RequestParam double longitude,
             @RequestParam(defaultValue = "5.0") double radiusKm
     ) {
 
-        List<Note> notes = noteService.findNotesByGeographicArea(latitude, longitude, radiusKm);
+        List<NoteDTO> notes = noteService.findNotesByGeographicArea(latitude, longitude, radiusKm);
 
         if (notes.isEmpty()) {
             return ResponseEntity.noContent().build();
