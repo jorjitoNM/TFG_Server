@@ -1,5 +1,7 @@
 package org.server.dao.model.note;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,6 +17,11 @@ import java.time.LocalDateTime;
 @Table(name = "notes")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "note_type", discriminatorType = DiscriminatorType.STRING)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", visible = true)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Event.class, name = "EVENT")
+        // Add other note types here if you have them
+})
 public class Note {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -115,17 +115,22 @@ public class NoteService {
 
     public Note addNote(Note note, String username) {
         User user = userRepository.findByUsername(username);
-        if(user == null){
+        if (user == null) {
             throw new NoValidUserException("This user is not valid");
-        }else{
-            if(checkNote(note)){
+        } else {
+            if (checkNote(note)) {
                 note.setOwner(user);
                 note.setCreated(LocalDateTime.now());
+
+                // If it's an EVENT type but not an Event instance, we need to convert it
+                if (note.getType() == NoteType.EVENT && !(note instanceof Event)) {
+                    throw new InvalidNoteTypeException("For EVENT type, you must provide start and end dates");
+                }
+
                 return noteRepository.save(note);
-            }else{
+            } else {
                 throw new InvalidNoteTypeException("Invalid note type");
             }
-
         }
     }
 
@@ -134,8 +139,20 @@ public class NoteService {
         if (note == null || note.getType() == null || note.getTitle().isEmpty()) {
             return false;
         }
+
         try {
-            NoteType.valueOf(String.valueOf(note.getType()));
+            NoteType noteType = NoteType.valueOf(String.valueOf(note.getType()));
+
+            // Additional validation for EVENT type
+            if (noteType == NoteType.EVENT) {
+                if (note instanceof Event event) {
+                    return event.getStart() != null && event.getEnd() != null;
+                } else {
+                    // If it's an EVENT type but not an Event instance, it's invalid
+                    return false;
+                }
+            }
+
             return true;
         } catch (IllegalArgumentException e) {
             return false;
