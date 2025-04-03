@@ -4,14 +4,12 @@ Content-Type: application/json
 X-Username: user1
 
 {
-  "title": "Nota de prueba",
-  "type": "EVENT",
+  "title": "Nota aaaaa prueba",
+  "type": "CLASSIC",
   "content": "Contenido de la nota de prueba",
   "privacy": "PUBLIC",
   "latitude": 40.416775,
-  "longitude": -3.703790,
-  "start": "2023-06-01T10:00:00",
-  "end": "2023-06-01T12:00:00"
+  "longitude": -3.703790
 }
 
 ###

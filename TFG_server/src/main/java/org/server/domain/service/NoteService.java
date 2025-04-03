@@ -121,12 +121,6 @@ public class NoteService {
             if (checkNote(note)) {
                 note.setOwner(user);
                 note.setCreated(LocalDateTime.now());
-
-                // If it's an EVENT type but not an Event instance, we need to convert it
-                if (note.getType() == NoteType.EVENT && !(note instanceof Event)) {
-                    throw new InvalidNoteTypeException("For EVENT type, you must provide start and end dates");
-                }
-
                 return noteRepository.save(note);
             } else {
                 throw new InvalidNoteTypeException("Invalid note type");
@@ -136,27 +130,7 @@ public class NoteService {
 
 
     public boolean checkNote(Note note) {
-        if (note == null || note.getType() == null || note.getTitle().isEmpty()) {
-            return false;
-        }
-
-        try {
-            NoteType noteType = NoteType.valueOf(String.valueOf(note.getType()));
-
-            // Additional validation for EVENT type
-            if (noteType == NoteType.EVENT) {
-                if (note instanceof Event event) {
-                    return event.getStart() != null && event.getEnd() != null;
-                } else {
-                    // If it's an EVENT type but not an Event instance, it's invalid
-                    return false;
-                }
-            }
-
-            return true;
-        } catch (IllegalArgumentException e) {
-            return false;
-        }
+        return note != null && note.getType() != null && !note.getTitle().isEmpty();
     }
 
 }
