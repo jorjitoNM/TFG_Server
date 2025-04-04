@@ -1,5 +1,6 @@
 package org.server.domain.service;
 import org.server.dao.model.note.Event;
+import org.server.dao.model.note.NoteType;
 import org.server.domain.errors.NoteNotAccessException;
 import org.server.domain.errors.NoteNotBelongUserException;
 import org.server.domain.errors.NoteNotFoundException;
@@ -87,12 +88,12 @@ public class NoteService {
         if (note == null) {
             return null;
         }
-
         NoteDTO dto;
-        if (note instanceof Event event) {
+
+        if (note.getType() == NoteType.EVENT && note instanceof Event event) {
             EventNoteDTO eventDto = new EventNoteDTO();
-            eventDto.setStart(event.getStart());
-            eventDto.setEnd(event.getEnd());
+            eventDto.setStart(event.getStart().toString()); // Convertir a String
+            eventDto.setEnd(event.getEnd().toString());     // Convertir a String
             dto = eventDto;
         } else {
             dto = new NoteDTO();

@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "notes")
+@DiscriminatorValue("CLASSIC")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "note_type", discriminatorType = DiscriminatorType.STRING)
 public class Note {
@@ -52,4 +53,10 @@ public class Note {
     @Enumerated(EnumType.STRING)
     @Column(name = "note_type", insertable = false, updatable = false)
     private NoteType type;
+
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+        owner.addNote(this);
+    }
 }
