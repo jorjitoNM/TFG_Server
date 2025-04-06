@@ -141,4 +141,8 @@ public class NoteService {
         }
     }
 
+    public List<Note> sortNoteList(boolean ascending) {
+        return ascending ? noteRepository.findAllByOrderByLikesAsc() : noteRepository.findAllByOrderByLikesDesc();
+    }
+
 }
