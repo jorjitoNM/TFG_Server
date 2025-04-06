@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.server.common.Constantes;
 import org.server.dao.model.note.Note;
 import org.server.domain.service.NoteService;
+import org.server.domain.service.UserService;
 import org.server.ui.model.NoteDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
