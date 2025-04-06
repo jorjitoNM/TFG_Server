@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @Table(name = "notes")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "note_type", discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorValue("CLASSIC")
 public class Note {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

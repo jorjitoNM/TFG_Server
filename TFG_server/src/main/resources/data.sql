@@ -51,8 +51,8 @@ VALUES ('Plaza de España', 'Landmark square with beautiful architecture', 'PUBL
 INSERT INTO notes (title, content, privacy, rating, owner_id, likes, created, latitude, longitude, note_type, start, end)
 VALUES ('Summer Concert', 'Live music event at the park', 'PUBLIC', 4, 'user1', 9, '2023-01-10 20:00:00', 40.419946, -3.699437, 'EVENT', '2023-07-15 19:00:00', '2023-07-15 23:00:00');
 
--- Add start and end times for the event note (assuming the discriminator value is set correctly)
-UPDATE notes SET start = '2023-07-15 19:00:00', end = '2023-07-15 23:00:00' WHERE title = 'Summer Concert';
+INSERT INTO notes (title, content, privacy, rating, owner_id, likes, created, latitude, longitude, note_type)
+VALUES ('Summer Concert', 'Live music event at the park', 'PUBLIC', 4, 'user1', 9, '2023-01-10 20:00:00', 40.419946, -3.699437, 'CULTURAL');
 
 -- NSERT INTO  user_saved_notes(id, note_id, user_id)
 -- values (1,103,'user1')
