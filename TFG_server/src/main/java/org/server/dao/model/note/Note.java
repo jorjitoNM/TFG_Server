@@ -1,5 +1,6 @@
 package org.server.dao.model.note;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,8 +34,9 @@ public class Note {
     @Column
     private int rating;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "owner_id", nullable = false)
+    @JsonIgnoreProperties("notes")
     private User owner;
 
     @Column
