@@ -1,6 +1,6 @@
 package org.server.ui.controllers;
 
-
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.server.common.Constantes;
 import org.server.dao.model.note.Note;
@@ -11,13 +11,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/notes")
+@RequestMapping("/notes")
 @RequiredArgsConstructor
 public class NotasController {
 
 
 
     private final NoteService noteService;
+    private final UserService userService;
 
     @GetMapping("/area")
     public ResponseEntity<List<NoteDTO>> getNotesByGeographicArea(
@@ -34,7 +35,12 @@ public class NotasController {
 
         return ResponseEntity.ok(notes);
     }
-
+    @GetMapping("/sorted")
+    public ResponseEntity<List<Note>> getNotesSortedByLikes(
+            @RequestParam boolean ascending) {
+        List<Note> sortedNotes = noteService.sortNoteList(ascending);
+        return ResponseEntity.status(HttpServletResponse.SC_OK).body(sortedNotes);
+    }
     @PutMapping("/{id}")
     public ResponseEntity<Note> updateNote(
             @PathVariable int id,
@@ -45,6 +51,12 @@ public class NotasController {
         return ResponseEntity.ok(updatedNote);
     }
 
+    @GetMapping("/saveds")
+    public ResponseEntity<List<Note>> getSavedNotes(
+            @RequestParam String username) {
+        List<Note> savedNotes = userService.getSavedNotesForUser(username);
+        return ResponseEntity.status(HttpServletResponse.SC_OK).body(savedNotes);
+    }
     @PatchMapping("/{id}/rate")
     public ResponseEntity<Note> rateNote(
             @PathVariable int id,
@@ -53,6 +65,13 @@ public class NotasController {
     ) {
         Note ratedNote = noteService.rateNote(id, rating, username);
         return ResponseEntity.ok(ratedNote);
+    }
+
+    @PostMapping("/saveds")
+    public ResponseEntity<Boolean> addNoteToSaved(
+            @RequestParam String username,
+            @RequestParam int noteId) {
+        return ResponseEntity.status(HttpServletResponse.SC_CREATED).body(userService.addNoteToSaved(username, noteId));
     }
 
     @PostMapping("/addNota")

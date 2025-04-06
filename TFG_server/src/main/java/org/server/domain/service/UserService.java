@@ -27,7 +27,7 @@ public class UserService {
                 .toList();
     }
 
-    public boolean addNoteToSaved(String username, Long noteId) {
+    public boolean addNoteToSaved(String username, int noteId) {
         boolean alreadyExists = userSavedRepository.findByUserUsername(username).stream()
                 .anyMatch(savedNote -> savedNote.getNote().getId() == (noteId));
 
