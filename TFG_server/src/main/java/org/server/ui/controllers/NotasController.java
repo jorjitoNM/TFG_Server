@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/notes")
+@RequestMapping("/notes")
 @RequiredArgsConstructor
 public class NotasController {
 
@@ -35,7 +35,7 @@ public class NotasController {
     @PostMapping("/saveds")
     public ResponseEntity<Boolean> addNoteToSaved(
             @RequestParam String username,
-            @RequestParam Long noteId) {
+            @RequestParam int noteId) {
         return ResponseEntity.status(HttpServletResponse.SC_CREATED).body(userService.addNoteToSaved(username, noteId));
     }
 }
