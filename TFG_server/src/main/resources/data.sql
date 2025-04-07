@@ -12,10 +12,7 @@ VALUES ('user2', 'user2', 'user2@example.com', 1234, 'FREE');
 
 -- Madrid, Spain (Center)
 INSERT INTO notes (title, content, privacy, rating, owner_id, likes, created, latitude, longitude, note_type, start, end)
-VALUES ('Puerta del Sol', 'Historic square in the heart of Madrid', 'PUBLIC', 5, 'user1', 10, '2023-01-01 12:00:00', 40.416775, -3.703790, 'EVENT', '2023-01-01 12:00:00', '2023-01-01 12:00:00');
-
-INSERT INTO notes (title, content, privacy, rating, owner_id, likes, created, latitude, longitude, note_type, start, end)
-VALUES ('Plaza', 'Landmark square with beautiful architecture', 'PUBLIC', 4, 'user2', 14, '2023-01-09 15:30:00', 37.377102, -5.986400, 'CLASSIC', null, null);
+VALUES ('Puerta del Sol', 'Historic square in the heart of Madrid', 'PUBLIC', 5, 'user1', 10, '2023-01-01 12:00:00', 40.416775, -3.703790, 'CLASSIC', null, null);
 
 -- Notes within 5km of Madrid center
 INSERT INTO notes (title, content, privacy, rating, owner_id, likes, created, latitude, longitude, note_type, start, end)

@@ -23,55 +23,38 @@ public class NoteService {
         this.noteRepository = noteRepository;
     }
 
-    public List<NoteDTO> findNotesByGeographicArea(double latitude, double longitude, double radiusKm) {
-        //lo saque de v0
-        // Convert radius from km to degrees (approximate)
-        // 1 degree of latitude = ~111 km
-        // 1 degree of longitude = ~111 km * cos(latitude)
-        double latDelta = radiusKm / 111.0;
-        double lngDelta = radiusKm / (111.0 * Math.cos(Math.toRadians(latitude)));
-
-        double minLat = latitude - latDelta;
-        double maxLat = latitude + latDelta;
-        double minLng = longitude - lngDelta;
-        double maxLng = longitude + lngDelta;
-
-        return noteRepository.findNotesByGeographicArea(minLat, maxLat, minLng, maxLng).stream().map(this::toDTO).toList();
+    public List<NoteDTO> findNotesByGeographicArea(double latitude, double longitude) {
+        return noteRepository.findNotesByGeographicArea(latitude,longitude).stream().map(this::toDTO).toList();
     }
 
 
-    public Note updateNote(Note updatedNote, String username) {
-        Note existingNote = noteRepository.findById(updatedNote.getId())
-                .orElseThrow(() -> new NoteNotFoundException("Note not found with id: " + updatedNote.getId()));
+    public NoteDTO updateNoteFromDTO(NoteDTO noteDTO) {
+        Note existingNote = noteRepository.findById(noteDTO.getId())
+                .orElseThrow(() -> new NoteNotFoundException("Note not found with id: " + noteDTO.getId()));
 
+        // Update the entity from the DTO
+        existingNote.setTitle(noteDTO.getTitle());
+        existingNote.setContent(noteDTO.getContent());
+        existingNote.setPrivacy(noteDTO.getPrivacy());
+        existingNote.setLatitude(noteDTO.getLatitude());
+        existingNote.setLongitude(noteDTO.getLongitude());
 
-        if (!existingNote.getOwner().getUsername().equals(username)) {
-            throw new NoteNotBelongUserException("You don't have permission to edit this note");
-        }
-        existingNote.setTitle(updatedNote.getTitle());
-        existingNote.setContent(updatedNote.getContent());
-        existingNote.setPrivacy(updatedNote.getPrivacy());
-        existingNote.setLatitude(updatedNote.getLatitude());
-        existingNote.setLongitude(updatedNote.getLongitude());
-
-        return noteRepository.save(existingNote);
+        // Save and convert back to DTO
+        Note savedNote = noteRepository.save(existingNote);
+        return toDTO(savedNote);
     }
 
-    public Note rateNote(int noteId, int rating, String username) {
-
-        if (rating < 0 || rating > 10) {
-            throw new RatingOutOfBoundsException("Rating must be between 0 and 10");
+    public NoteDTO rateNoteAndReturnDTO(int noteId, int rating) {
+        if (rating < 0 || rating > 5) {
+            throw new RatingOutOfBoundsException("Rating must be between 0 and 5");
         }
 
-
-        Note note = noteRepository.findByIdAndOwnerUsername(noteId, username)
+        Note note = noteRepository.findById(noteId)
                 .orElseThrow(() -> new NoteNotAccessException("Note not found or you don't have permission to rate it"));
 
-
         note.setRating(rating);
-
-
-        return noteRepository.save(note);
+        Note savedNote = noteRepository.save(note);
+        return toDTO(savedNote);
     }
 
     public List<NoteDTO> getAllNotes(){
@@ -106,7 +89,7 @@ public class NoteService {
         dto.setRating(note.getRating());
         dto.setOwnerUsername(note.getOwner() != null ? note.getOwner().getUsername() : null);
         dto.setLikes(note.getLikes());
-        dto.setCreated(note.getCreated());
+        dto.setCreated(note.getCreated().toString());
         dto.setLatitude(note.getLatitude());
         dto.setLongitude(note.getLongitude());
         dto.setType(note.getType());

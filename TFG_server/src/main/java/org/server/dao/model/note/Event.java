@@ -17,8 +17,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class Event extends Note {
-    @Column(nullable = false)
+    @Column
     private LocalDateTime start;
-    @Column(nullable = false)
+    @Column
     private LocalDateTime end;
 }

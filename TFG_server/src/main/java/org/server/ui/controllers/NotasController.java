@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/notes")
+@RequestMapping("/notes")
 @RequiredArgsConstructor
 public class NotasController {
 
@@ -29,37 +29,26 @@ public class NotasController {
     @GetMapping("/area")
     public ResponseEntity<List<NoteDTO>> getNotesByGeographicArea(
             @RequestParam double latitude,
-            @RequestParam double longitude,
-            @RequestParam(defaultValue = "5.0") double radiusKm
+            @RequestParam double longitude
     ) {
-
-        List<NoteDTO> notes = noteService.findNotesByGeographicArea(latitude, longitude, radiusKm);
-
-        if (notes.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-
+        List<NoteDTO> notes = noteService.findNotesByGeographicArea(latitude, longitude);
         return ResponseEntity.ok(notes);
     }
 
     @PutMapping
-    public ResponseEntity<Note> updateNote(
-            @RequestBody Note note,
-            @RequestHeader("X-Username") String username
+    public ResponseEntity<NoteDTO> updateNote(
+            @RequestBody NoteDTO noteDTO
     ) {
-        Note updatedNote = noteService.updateNote(note, username);
+        NoteDTO updatedNote = noteService.updateNoteFromDTO(noteDTO);
         return ResponseEntity.ok(updatedNote);
     }
 
-
-
     @PatchMapping("/{id}/rate")
-    public ResponseEntity<Note> rateNote(
+    public ResponseEntity<NoteDTO> rateNote(
             @PathVariable int id,
-            @RequestParam int rating,
-            @RequestHeader("X-Username") String username
+            @RequestParam int rating
     ) {
-        Note ratedNote = noteService.rateNote(id, rating, username);
+        NoteDTO ratedNote = noteService.rateNoteAndReturnDTO(id, rating);
         return ResponseEntity.ok(ratedNote);
     }
 }
