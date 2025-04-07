@@ -19,8 +19,8 @@ public class SocialController {
     private final SocialService service;
 
     @PostMapping(UiConstants.LIKE_URL)
-    public ResponseEntity<Boolean> likeNote (@RequestBody Integer noteId, @RequestBody UUID userId) {
-        if (service.likeNote(noteId,userId))
+    public ResponseEntity<Void> likeNote(@RequestParam Integer noteId,@RequestParam UUID userId) {
+        if (service.likeNote(noteId, userId))
             return ResponseEntity.status(HttpServletResponse.SC_NO_CONTENT).build();
         else
             return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).build();

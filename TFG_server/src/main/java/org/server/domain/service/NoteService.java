@@ -1,4 +1,5 @@
 package org.server.domain.service;
+import org.server.common.Constantes;
 import org.server.dao.model.note.NoteType;
 import org.server.dao.model.user.User;
 import org.server.dao.repositories.UserRepository;
@@ -44,7 +45,7 @@ public class NoteService {
 
     public Note updateNote(int noteId, Note updatedNote, String username) {
         Note existingNote = noteRepository.findById(noteId)
-                .orElseThrow(() -> new NoteNotFoundException("Note not found with id: " + noteId));
+                .orElseThrow(() -> new NoteNotFoundException(Constantes.NOTE_NOT_FOUND));
 
 
         if (!existingNote.getOwner().getUsername().equals(username)) {
