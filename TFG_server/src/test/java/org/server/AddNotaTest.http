@@ -1,5 +1,5 @@
 ### Añadimos la nota
-POST http://localhost:8080/api/notes/addNota
+POST http://localhost:8080/notes/addNota
 Content-Type: application/json
 X-Username: user1
 

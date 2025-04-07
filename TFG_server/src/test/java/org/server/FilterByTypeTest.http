@@ -1,11 +1,11 @@
 ### GET request to get notes by type with no content
-GET http://localhost:8080/api/notes/type
+GET http://localhost:8080/notes/type
     ?type=NON_EXISTENT_TYPE
 Content-Type: application/json
 
 
 ### GET request to get notes by type HISTORICAL
-GET http://localhost:8080/api/notes/type
+GET http://localhost:8080/notes/type
     ?type=HISTORICAL
 Content-Type: application/json
 
