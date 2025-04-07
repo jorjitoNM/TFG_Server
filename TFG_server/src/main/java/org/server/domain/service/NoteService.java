@@ -115,7 +115,7 @@ public class NoteService {
     }
 
     public Note addNote(Note note, String username) {
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByOwnUsername(username);
         if(user == null){
             throw new NoValidUserException("This user is not valid");
         }else{

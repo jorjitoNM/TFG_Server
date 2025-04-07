@@ -54,8 +54,5 @@ public class Note {
     private NoteType type;
 
 
-    public void setOwner(User owner) {
-        this.owner = owner;
-        owner.addNote(this);
-    }
+
 }
