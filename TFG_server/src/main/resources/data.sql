@@ -13,7 +13,7 @@ VALUES ('user2', 'user2', 'user2@example.com', 1234, 'FREE');
 
 -- Madrid, Spain (Center)
 INSERT INTO notes (title, content, privacy, rating, owner_id, likes, created, latitude, longitude, note_type, start, end)
-VALUES ('Puerta del Sol', 'Historic square in the heart of Madrid', 'PUBLIC', 5, 'user1', 10, '2023-01-01 12:00:00', 40.416775, -3.703790, 'EVENT', '2023-01-01 12:00:00', '2023-01-01 12:00:00');
+VALUES ('Puerta del Sol', 'Historic square in the heart of Madrid', 'PUBLIC', 5, 'user1', 10, '2023-01-01 12:00:00', 40.416775, -3.703790, 'HISTORICAL', '2023-01-01 12:00:00', '2023-01-01 12:00:00');
 
 INSERT INTO notes (title, content, privacy, rating, owner_id, likes, created, latitude, longitude, note_type, start, end)
 VALUES ('Plaza', 'Landmark square with beautiful architecture', 'PUBLIC', 4, 'user2', 14, '2023-01-09 15:30:00', 37.377102, -5.986400, 'EVENT', '2023-01-01 12:00:00', '2023-01-01 12:00:00');
@@ -23,7 +23,7 @@ INSERT INTO notes (title, content, privacy, rating, owner_id, likes, created, la
 VALUES ('Retiro Park', 'Beautiful park with a lake', 'PUBLIC', 5, 'user1', 15, '2023-01-02 14:30:00', 40.415504, -3.682909, 'EVENT', '2023-01-02 14:30:00', '2023-01-02 14:30:00');
 
 INSERT INTO notes (title, content, privacy, rating, owner_id, likes, created, latitude, longitude, note_type, start, end)
-VALUES ('Royal Palace', 'Official residence of the Spanish Royal Family', 'PUBLIC', 4, 'user2', 8, '2023-01-03 10:15:00', 40.418053, -3.714312, 'EVENT', '2023-01-03 10:15:00', '2023-01-03 10:15:00');
+VALUES ('Royal Palace', 'Official residence of the Spanish Royal Family', 'PUBLIC', 4, 'user2', 8, '2023-01-03 10:15:00', 40.418053, -3.714312, 'HISTORICAL', '2023-01-03 10:15:00', '2023-01-03 10:15:00');
 
 INSERT INTO notes (title, content, privacy, rating, owner_id, likes, created, latitude, longitude, note_type, start, end)
 VALUES ('Mercado de San Miguel', 'Popular food market with various cuisines', 'PUBLIC', 4, 'user1', 12, '2023-01-04 18:45:00', 40.415421, -3.709658, 'EVENT', '2023-01-04 18:45:00', '2023-01-04 18:45:00');
@@ -41,7 +41,7 @@ VALUES ('Sagrada Familia', 'Famous basilica designed by Antoni Gaudí', 'PUBLIC'
 
 -- Valencia (far from Madrid)
 INSERT INTO notes (title, content, privacy, rating, owner_id, likes, created, latitude, longitude, note_type, start, end)
-VALUES ('City of Arts and Sciences', 'Cultural and architectural complex', 'PUBLIC', 5, 'user1', 18, '2023-01-08 13:10:00', 39.454769, -0.351913, 'EVENT', '2023-01-08 13:10:00', '2023-01-08 13:10:00');
+VALUES ('City of Arts and Sciences', 'Cultural and architectural complex', 'PUBLIC', 5, 'user1', 18, '2023-01-08 13:10:00', 39.454769, -0.351913, 'HISTORICAL', '2023-01-08 13:10:00', '2023-01-08 13:10:00');
 
 -- Seville (far from Madrid)
 INSERT INTO notes (title, content, privacy, rating, owner_id, likes, created, latitude, longitude, note_type, start, end)
