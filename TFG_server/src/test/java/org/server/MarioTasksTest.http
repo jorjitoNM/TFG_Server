@@ -1,0 +1,15 @@
+### notas: ordena la lista ascendente
+GET http://localhost:8080/api/notes/sorted?ascending=true
+Accept: application/json
+
+
+### notas: ordena la lista descendente
+GET http://localhost:8080/api/notes/sorted?ascending=false
+Accept: application/json
+
+### savedNotas: da las notas guardadas de un usuario
+GET http://localhost:8080/api/notes/saveds?username=user1
+Accept: application/json
+
+### savedNotas: guardar nota
+POST http://localhost:8080/api/notes/saveds

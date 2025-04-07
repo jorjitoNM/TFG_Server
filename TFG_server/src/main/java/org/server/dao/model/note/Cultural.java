@@ -4,13 +4,12 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @AllArgsConstructor
 @Entity
-@DiscriminatorValue("LANDSCAPE")
+@DiscriminatorValue("CULTURAL")
 @Getter
 @Setter
-public class Landscape extends Note{
+public class Cultural extends Note {
 }

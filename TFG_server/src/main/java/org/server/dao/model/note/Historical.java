@@ -1,6 +1,5 @@
 package org.server.dao.model.note;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
@@ -8,17 +7,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 @AllArgsConstructor
-@NoArgsConstructor
 @Entity
-@DiscriminatorValue("EVENT")
+@DiscriminatorValue("HISTORICAL")
 @Getter
 @Setter
-public class Event extends Note {
-    @Column
-    private LocalDateTime start;
-    @Column
-    private LocalDateTime end;
+public class Historical extends Note{
 }
