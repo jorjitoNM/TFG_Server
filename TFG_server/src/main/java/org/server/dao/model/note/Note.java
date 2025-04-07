@@ -1,6 +1,5 @@
 package org.server.dao.model.note;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +15,6 @@ import java.time.LocalDateTime;
 @Table(name = "notes")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "note_type", discriminatorType = DiscriminatorType.STRING)
-@DiscriminatorValue("CLASSIC")
 public class Note {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,9 +33,8 @@ public class Note {
     @Column
     private int rating;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", nullable = false)
-    @JsonIgnoreProperties("notes")
     private User owner;
 
     @Column
@@ -55,4 +52,5 @@ public class Note {
     @Enumerated(EnumType.STRING)
     @Column(name = "note_type", insertable = false, updatable = false)
     private NoteType type;
+
 }
