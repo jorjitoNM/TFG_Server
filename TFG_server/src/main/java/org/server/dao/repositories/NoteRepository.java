@@ -25,4 +25,6 @@ public interface NoteRepository extends JpaRepository<Note, Integer> {
     @Query("SELECT n FROM Note n WHERE n.type = :note_type")
     List<Note> findByType(@Param("note_type") NoteType noteType);
 
+
+
 }
