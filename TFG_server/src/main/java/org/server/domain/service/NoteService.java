@@ -1,5 +1,4 @@
 package org.server.domain.service;
-
 import org.server.dao.model.note.NoteType;
 import org.server.dao.model.user.User;
 import org.server.dao.repositories.UserRepository;
@@ -14,7 +13,6 @@ import org.server.ui.model.NoteDTO;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
 @Service
 public class NoteService {
     private final NoteRepository noteRepository;
@@ -117,14 +115,18 @@ public class NoteService {
     }
 
     public Note addNote(Note note, String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new NoValidUserException("This user is not valid"));
-        if (checkNote(note)) {
-            note.setOwner(user);
-            note.setCreated(LocalDateTime.now());
-            return noteRepository.save(note);
-        } else {
-            throw new InvalidNoteTypeException("Invalid note type");
+        User user = userRepository.findByUsername(username);
+        if(user == null){
+            throw new NoValidUserException("This user is not valid");
+        }else{
+            if(checkNote(note)){
+                note.setOwner(user);
+                note.setCreated(LocalDateTime.now());
+                return noteRepository.save(note);
+            }else{
+                throw new InvalidNoteTypeException("Invalid note type");
+            }
+
         }
     }
 

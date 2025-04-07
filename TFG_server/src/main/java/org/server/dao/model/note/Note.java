@@ -53,4 +53,9 @@ public class Note {
     @Column(name = "note_type", insertable = false, updatable = false)
     private NoteType type;
 
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+        owner.addNote(this);
+    }
 }
