@@ -33,14 +33,12 @@ public class NoteService {
         Note existingNote = noteRepository.findById(noteDTO.getId())
                 .orElseThrow(() -> new NoteNotFoundException("Note not found with id: " + noteDTO.getId()));
 
-        // Update the entity from the DTO
         existingNote.setTitle(noteDTO.getTitle());
         existingNote.setContent(noteDTO.getContent());
         existingNote.setPrivacy(noteDTO.getPrivacy());
         existingNote.setLatitude(noteDTO.getLatitude());
         existingNote.setLongitude(noteDTO.getLongitude());
 
-        // Save and convert back to DTO
         Note savedNote = noteRepository.save(existingNote);
         return toDTO(savedNote);
     }
@@ -76,8 +74,8 @@ public class NoteService {
 
         if (note.getType() == NoteType.EVENT && note instanceof Event event) {
             EventNoteDTO eventDto = new EventNoteDTO();
-            eventDto.setStart(event.getStart().toString()); // Convertir a String
-            eventDto.setEnd(event.getEnd().toString());     // Convertir a String
+            eventDto.setStart(event.getStart().toString());
+            eventDto.setEnd(event.getEnd().toString());
             dto = eventDto;
         } else {
             dto = new NoteDTO();
@@ -90,7 +88,7 @@ public class NoteService {
         dto.setRating(note.getRating());
         dto.setOwnerUsername(note.getOwner() != null ? note.getOwner().getUsername() : null);
         dto.setLikes(note.getLikes());
-        dto.setCreated(note.getCreated().toString());
+        dto.setCreated(note.getCreated());
         dto.setLatitude(note.getLatitude());
         dto.setLongitude(note.getLongitude());
         dto.setType(note.getType());
