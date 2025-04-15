@@ -6,7 +6,7 @@ Content-Type: application/json
 
 ### GET request to get notes by type HISTORICAL
 GET http://localhost:8080/notes/type
-    ?type=HISTORICAL
+    ?type=CLASSIC
 Content-Type: application/json
 
 ###

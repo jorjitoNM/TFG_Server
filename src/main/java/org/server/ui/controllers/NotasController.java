@@ -81,8 +81,8 @@ public class NotasController {
     }
 
     @GetMapping("/type")
-    public ResponseEntity<List<Note>> getNotesByType(@RequestParam NoteType type) {
-        List<Note> notes = noteService.findNotesByType(type);
+    public ResponseEntity<List<NoteDTO>> getNotesByType(@RequestParam NoteType type) {
+        List<NoteDTO> notes = noteService.findNotesByType(type);
 
         if (notes.isEmpty()) {
             return ResponseEntity.noContent().build();
@@ -90,6 +90,7 @@ public class NotasController {
 
         return ResponseEntity.ok(notes);
     }
+
     @GetMapping("/sorted")
     public ResponseEntity<List<Note>> getNotesSortedByLikes(
             @RequestParam boolean ascending) {
