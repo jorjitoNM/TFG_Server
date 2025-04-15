@@ -16,7 +16,7 @@ VALUES ('Puerta del Sol', 'Historic square in the heart of Madrid', 'PUBLIC', 5,
 
 -- Notes within 5km of Madrid center
 INSERT INTO notes (title, content, privacy, rating, owner_id, likes, created, latitude, longitude, note_type, start, end)
-VALUES ('Retiro Park', 'Beautiful park with a lake', 'PUBLIC', 5, UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')), 15, '2023-01-02 14:30:00', 40.415504, -3.682909, 'EVENT', '2023-01-02 14:30:00', '2023-01-02 14:30:00');
+VALUES ('Retiro Park', 'Beautiful park with a lake', 'PUBLIC', 5, UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')), 15, '2023-01-02 14:30:00', 40.415504, -3.682909, 'CLASSIC', '2023-01-02 14:30:00', '2023-01-02 14:30:00');
 
 INSERT INTO notes (title, content, privacy, rating, owner_id, likes, created, latitude, longitude, note_type, start, end)
 VALUES ('Royal Palace', 'Official residence of the Spanish Royal Family', 'PUBLIC', 4, UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', '')), 8, '2023-01-03 10:15:00', 40.418053, -3.714312, 'EVENT', '2023-01-03 10:15:00', '2023-01-03 10:15:00');
@@ -29,7 +29,7 @@ VALUES ('Prado Museum', 'One of the greatest art museums in the world', 'PUBLIC'
 
 -- Notes just outside 5km of Madrid center
 INSERT INTO notes (title, content, privacy, rating, owner_id, likes, created, latitude, longitude, note_type, start, end)
-VALUES ('Madrid Rio Park', 'Urban park along the Manzanares River', 'PUBLIC', 4, UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')), 7, '2023-01-06 16:20:00', 40.395857, -3.719488, 'EVENT', '2023-01-06 16:20:00', '2023-01-06 16:20:00');
+VALUES ('Madrid Rio Park', 'Urban park along the Manzanares River', 'PUBLIC', 4, UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')), 7, '2023-01-06 16:20:00', 40.395857, -3.719488, 'CLASSIC', '2023-01-06 16:20:00', '2023-01-06 16:20:00');
 
 -- Barcelona (far from Madrid)
 INSERT INTO notes (title, content, privacy, rating, owner_id, likes, created, latitude, longitude, note_type, start, end)
@@ -41,7 +41,7 @@ VALUES ('City of Arts and Sciences', 'Cultural and architectural complex', 'PUBL
 
 -- Seville (far from Madrid)
 INSERT INTO notes (title, content, privacy, rating, owner_id, likes, created, latitude, longitude, note_type, start, end)
-VALUES ('Plaza de España', 'Landmark square with beautiful architecture', 'PUBLIC', 4, UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', '')), 14, '2023-01-09 15:30:00', 37.377102, -5.986400, 'EVENT', '2023-01-09 15:30:00', '2023-01-09 15:30:00');
+VALUES ('Plaza de España', 'Landmark square with beautiful architecture', 'PUBLIC', 4, UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', '')), 14, '2023-01-09 15:30:00', 37.377102, -5.986400, 'CULTURAL', '2023-01-09 15:30:00', '2023-01-09 15:30:00');
 
 -- Event notes (Madrid area)
 INSERT INTO notes (title, content, privacy, rating, owner_id, likes, created, latitude, longitude, note_type, start, end)
