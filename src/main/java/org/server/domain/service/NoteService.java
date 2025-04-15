@@ -146,8 +146,8 @@ public class NoteService {
     }
 
 
-    public List<Note> findNotesByType(NoteType type) {
-        return noteRepository.findByType(type);
+    public List<NoteDTO> findNotesByType(NoteType type) {
+        return noteRepository.findByType(type).stream().map(this::toDTO).toList();
     }
     public List<Note> sortNoteList(boolean ascending) {
         return ascending ? noteRepository.findAllByOrderByLikesAsc() : noteRepository.findAllByOrderByLikesDesc();
