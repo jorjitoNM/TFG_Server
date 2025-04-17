@@ -4,6 +4,8 @@ package org.server.ui.controllers;
 import lombok.RequiredArgsConstructor;
 import org.server.common.Constantes;
 import org.server.dao.model.note.Note;
+import org.server.dao.repositories.mongodb.ImageRepository;
+import org.server.domain.service.ImagesService;
 import org.server.domain.service.NoteService;
 import org.server.ui.model.NoteDTO;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NotasController {
 
-
-
+    private final ImagesService imagesService;
     private final NoteService noteService;
 
     @GetMapping("/area")
@@ -25,6 +26,7 @@ public class NotasController {
             @RequestParam double longitude,
             @RequestParam(defaultValue = "5.0") double radiusKm
     ) {
+
 
         List<NoteDTO> notes = noteService.findNotesByGeographicArea(latitude, longitude, radiusKm);
 
