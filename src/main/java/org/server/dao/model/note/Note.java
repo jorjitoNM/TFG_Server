@@ -53,4 +53,6 @@ public class Note {
     @Enumerated(EnumType.STRING)
     @Column(name = "note_type", insertable = false, updatable = false)
     private NoteType type;
+
+    
 }

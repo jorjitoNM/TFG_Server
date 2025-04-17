@@ -1,9 +1,9 @@
 package org.server.domain.service;
 import org.server.dao.model.note.NoteType;
 import org.server.dao.model.user.User;
-import org.server.dao.repositories.UserRepository;
+import org.server.dao.repositories.mysql.UserRepository;
 import org.server.domain.errors.*;
-import org.server.dao.repositories.NoteRepository;
+import org.server.dao.repositories.mysql.NoteRepository;
 import org.springframework.stereotype.Service;
 import org.server.dao.model.note.Event;
 import org.server.dao.model.note.Note;
