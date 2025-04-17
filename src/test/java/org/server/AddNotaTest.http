@@ -1,10 +1,11 @@
 ### Añadimos la nota
-POST http://localhost:8080/api/notes/addNota
+POST http://localhost:8080/notes/addNota
 Content-Type: application/json
 X-Username: user1
 
 {
   "title": "Nota de prueba",
+  "type": "LANDSCAPE",
   "content": "Contenido de la nota de prueba",
   "privacy": "PUBLIC",
   "latitude": 40.416775,

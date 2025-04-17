@@ -19,8 +19,6 @@ public class NoteDTO {
     private double latitude;
     private double longitude;
     private NoteType type;
+
 }
-
-
-
 
