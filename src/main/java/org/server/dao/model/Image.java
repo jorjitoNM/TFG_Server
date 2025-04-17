@@ -16,4 +16,10 @@ public class Image {
     private int noteId;
     private Binary image;
     private String imageType;
+
+    public Image(int noteId, Binary image, String imageType) {
+        this.noteId = noteId;
+        this.image = image;
+        this.imageType = imageType;
+    }
 }

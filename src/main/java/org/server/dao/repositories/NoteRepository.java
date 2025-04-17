@@ -1,4 +1,4 @@
-package org.server.dao.repositories.mysql;
+package org.server.dao.repositories;
 
 import org.server.dao.model.note.Note;
 import org.server.dao.model.note.NoteType;

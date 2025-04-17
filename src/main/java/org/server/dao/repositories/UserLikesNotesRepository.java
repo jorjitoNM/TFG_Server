@@ -1,4 +1,4 @@
-package org.server.dao.repositories.mysql;
+package org.server.dao.repositories;
 
 import org.server.dao.model.user.UserLikedNote;
 import org.springframework.data.jpa.repository.JpaRepository;
