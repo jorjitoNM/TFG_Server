@@ -4,6 +4,7 @@ import org.server.dao.model.user.User;
 import org.server.dao.repositories.UserRepository;
 import org.server.domain.errors.*;
 import org.server.dao.repositories.NoteRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.server.dao.model.note.Event;
 import org.server.dao.model.note.Note;
@@ -128,7 +129,10 @@ public class NoteService {
     public List<NoteDTO> findNotesByType(NoteType type) {
         return noteRepository.findByType(type).stream().map(this::toDTO).toList();
     }
-    public List<Note> sortNoteList(boolean ascending) {
-        return ascending ? noteRepository.findAllByOrderByLikesAsc() : noteRepository.findAllByOrderByLikesDesc();
+    public List<NoteDTO> sortNoteList(boolean ascending) {
+        Sort sort = Sort.by(ascending ? Sort.Direction.ASC : Sort.Direction.DESC, "likes");
+        List<Note> notes = noteRepository.findAll(sort);
+        return notes.stream().map(this::toDTO).toList();
     }
+
 }

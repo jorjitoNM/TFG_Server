@@ -92,9 +92,9 @@ public class NotasController {
     }
 
     @GetMapping("/sorted")
-    public ResponseEntity<List<Note>> getNotesSortedByLikes(
+    public ResponseEntity<List<NoteDTO>> getNotesSortedByLikes(
             @RequestParam boolean ascending) {
-        List<Note> sortedNotes = noteService.sortNoteList(ascending);
+        List<NoteDTO> sortedNotes = noteService.sortNoteList(ascending);
         return ResponseEntity.status(HttpServletResponse.SC_OK).body(sortedNotes);
     }
 }
