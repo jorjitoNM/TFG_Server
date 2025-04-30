@@ -22,30 +22,34 @@ public class NotasController {
     private final NoteService noteService;
     private final UserService userService;
 
-    @GetMapping
-    public ResponseEntity<List<NoteDTO>> getNotes() {
-        return ResponseEntity.ok(noteService.getAllNotes());
-    }
-
-    @GetMapping("/{noteId}")
-    public ResponseEntity<NoteDTO> getNote(@PathVariable int noteId) {
-        return ResponseEntity.ok(noteService.getNoteById(noteId));
-    }
-
     @GetMapping("/area")
     public ResponseEntity<List<NoteDTO>> getNotesByGeographicArea(
             @RequestParam double latitude,
-            @RequestParam double longitude
+            @RequestParam double longitude,
+            @RequestParam(defaultValue = "5.0") double radiusKm
     ) {
-        List<NoteDTO> notes = noteService.findNotesByGeographicArea(latitude, longitude);
+
+        List<NoteDTO> notes = noteService.findNotesByGeographicArea(latitude, longitude, radiusKm);
+
+        if (notes.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
         return ResponseEntity.ok(notes);
     }
-
-    @PutMapping
-    public ResponseEntity<NoteDTO> updateNote(
-            @RequestBody NoteDTO noteDTO
+    @GetMapping("/sorted")
+    public ResponseEntity<List<Note>> getNotesSortedByLikes(
+            @RequestParam boolean ascending) {
+        List<Note> sortedNotes = noteService.sortNoteList(ascending);
+        return ResponseEntity.status(HttpServletResponse.SC_OK).body(sortedNotes);
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<Note> updateNote(
+            @PathVariable int id,
+            @RequestBody Note note,
+            @RequestHeader(Constantes.X_USERNAME) String username
     ) {
-        NoteDTO updatedNote = noteService.updateNoteFromDTO(noteDTO);
+        Note updatedNote = noteService.updateNote(id, note, username);
         return ResponseEntity.ok(updatedNote);
     }
 
@@ -56,11 +60,12 @@ public class NotasController {
         return ResponseEntity.status(HttpServletResponse.SC_OK).body(savedNotes);
     }
     @PatchMapping("/{id}/rate")
-    public ResponseEntity<NoteDTO> rateNote(
+    public ResponseEntity<Note> rateNote(
             @PathVariable int id,
-            @RequestParam int rating
+            @RequestParam int rating,
+            @RequestHeader(Constantes.X_USERNAME) String username
     ) {
-        NoteDTO ratedNote = noteService.rateNoteAndReturnDTO(id, rating);
+        Note ratedNote = noteService.rateNote(id, rating, username);
         return ResponseEntity.ok(ratedNote);
     }
 
@@ -90,10 +95,10 @@ public class NotasController {
 
         return ResponseEntity.ok(notes);
     }
-    @GetMapping("/sorted")
-    public ResponseEntity<List<Note>> getNotesSortedByLikes(
-            @RequestParam boolean ascending) {
-        List<Note> sortedNotes = noteService.sortNoteList(ascending);
-        return ResponseEntity.status(HttpServletResponse.SC_OK).body(sortedNotes);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Note> deleteNote(@PathVariable int id) {
+        Note note=noteService.getNoteById(id);
+        return noteService.deleteNote(note) ? ResponseEntity.status(HttpServletResponse.SC_NO_CONTENT).build()
+                : ResponseEntity.status(HttpServletResponse.SC_NOT_FOUND).build();
     }
 }

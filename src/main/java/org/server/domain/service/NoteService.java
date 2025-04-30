@@ -13,7 +13,6 @@ import org.server.ui.model.NoteDTO;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
 @Service
 public class NoteService {
     private final NoteRepository noteRepository;
@@ -24,45 +23,58 @@ public class NoteService {
         this.userRepository = userRepository;
     }
 
-    public List<NoteDTO> findNotesByGeographicArea(double latitude, double longitude) {
-        return noteRepository.findNotesByGeographicArea(latitude, longitude).stream().map(this::toDTO).toList();
+
+    public List<NoteDTO> findNotesByGeographicArea(double latitude, double longitude, double radiusKm) {
+        //lo saque de v0
+        // Convert radius from km to degrees (approximate)
+        // 1 degree of latitude = ~111 km
+        // 1 degree of longitude = ~111 km * cos(latitude)
+        double latDelta = radiusKm / 111.0;
+        double lngDelta = radiusKm / (111.0 * Math.cos(Math.toRadians(latitude)));
+
+        double minLat = latitude - latDelta;
+        double maxLat = latitude + latDelta;
+        double minLng = longitude - lngDelta;
+        double maxLng = longitude + lngDelta;
+
+        List<Note> notes = noteRepository.findNotesByGeographicArea(minLat, maxLat, minLng, maxLng);
+        return toDTOList(notes);
     }
 
 
-    public NoteDTO updateNoteFromDTO(NoteDTO noteDTO) {
-        Note existingNote = noteRepository.findById(noteDTO.getId())
-                .orElseThrow(() -> new NoteNotFoundException("Note not found with id: " + noteDTO.getId()));
+    public Note updateNote(int noteId, Note updatedNote, String username) {
+        Note existingNote = noteRepository.findById(noteId)
+                .orElseThrow(() -> new NoteNotFoundException("Note not found with id: " + noteId));
 
-        existingNote.setTitle(noteDTO.getTitle());
-        existingNote.setContent(noteDTO.getContent());
-        existingNote.setPrivacy(noteDTO.getPrivacy());
-        existingNote.setLatitude(noteDTO.getLatitude());
-        existingNote.setLongitude(noteDTO.getLongitude());
 
-        Note savedNote = noteRepository.save(existingNote);
-        return toDTO(savedNote);
+        if (!existingNote.getOwner().getUsername().equals(username)) {
+            throw new NoteNotBelongUserException("You don't have permission to edit this note");
+        }
+        existingNote.setTitle(updatedNote.getTitle());
+        existingNote.setContent(updatedNote.getContent());
+        existingNote.setPrivacy(updatedNote.getPrivacy());
+        existingNote.setLatitude(updatedNote.getLatitude());
+        existingNote.setLongitude(updatedNote.getLongitude());
+
+
+        return noteRepository.save(existingNote);
     }
 
-    public NoteDTO rateNoteAndReturnDTO(int noteId, int rating) {
-        if (rating < 0 || rating > 5) {
-            throw new RatingOutOfBoundsException("Rating must be between 0 and 5");
+    public Note rateNote(int noteId, int rating, String username) {
+
+        if (rating < 0 || rating > 10) {
+            throw new RatingOutOfBoundsException("Rating must be between 0 and 10");
         }
 
-        Note note = noteRepository.findById(noteId)
+
+        Note note = noteRepository.findByIdAndOwnerUsername(noteId, username)
                 .orElseThrow(() -> new NoteNotAccessException("Note not found or you don't have permission to rate it"));
 
+
         note.setRating(rating);
-        Note savedNote = noteRepository.save(note);
-        return toDTO(savedNote);
-    }
 
-    public List<NoteDTO> getAllNotes() {
-        return noteRepository.findAll().stream().map(this::toDTO).toList();
-    }
 
-    public NoteDTO getNoteById(int noteId) {
-        Note n = noteRepository.findById(noteId).orElseThrow(() -> new NoteNotFoundException("Note not found with id: " + noteId));
-        return toDTO(n);
+        return noteRepository.save(note);
     }
 
 
@@ -70,12 +82,12 @@ public class NoteService {
         if (note == null) {
             return null;
         }
-        NoteDTO dto;
 
-        if (note.getType() == NoteType.EVENT && note instanceof Event event) {
+        NoteDTO dto;
+        if (note instanceof Event event) {
             EventNoteDTO eventDto = new EventNoteDTO();
-            eventDto.setStart(event.getStart().toString());
-            eventDto.setEnd(event.getEnd().toString());
+            eventDto.setStart(event.getStart());
+            eventDto.setEnd(event.getEnd());
             dto = eventDto;
         } else {
             dto = new NoteDTO();
@@ -96,6 +108,12 @@ public class NoteService {
         return dto;
     }
 
+    private List<NoteDTO> toDTOList(List<Note> notes) {
+        return notes.stream()
+                .map(this::toDTO)
+                .toList();
+    }
+
     public Note addNote(Note note, String username) {
         User user = userRepository.findByOwnUsername(username);
         if(user == null){
@@ -112,7 +130,8 @@ public class NoteService {
         }
     }
 
-    public boolean checkNote(Note note) {
+
+    private boolean checkNote(Note note) {
         if (note == null || note.getType() == null || note.getTitle().isEmpty()) {
             return false;
         }
@@ -130,5 +149,14 @@ public class NoteService {
     }
     public List<Note> sortNoteList(boolean ascending) {
         return ascending ? noteRepository.findAllByOrderByLikesAsc() : noteRepository.findAllByOrderByLikesDesc();
+    }
+
+    public boolean deleteNote(Note note) {
+        noteRepository.delete(note);
+        return false;
+    }
+
+    public Note getNoteById(int id) {
+        return noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException("Note not found with id: " + id));
     }
 }
