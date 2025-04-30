@@ -24,5 +24,5 @@ public class ImagesController {
             return ResponseEntity.status(HttpServletResponse.SC_NOT_MODIFIED).body(false);
     }
 
-    public ResponseEntity<List<>>
+
 }
