@@ -1,0 +1,4 @@
+### notas: ordena la lista ascendente
+DELETE http://localhost:8080/notes/1
+Accept: application/json
+

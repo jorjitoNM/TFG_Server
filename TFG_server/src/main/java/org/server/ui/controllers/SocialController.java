@@ -24,5 +24,7 @@ public class SocialController {
             return ResponseEntity.status(HttpServletResponse.SC_NO_CONTENT).build();
         else
             return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).build();
+
     }
+
 }

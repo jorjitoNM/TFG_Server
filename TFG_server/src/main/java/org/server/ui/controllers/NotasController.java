@@ -95,5 +95,10 @@ public class NotasController {
 
         return ResponseEntity.ok(notes);
     }
-
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Note> deleteNote(@PathVariable int id) {
+        Note note=noteService.getNoteById(id);
+        return noteService.deleteNote(note) ? ResponseEntity.status(HttpServletResponse.SC_NO_CONTENT).build()
+                : ResponseEntity.status(HttpServletResponse.SC_NOT_FOUND).build();
+    }
 }

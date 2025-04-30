@@ -131,7 +131,7 @@ public class NoteService {
     }
 
 
-    public boolean checkNote(Note note) {
+    private boolean checkNote(Note note) {
         if (note == null || note.getType() == null || note.getTitle().isEmpty()) {
             return false;
         }
@@ -151,4 +151,12 @@ public class NoteService {
         return ascending ? noteRepository.findAllByOrderByLikesAsc() : noteRepository.findAllByOrderByLikesDesc();
     }
 
+    public boolean deleteNote(Note note) {
+        noteRepository.delete(note);
+        return false;
+    }
+
+    public Note getNoteById(int id) {
+        return noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException("Note not found with id: " + id));
+    }
 }
