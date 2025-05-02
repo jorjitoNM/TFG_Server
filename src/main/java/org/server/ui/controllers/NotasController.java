@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.server.common.Constantes;
 import org.server.dao.model.note.Note;
+import org.server.dao.model.note.NotePrivacy;
 import org.server.dao.model.note.NoteType;
 import org.server.domain.service.NoteService;
 import org.server.domain.service.UserService;

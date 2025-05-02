@@ -1,4 +1,5 @@
 package org.server.domain.service;
+import org.server.dao.model.note.NotePrivacy;
 import org.server.dao.model.note.NoteType;
 import org.server.dao.model.user.User;
 import org.server.dao.repositories.UserRepository;
