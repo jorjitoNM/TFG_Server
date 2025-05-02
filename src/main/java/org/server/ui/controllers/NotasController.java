@@ -74,8 +74,8 @@ public class NotasController {
 
     @PostMapping("/addNota")
     public ResponseEntity<Note> addNote(
-            @RequestBody Note note,
-            @RequestHeader(Constantes.X_USERNAME) String username
+            @RequestParam Note note,
+            @RequestParam String username
     ) {
         Note createdNote = noteService.addNote(note, username);
         return ResponseEntity.ok(createdNote);
