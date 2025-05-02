@@ -73,11 +73,11 @@ public class NotasController {
     }
 
     @PostMapping("/addNota")
-    public ResponseEntity<Note> addNote(
-            @RequestParam Note note,
+    public ResponseEntity<NoteDTO> addNote(
+            @RequestParam NoteDTO note,
             @RequestParam String username
     ) {
-        Note createdNote = noteService.addNote(note, username);
+        NoteDTO createdNote = noteService.addNote(note, username);
         return ResponseEntity.ok(createdNote);
     }
 

@@ -97,15 +97,45 @@ public class NoteService {
         return dto;
     }
 
-    public Note addNote(Note note, String username) {
+    private Note toEntity(NoteDTO dto) {
+        if (dto == null) {
+            return null;
+        }
+        Note note;
+
+        if (dto.getType() == NoteType.EVENT && dto instanceof EventNoteDTO eventDto) {
+            Event event = new Event();
+            event.setStart(LocalDateTime.parse(eventDto.getStart()));
+            event.setEnd(LocalDateTime.parse(eventDto.getEnd()));
+            note = event;
+        } else {
+            note = new Note();
+        }
+        note.setId(dto.getId());
+        note.setTitle(dto.getTitle());
+        note.setContent(dto.getContent());
+        note.setPrivacy(dto.getPrivacy());
+        note.setRating(dto.getRating());
+        note.setLikes(dto.getLikes());
+        note.setCreated(dto.getCreated());
+        note.setLatitude(dto.getLatitude());
+        note.setLongitude(dto.getLongitude());
+        note.setType(dto.getType());
+
+        return note;
+    }
+
+
+    public NoteDTO addNote(NoteDTO note, String username) {
         User user = userRepository.findByOwnUsername(username);
         if(user == null){
             throw new NoValidUserException("This user is not valid");
         }else{
-            if(checkNote(note)){
-                note.setOwner(user);
-                note.setCreated(LocalDateTime.now());
-                return noteRepository.save(note);
+            Note noteEntity = toEntity(note);
+            if(checkNote(noteEntity)){
+                noteEntity.setOwner(user);
+                noteEntity.setCreated(LocalDateTime.now());
+                return (noteRepository.save(noteEntity)) != null ? toDTO(noteEntity) : null;
             }else{
                 throw new InvalidNoteTypeException("Invalid note type");
             }
