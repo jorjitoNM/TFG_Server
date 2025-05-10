@@ -2,7 +2,6 @@ package org.server.dao.repositories;
 
 import org.server.dao.model.note.Note;
 import org.server.dao.model.note.NoteType;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

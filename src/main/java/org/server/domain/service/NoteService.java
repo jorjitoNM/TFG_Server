@@ -1,16 +1,16 @@
 package org.server.domain.service;
-import org.server.dao.model.note.NoteType;
-import org.server.dao.model.user.User;
-import org.server.dao.repositories.UserRepository;
-import org.server.domain.errors.*;
-import org.server.dao.repositories.NoteRepository;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
+
 import org.server.dao.model.note.Event;
 import org.server.dao.model.note.Note;
-
+import org.server.dao.model.note.NoteType;
+import org.server.dao.model.user.User;
+import org.server.dao.repositories.NoteRepository;
+import org.server.dao.repositories.UserRepository;
+import org.server.domain.errors.*;
 import org.server.ui.model.EventNoteDTO;
 import org.server.ui.model.NoteDTO;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
