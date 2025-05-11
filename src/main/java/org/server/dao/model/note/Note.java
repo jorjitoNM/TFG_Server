@@ -4,9 +4,11 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.server.dao.model.Image;
 import org.server.dao.model.user.User;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -54,5 +56,8 @@ public class Note {
     @Column(name = "note_type", insertable = false, updatable = false)
     private NoteType type;
 
-    
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "note_id")
+    @OrderColumn(name = "position")
+    private List<Image> images;
 }
