@@ -26,11 +26,9 @@ public class SocialService {
     public boolean likeNote(Integer noteId, UUID userId) {
         User u = userRepository.findById(userId).orElseThrow(() -> new UserNotFound(Constantes.USER_NOT_FOUND));
         Note n = noteRepository.findById(noteId).orElseThrow(() -> new NoteNotFoundException(Constantes.NOTE_NOT_FOUND));
-        Optional<UserLikedNote> likedNote = likesNotesRepository.findUserLikedNoteByUserAndNote(u,n);
+        Optional<UserLikedNote> likedNote = likesNotesRepository.findUserLikedNoteByUserAndNote(u, n);
         if (likedNote.isPresent())
-            likedNote = Optional.of(likesNotesRepository.save(new UserLikedNote(u,n)));
+            likedNote = Optional.of(likesNotesRepository.save(new UserLikedNote(u, n)));
         return likedNote.get().getUser().getId().equals(userId);
     }
-
-
 }
