@@ -139,35 +139,7 @@ public class NoteService {
         return notes.stream().map(this::toDTO).toList();
     }
 
-    public List<NoteMapDTO> getNotesByLocationAndZoom(float zoomLevel) {
-        List<Note> allNotes = noteRepository.findAll();
-        Map<String, List<Note>> grouped = allNotes.stream()
-                .collect(Collectors.groupingBy(n -> n.getLatitude() + "," + n.getLongitude()));
 
-        List<NoteMapDTO> result = new ArrayList<>();
-        for (List<Note> notesAtLocation : grouped.values()) {
-            int totalLikes = notesAtLocation.stream().mapToInt(Note::getLikes).sum();
-            Note first = notesAtLocation.getFirst();
-            // Filtrado según el zoom
-            boolean include = false;
-            if (zoomLevel <= 5f) {
-                include = totalLikes > 35;
-            } else if (zoomLevel <= 12f) {
-                include = totalLikes > 10;
-            } else {
-                include = true;
-            }
-            if (include) {
-                result.add(new NoteMapDTO(
-                        first.getLatitude(),
-                        first.getLongitude(),
-                        totalLikes,
-                        notesAtLocation.stream().map(this::toDTO).toList()
-                ));
-            }
-        }
-        return result;
-    }
 
 
 }
