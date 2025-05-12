@@ -94,12 +94,7 @@ public class NotasController {
         return ResponseEntity.status(HttpServletResponse.SC_OK).body(sortedNotes);
     }
 
-    @GetMapping("/grouped")
-    public ResponseEntity<List<NoteMapDTO>> getGroupedNotesByZoom(
-            @RequestParam float zoomLevel) {
-        List<NoteMapDTO> grouped = noteService.getNotesByLocationAndZoom(zoomLevel);
-        return ResponseEntity.ok(grouped);
-    }
+
 
 
 
