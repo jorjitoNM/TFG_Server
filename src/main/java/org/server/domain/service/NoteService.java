@@ -9,11 +9,15 @@ import org.server.dao.repositories.UserRepository;
 import org.server.domain.errors.*;
 import org.server.ui.model.EventNoteDTO;
 import org.server.ui.model.NoteDTO;
+import org.server.ui.model.NoteMapDTO;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class NoteService {
@@ -134,5 +138,36 @@ public class NoteService {
         List<Note> notes = noteRepository.findAll(sort);
         return notes.stream().map(this::toDTO).toList();
     }
+
+    public List<NoteMapDTO> getNotesByLocationAndZoom(float zoomLevel) {
+        List<Note> allNotes = noteRepository.findAll();
+        Map<String, List<Note>> grouped = allNotes.stream()
+                .collect(Collectors.groupingBy(n -> n.getLatitude() + "," + n.getLongitude()));
+
+        List<NoteMapDTO> result = new ArrayList<>();
+        for (List<Note> notesAtLocation : grouped.values()) {
+            int totalLikes = notesAtLocation.stream().mapToInt(Note::getLikes).sum();
+            Note first = notesAtLocation.getFirst();
+            // Filtrado según el zoom
+            boolean include = false;
+            if (zoomLevel <= 5f) {
+                include = totalLikes > 35;
+            } else if (zoomLevel <= 12f) {
+                include = totalLikes > 10;
+            } else {
+                include = true;
+            }
+            if (include) {
+                result.add(new NoteMapDTO(
+                        first.getLatitude(),
+                        first.getLongitude(),
+                        totalLikes,
+                        notesAtLocation.stream().map(this::toDTO).toList()
+                ));
+            }
+        }
+        return result;
+    }
+
 
 }
