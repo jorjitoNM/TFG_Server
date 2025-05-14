@@ -51,9 +51,9 @@ public class NotasController {
     }
 
     @GetMapping("/saveds")
-    public ResponseEntity<List<Note>> getSavedNotes(
+    public ResponseEntity<List<NoteDTO>> getSavedNotes(
             @RequestParam String username) {
-        List<Note> savedNotes = userService.getSavedNotesForUser(username);
+        List<NoteDTO> savedNotes = userService.getSavedNotesForUser(username);
         return ResponseEntity.status(HttpServletResponse.SC_OK).body(savedNotes);
     }
     @PatchMapping("/{id}/rate")
@@ -65,12 +65,6 @@ public class NotasController {
         return ResponseEntity.ok(ratedNote);
     }
 
-    @PostMapping("/saveds")
-    public ResponseEntity<Boolean> addNoteToSaved(
-            @RequestParam String username,
-            @RequestParam int noteId) {
-        return ResponseEntity.status(HttpServletResponse.SC_CREATED).body(userService.addNoteToSaved(username, noteId));
-    }
 
     @PostMapping("/addNota")
     public ResponseEntity<Note> addNote(
