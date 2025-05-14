@@ -13,6 +13,8 @@ import org.server.ui.model.NoteDTO;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+
 @Service
 public class NoteService {
     private final NoteRepository noteRepository;
@@ -153,6 +155,7 @@ public class NoteService {
 
     public boolean deleteNote(Note note) {
         noteRepository.delete(note);
+
         return false;
     }
 
