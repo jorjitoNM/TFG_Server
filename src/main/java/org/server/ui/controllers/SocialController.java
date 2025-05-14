@@ -25,5 +25,13 @@ public class SocialController {
             return ResponseEntity.status(HttpServletResponse.SC_NO_CONTENT).build();
         else
             return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).build();
+
+    }
+
+    @PostMapping("/saveds")
+    public ResponseEntity<Boolean> addNoteToSaved(
+            @RequestParam String username,
+            @RequestParam int noteId) {
+        return ResponseEntity.status(HttpServletResponse.SC_CREATED).body(service.addNoteToSaved(username, noteId));
     }
 }

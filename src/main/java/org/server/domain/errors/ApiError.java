@@ -1,5 +1,6 @@
 package org.server.domain.errors;
 
+
 import java.time.LocalDate;
 
 public class ApiError extends RuntimeException {

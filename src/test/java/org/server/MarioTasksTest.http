@@ -2,7 +2,6 @@
 GET http://localhost:8080/notes/sorted?ascending=true
 Accept: application/json
 
-
 ### notas: ordena la lista descendente
 GET http://localhost:8080/notes/sorted?ascending=false
 Accept: application/json
