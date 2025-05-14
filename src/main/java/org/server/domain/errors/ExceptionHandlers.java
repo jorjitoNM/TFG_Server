@@ -13,9 +13,6 @@ public class ExceptionHandlers {
         return buildResponseEntity(new ApiError(message), HttpStatus.FORBIDDEN);
     }
 
-
-
-
     @ExceptionHandler(NoteNotAccessException.class)
     public ResponseEntity<ApiError> handleNoteNotAccessException(NoteNotAccessException ex) {
         String message = ex.getMessage();
@@ -36,5 +33,23 @@ public class ExceptionHandlers {
 
     private ResponseEntity<ApiError> buildResponseEntity(ApiError apiError, HttpStatus status) {
         return new ResponseEntity<>(apiError, status);
+    }
+
+    @ExceptionHandler(InvalidNoteTypeException.class)
+    public ResponseEntity<ApiError> handleInvalidNoteTypeException(InvalidNoteTypeException ex) {
+        String message = ex.getMessage();
+        return buildResponseEntity(new ApiError(message), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UserNotFound.class)
+    public ResponseEntity<ApiError> handleUserNotFoundException(UserNotFound ex) {
+        String message = ex.getMessage();
+        return buildResponseEntity(new ApiError(message), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(NoValidUserException.class)
+    public ResponseEntity<ApiError> handleNoValidUserException(NoValidUserException ex) {
+        String message = ex.getMessage();
+        return buildResponseEntity(new ApiError(message), HttpStatus.BAD_REQUEST);
     }
 }
