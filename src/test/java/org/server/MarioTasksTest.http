@@ -11,4 +11,7 @@ GET http://localhost:8080/notes/saveds?username=user1
 Accept: application/json
 
 ### savedNotas: guardar nota
-POST http://localhost:8080/notes/saveds
+POST http://localhost:8080/social/saveds
+Content-Type: application/x-www-form-urlencoded
+
+username=user1&noteId=104

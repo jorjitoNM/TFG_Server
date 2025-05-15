@@ -51,9 +51,9 @@ public class NotasController {
     }
 
     @GetMapping("/saveds")
-    public ResponseEntity<List<Note>> getSavedNotes(
+    public ResponseEntity<List<NoteDTO>> getSavedNotes(
             @RequestParam String username) {
-        List<Note> savedNotes = userService.getSavedNotesForUser(username);
+        List<NoteDTO> savedNotes = userService.getSavedNotesForUser(username);
         return ResponseEntity.status(HttpServletResponse.SC_OK).body(savedNotes);
     }
 

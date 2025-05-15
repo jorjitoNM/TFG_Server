@@ -6,6 +6,7 @@ import org.server.dao.model.note.NoteType;
 import org.server.dao.model.user.User;
 import org.server.dao.repositories.NoteRepository;
 import org.server.dao.repositories.UserRepository;
+import org.server.dao.repositories.UserSavedRepository;
 import org.server.domain.errors.*;
 import org.server.ui.model.EventNoteDTO;
 import org.server.ui.model.NoteDTO;
@@ -20,10 +21,12 @@ import java.util.List;
 public class NoteService {
     private final NoteRepository noteRepository;
     private final UserRepository userRepository;
+    private final UserSavedRepository userSavedRepository;
 
-    public NoteService(NoteRepository noteRepository, UserRepository userRepository) {
+    public NoteService(NoteRepository noteRepository, UserRepository userRepository, UserSavedRepository userSavedRepository) {
         this.noteRepository = noteRepository;
         this.userRepository = userRepository;
+        this.userSavedRepository = userSavedRepository;
     }
 
     public List<NoteDTO> findNotesByGeographicArea(double latitude, double longitude) {
@@ -94,7 +97,6 @@ public class NoteService {
         dto.setLatitude(note.getLatitude());
         dto.setLongitude(note.getLongitude());
         dto.setType(note.getType());
-
         return dto;
     }
 
