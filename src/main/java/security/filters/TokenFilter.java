@@ -1,0 +1,71 @@
+package security.filters;
+
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.lang.NonNull;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+import security.jwt.JWTService;
+
+import java.io.IOException;
+
+@Component
+@RequiredArgsConstructor
+public class TokenFilter extends OncePerRequestFilter {
+
+    private static final String BEARER = "Bearer ";
+    private static final String AUTHORIZATION = "Authorization";
+    private static final String PETICION_INCOMPLETA = "Peticion incompleta, porfavor, envie un token";
+
+    private final JWTService jwtService;
+    private final UserDetailsService userDetailsService;
+
+
+    @Override
+    protected void doFilterInternal(
+            @NonNull HttpServletRequest request,
+            @NonNull HttpServletResponse response,
+            @NonNull FilterChain filterChain
+    ) throws ServletException, IOException {
+        final String authHeader = request.getHeader(AUTHORIZATION);
+        final String jwt;
+        final String userEmail;
+        if (authHeader == null || !authHeader.startsWith(BEARER)) {
+            response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE, PETICION_INCOMPLETA);
+            return;
+        }
+        jwt = authHeader.split(" ")[1].trim();
+        userEmail = jwtService.extractUsername(jwt);
+        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+            if (jwtService.isTokenValid(jwt, userDetails)) {
+                UsernamePasswordAuthenticationToken authToken =
+                        new UsernamePasswordAuthenticationToken(
+                                userDetails,
+                                null,
+                                userDetails.getAuthorities()
+                        );
+                authToken.setDetails(
+                        new WebAuthenticationDetailsSource().buildDetails(request)
+                );
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            }
+        }
+        filterChain.doFilter(request, response);
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getServletPath();
+        return false;
+    }
+}
