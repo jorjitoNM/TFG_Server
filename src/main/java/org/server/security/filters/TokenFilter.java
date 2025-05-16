@@ -1,4 +1,4 @@
-package security.filters;
+package org.server.security.filters;
 
 
 import jakarta.servlet.FilterChain;
@@ -14,7 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import security.jwt.JWTService;
+import org.server.security.jwt.JWTService;
 
 import java.io.IOException;
 

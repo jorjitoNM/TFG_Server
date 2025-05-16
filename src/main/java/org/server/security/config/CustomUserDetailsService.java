@@ -1,4 +1,4 @@
-package security.config;
+package org.server.security.config;
 
 
 import lombok.RequiredArgsConstructor;
