@@ -1,4 +1,4 @@
-package security.jwt;
+package org.server.security.jwt;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
