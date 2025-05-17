@@ -1,13 +1,14 @@
 package org.server.ui.controllers;
 
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
-import org.server.dao.model.user.User;
 import org.server.domain.service.SocialService;
 import org.server.ui.common.UiConstants;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 

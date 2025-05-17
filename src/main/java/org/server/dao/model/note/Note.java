@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "notes")
+@DiscriminatorValue("CLASSIC")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "note_type", discriminatorType = DiscriminatorType.STRING)
 public class Note {
@@ -53,6 +54,5 @@ public class Note {
     @Column(name = "note_type", insertable = false, updatable = false)
     private NoteType type;
 
-
-
+    
 }
