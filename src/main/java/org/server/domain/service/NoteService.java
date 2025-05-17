@@ -38,6 +38,7 @@ public class NoteService {
 
 
     public NoteDTO updateNoteFromDTO(NoteDTO noteDTO) {
+
         Note existingNote = noteRepository.findById(noteDTO.getId())
                 .orElseThrow(() -> new NoteNotFoundException("Note not found with id: " + noteDTO.getId()));
 
