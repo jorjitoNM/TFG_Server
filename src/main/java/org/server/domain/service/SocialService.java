@@ -9,7 +9,7 @@ import org.server.dao.repositories.NoteRepository;
 import org.server.dao.repositories.UserLikesNotesRepository;
 import org.server.dao.repositories.UserRepository;
 import org.server.domain.errors.NoteNotFoundException;
-import org.server.domain.errors.UserNotFound;
+import org.server.domain.errors.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -24,7 +24,7 @@ public class SocialService {
     private final UserLikesNotesRepository likesNotesRepository;
 
     public boolean likeNote(Integer noteId, UUID userId) {
-        User u = userRepository.findById(userId).orElseThrow(() -> new UserNotFound(Constantes.USER_NOT_FOUND));
+        User u = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(Constantes.USER_NOT_FOUND));
         Note n = noteRepository.findById(noteId).orElseThrow(() -> new NoteNotFoundException(Constantes.NOTE_NOT_FOUND));
         Optional<UserLikedNote> likedNote = likesNotesRepository.findUserLikedNoteByUserAndNote(u, n);
         if (likedNote.isPresent())

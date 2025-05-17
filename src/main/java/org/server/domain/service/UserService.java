@@ -7,6 +7,8 @@ import org.server.dao.model.user.UserSavedNote;
 import org.server.dao.repositories.NoteRepository;
 import org.server.dao.repositories.UserRepository;
 import org.server.dao.repositories.UserSavedRepository;
+import org.server.ui.model.NoteDTO;
+import org.server.ui.model.UserDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,4 +47,67 @@ public class UserService {
         userSavedRepository.save(newSavedNote);
         return true;
     }
+
+    public UserDTO getUser (String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return toDTO(user);
+    }
+
+
+    private UserDTO toDTO(User user) {
+        List<UserDTO> followersDTO = user.getFollowers()
+                .stream()
+                .map(follower -> new UserDTO(
+                        follower.getId(),
+                        follower.getUsername(),
+                        null, // No exponer password
+                        follower.getEmail(),
+                        follower.getRol(),
+                        null, // Evitar ciclos infinitos
+                        null,
+                        null
+                )).toList();
+
+        List<UserDTO> followingDTO = user.getFollowing()
+                .stream()
+                .map(following -> new UserDTO(
+                        following.getId(),
+                        following.getUsername(),
+                        null,
+                        following.getEmail(),
+                        following.getRol(),
+                        null,
+                        null,
+                        null
+                )).toList();
+
+        List<NoteDTO> notesDTO = user.getNotes()
+                .stream()
+                .map(note -> new NoteDTO(
+                        note.getId(),
+                        note.getTitle(),
+                        note.getContent(),
+                        note.getPrivacy(),
+                        note.getRating(),
+                        user.getUsername(),
+                        note.getLikes(),
+                        note.getCreated(),
+                        note.getLatitude(),
+                        note.getLongitude(),
+                        note.getType()
+                )).toList();
+
+        return new UserDTO(
+                user.getId(),
+                user.getUsername(),
+                null, // No exponer password
+                user.getEmail(),
+                user.getRol(),
+                followersDTO,
+                followingDTO,
+                notesDTO
+        );
+    }
+
 }
