@@ -1,11 +1,14 @@
 package org.server.ui.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.server.dao.model.note.NotePrivacy;
 import org.server.dao.model.note.NoteType;
 
 import java.time.LocalDateTime;
-
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class NoteDTO {
     private int id;

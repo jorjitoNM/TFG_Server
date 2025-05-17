@@ -1,5 +1,6 @@
 package org.server.domain.errors;
 
+import org.server.domain.errors.images.CouldNotReadImageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -41,14 +42,20 @@ public class ExceptionHandlers {
         return buildResponseEntity(new ApiError(message), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(UserNotFound.class)
-    public ResponseEntity<ApiError> handleUserNotFoundException(UserNotFound ex) {
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ApiError> handleUserNotFoundException(UserNotFoundException ex) {
         String message = ex.getMessage();
         return buildResponseEntity(new ApiError(message), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(NoValidUserException.class)
     public ResponseEntity<ApiError> handleNoValidUserException(NoValidUserException ex) {
+        String message = ex.getMessage();
+        return buildResponseEntity(new ApiError(message), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(CouldNotReadImageException.class)
+    public ResponseEntity<ApiError> handleCouldNotReadImageException(CouldNotReadImageException ex) {
         String message = ex.getMessage();
         return buildResponseEntity(new ApiError(message), HttpStatus.BAD_REQUEST);
     }
