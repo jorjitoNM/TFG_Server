@@ -110,7 +110,7 @@ public class UserService {
                         note.getCreated(),
                         note.getLatitude(),
                         note.getLongitude(),
-                        note.getType()
+                        note.getType(),false,false
                 )).toList();
 
         return new UserDTO(
