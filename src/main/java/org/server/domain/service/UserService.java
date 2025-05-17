@@ -49,8 +49,7 @@ public class UserService {
     }
 
     public UserDTO getUser (String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findByOwnUsername(username);
         return toDTO(user);
     }
 
@@ -61,10 +60,10 @@ public class UserService {
                 .map(follower -> new UserDTO(
                         follower.getId(),
                         follower.getUsername(),
-                        null, // No exponer password
+                        null,
                         follower.getEmail(),
                         follower.getRol(),
-                        null, // Evitar ciclos infinitos
+                        null,
                         null,
                         null
                 )).toList();
@@ -101,7 +100,7 @@ public class UserService {
         return new UserDTO(
                 user.getId(),
                 user.getUsername(),
-                null, // No exponer password
+                null,
                 user.getEmail(),
                 user.getRol(),
                 followersDTO,
