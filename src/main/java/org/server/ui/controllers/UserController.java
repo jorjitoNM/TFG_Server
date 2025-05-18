@@ -6,6 +6,8 @@ import org.server.ui.model.UserDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
@@ -14,5 +16,9 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<UserDTO> getUser(@RequestParam String username) { return ResponseEntity.ok(userService.getUser(username)); }
+    @GetMapping("/all")
+    public ResponseEntity<List<UserDTO>> getAllUserStartsWithText(@RequestParam String text) { return ResponseEntity.ok(userService.getAllUserStartsWithText(text)); }
+
+
 
 }
