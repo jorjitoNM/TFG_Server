@@ -46,13 +46,11 @@ public class SocialService {
         if (alreadyExists) {
             return false;
         }
-
         UserSavedNote newSavedNote = new UserSavedNote();
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
         Note note = noteRepository.findById(noteId)
                 .orElseThrow(() -> new NoteNotFoundException("Nota no encontrada"));
-
         newSavedNote.setUser(user);
         newSavedNote.setNote(note);
         userSavedRepository.save(newSavedNote);
