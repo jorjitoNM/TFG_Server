@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+
 @Service
 public class NoteService {
     private final NoteRepository noteRepository;
@@ -113,6 +114,8 @@ public class NoteService {
         }
     }
 
+
+
     public boolean checkNote(Note note) {
         if (note == null || note.getType() == null || note.getTitle().isEmpty()) {
             return false;
@@ -135,4 +138,13 @@ public class NoteService {
         return notes.stream().map(this::toDTO).toList();
     }
 
+    public boolean deleteNote(Note note) {
+        noteRepository.delete(note);
+
+        return false;
+    }
+
+    public Note getNoteByIdNote(int id) {
+        return noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException("Note not found with id: " + id));
+    }
 }
