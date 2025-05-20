@@ -23,5 +23,5 @@ public interface NoteRepository extends JpaRepository<Note, Integer> {
     List<Note> findByType(@Param("note_type") NoteType noteType);
 
 
-
+    List<Note> findByUsername(String username);
 }

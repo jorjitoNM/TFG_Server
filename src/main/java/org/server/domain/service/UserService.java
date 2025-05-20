@@ -13,7 +13,6 @@ import org.server.dao.repositories.UserRepository;
 import org.server.ui.model.NoteDTO;
 import org.server.ui.model.UserDTO;
 import org.server.ui.model.EventNoteDTO;
-import org.server.ui.model.NoteDTO;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -68,7 +67,11 @@ public class UserService {
         User user = userRepository.findByOwnUsername(username);
         return toDTO(user);
     }
-
+    public List<NoteDTO> getNoteByUsername(String username) {
+        return noteRepository.findByUsername(username).stream()
+                .map(note -> toDTO(note, username))
+                .toList();
+    }
 
     private UserDTO toDTO(User user) {
         List<UserDTO> followersDTO = user.getFollowers()
@@ -124,5 +127,6 @@ public class UserService {
                 notesDTO
         );
     }
+
 
 }
