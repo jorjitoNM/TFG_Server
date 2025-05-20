@@ -6,15 +6,19 @@ import org.server.dao.model.note.NoteType;
 import org.server.dao.model.user.User;
 import org.server.dao.repositories.NoteRepository;
 import org.server.dao.repositories.UserRepository;
+import org.server.dao.repositories.UserSavedRepository;
 import org.server.domain.errors.*;
 import org.server.ui.model.EventNoteDTO;
 import org.server.ui.model.NoteDTO;
+import org.server.ui.model.NoteMapDTO;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class NoteService {
@@ -113,8 +117,6 @@ public class NoteService {
 
         }
     }
-
-
 
     public boolean checkNote(Note note) {
         if (note == null || note.getType() == null || note.getTitle().isEmpty()) {

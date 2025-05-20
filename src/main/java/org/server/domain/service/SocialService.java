@@ -11,7 +11,7 @@ import org.server.dao.repositories.UserLikesNotesRepository;
 import org.server.dao.repositories.UserRepository;
 import org.server.dao.repositories.UserSavedRepository;
 import org.server.domain.errors.NoteNotFoundException;
-import org.server.domain.errors.UserNotFound;
+import org.server.domain.errors.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -27,7 +27,7 @@ public class SocialService {
     private final UserSavedRepository userSavedRepository;
 
     public boolean likeNote(Integer noteId, UUID userId) {
-        User u = userRepository.findById(userId).orElseThrow(() -> new UserNotFound(Constantes.USER_NOT_FOUND));
+        User u = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(Constantes.USER_NOT_FOUND));
         Note n = noteRepository.findById(noteId).orElseThrow(() -> new NoteNotFoundException(Constantes.NOTE_NOT_FOUND));
 
         Optional<UserLikedNote> existingLike = likesNotesRepository.findUserLikedNoteByUserAndNote(u, n);
@@ -46,13 +46,11 @@ public class SocialService {
         if (alreadyExists) {
             return false;
         }
-
         UserSavedNote newSavedNote = new UserSavedNote();
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFound("Usuario no encontrado"));
+                .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
         Note note = noteRepository.findById(noteId)
                 .orElseThrow(() -> new NoteNotFoundException("Nota no encontrada"));
-
         newSavedNote.setUser(user);
         newSavedNote.setNote(note);
         userSavedRepository.save(newSavedNote);

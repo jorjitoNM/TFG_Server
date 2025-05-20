@@ -9,6 +9,7 @@ import org.server.domain.service.ImagesService;
 import org.server.domain.service.NoteService;
 import org.server.domain.service.UserService;
 import org.server.ui.model.NoteDTO;
+import org.server.ui.model.NoteMapDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,9 +52,9 @@ public class NotasController {
     }
 
     @GetMapping("/saveds")
-    public ResponseEntity<List<Note>> getSavedNotes(
+    public ResponseEntity<List<NoteDTO>> getSavedNotes(
             @RequestParam String username) {
-        List<Note> savedNotes = userService.getSavedNotesForUser(username);
+        List<NoteDTO> savedNotes = userService.getSavedNotesForUser(username);
         return ResponseEntity.status(HttpServletResponse.SC_OK).body(savedNotes);
     }
 
@@ -100,4 +101,9 @@ public class NotasController {
         List<NoteDTO> sortedNotes = noteService.sortNoteList(ascending);
         return ResponseEntity.status(HttpServletResponse.SC_OK).body(sortedNotes);
     }
+
+
+
+
+
 }
