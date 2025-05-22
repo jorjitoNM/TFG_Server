@@ -33,9 +33,6 @@ public class User {
     private String code;
 
     @Column(nullable = false)
-    private String rol;
-
-    @Column(nullable = false)
     private boolean enabled;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)

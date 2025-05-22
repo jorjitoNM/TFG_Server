@@ -1,24 +1,26 @@
 package org.server.ui.controllers;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.server.domain.service.AuthenticationService;
 import org.server.security.jwt.Token;
+import org.server.ui.common.UiConstants;
 import org.server.ui.model.AuthenticationUser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class AuthenticationController {
 
-    private AuthenticationService service;
+    private final AuthenticationService service;
     private final AuthenticationManager authenticationManager;
 
-    @PostMapping("/login")
+    @PostMapping(UiConstants.LOGIN_URL)
     public ResponseEntity<Token> login (@RequestBody AuthenticationUser authenticationUser) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -27,9 +29,9 @@ public class AuthenticationController {
         return ResponseEntity.ok(service.generateToken(authenticationUser));
     }
 
-    @PostMapping("/register")
+    @PostMapping(UiConstants.REGISTER_URL)
     public ResponseEntity<Void> register (@RequestBody AuthenticationUser authenticationUser) {
         service.register(authenticationUser);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpServletResponse.SC_CREATED).body(null);
     }
 }

@@ -8,6 +8,7 @@ import org.server.security.jwt.JWTService;
 import org.server.security.jwt.Token;
 import org.server.ui.model.AuthenticationUser;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
@@ -18,9 +19,10 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
-    private JWTService jwtService;
+    private final JWTService jwtService;
     private final UserDetailsService userDetailsService;
-    private UsersRepository usersRepository;
+    private final UsersRepository usersRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public Token generateToken(AuthenticationUser authenticationUser) {
         return jwtService.generateToken(
@@ -35,8 +37,8 @@ public class AuthenticationService {
         String code = Base64.getUrlEncoder().encodeToString(randomCode);
         usersRepository.save(new User(
                 authenticationUser.getUsername(),
+                passwordEncoder.encode(authenticationUser.getPassword()),
                 authenticationUser.getEmail(),
-                authenticationUser.getPassword(),
                 code,
                 false)
         );
