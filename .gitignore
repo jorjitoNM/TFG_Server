@@ -32,6 +32,9 @@ build/
 ### VS Code ###
 .vscode/
 
+### .env ###
+src/*.env
 
-### Spring properties ###
-src/main/resources/application.properties
+### Database initialization ###
+src/main/resources/data.sql
+src/main/resources/schema.sql
