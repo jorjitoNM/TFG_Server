@@ -1,48 +1,147 @@
+delete from user_followed;
+delete from user_followers;
+delete from user_following;
 delete from user_likes_notes;
+delete from user_saved_notes;
 delete from notes;
 delete from users;
 
 
--- Insert test users with UUIDs in binary(16) format
-INSERT INTO users (user_id, username, password, email, code, rol)
-VALUES (UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')), 'user1', 'user1', 'user1@example.com', 1234, 'PREMIUM');
+INSERT INTO users (user_id, code, email, enabled, password, username)
+VALUES (UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')), 'CODE111', 'alice@example.com', 1,
+        '$2a$10$XptfskLsT1l/bRTLRiiCgegjHmO79V3L/Ie6eXo1XzR1cF5W5JQ1O', 'alice'),
+       (UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', '')), 'CODE222', 'bob@example.com', 1,
+        '$2a$10$XptfskLsT1l/bRTLRiiCgegjHmO79V3L/Ie6eXo1XzR1cF5W5JQ1O', 'bob'),
+       (UNHEX(REPLACE('33333333-3333-3333-3333-333333333333', '-', '')), 'CODE333', 'charlie@example.com', 1,
+        '$2a$10$XptfskLsT1l/bRTLRiiCgegjHmO79V3L/Ie6eXo1XzR1cF5W5JQ1O', 'charlie'),
+       (UNHEX(REPLACE('44444444-4444-4444-4444-444444444444', '-', '')), 'CODE444', 'dave@example.com', 1,
+        '$2a$10$XptfskLsT1l/bRTLRiiCgegjHmO79V3L/Ie6eXo1XzR1cF5W5JQ1O', 'dave'),
+       (UNHEX(REPLACE('55555555-5555-5555-5555-555555555555', '-', '')), 'CODE555', 'eve@example.com', 1,
+        '$2a$10$XptfskLsT1l/bRTLRiiCgegjHmO79V3L/Ie6eXo1XzR1cF5W5JQ1O', 'eve');
 
-INSERT INTO users (user_id, username, password, email, code, rol)
-VALUES (UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', '')), 'user2', 'user2', 'user2@example.com', 1234, 'FREE');
+-- Alice follows Bob and Charlie
+INSERT INTO user_followed (followed_id, owner_id)
+VALUES (UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', '')),
+        UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', ''))),
+       (UNHEX(REPLACE('33333333-3333-3333-3333-333333333333', '-', '')),
+        UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')));
 
--- Madrid, Spain (Center)
-INSERT INTO notes (title, content, privacy, rating, owner_id, likes, created, latitude, longitude, note_type, start, end)
-VALUES ('Puerta del Sol', 'Historic square in the heart of Madrid', 'PUBLIC', 5, UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')), 10, '2023-01-01 12:00:00', 40.416775, -3.703790, 'EVENT', '2023-01-01 12:00:00', '2023-01-01 12:00:00');
+-- Bob follows Alice
+INSERT INTO user_followed (followed_id, owner_id)
+VALUES (UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')),
+        UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', '')));
 
--- Notes within 5km of Madrid center
-INSERT INTO notes (title, content, privacy, rating, owner_id, likes, created, latitude, longitude, note_type, start, end)
-VALUES ('Retiro Park', 'Beautiful park with a lake', 'PUBLIC', 5, UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')), 15, '2023-01-02 14:30:00', 40.415504, -3.682909, 'CLASSIC', '2023-01-02 14:30:00', '2023-01-02 14:30:00');
+-- Charlie follows Alice and Bob
+INSERT INTO user_followed (followed_id, owner_id)
+VALUES (UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')),
+        UNHEX(REPLACE('33333333-3333-3333-3333-333333333333', '-', ''))),
+       (UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', '')),
+        UNHEX(REPLACE('33333333-3333-3333-3333-333333333333', '-', '')));
 
-INSERT INTO notes (title, content, privacy, rating, owner_id, likes, created, latitude, longitude, note_type, start, end)
-VALUES ('Royal Palace', 'Official residence of the Spanish Royal Family', 'PUBLIC', 4, UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', '')), 8, '2023-01-03 10:15:00', 40.418053, -3.714312, 'EVENT', '2023-01-03 10:15:00', '2023-01-03 10:15:00');
+-- Dave follows Alice
+INSERT INTO user_followed (followed_id, owner_id)
+VALUES (UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')),
+        UNHEX(REPLACE('44444444-4444-4444-4444-444444444444', '-', '')));
 
-INSERT INTO notes (title, content, privacy, rating, owner_id, likes, created, latitude, longitude, note_type, start, end)
-VALUES ('Mercado de San Miguel', 'Popular food market with various cuisines', 'PUBLIC', 4, UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')), 12, '2023-01-04 18:45:00', 40.415421, -3.709658, 'EVENT', '2023-01-04 18:45:00', '2023-01-04 18:45:00');
+-- Eve follows Alice and Charlie
+INSERT INTO user_followed (followed_id, owner_id)
+VALUES (UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')),
+        UNHEX(REPLACE('55555555-5555-5555-5555-555555555555', '-', ''))),
+       (UNHEX(REPLACE('33333333-3333-3333-3333-333333333333', '-', '')),
+        UNHEX(REPLACE('55555555-5555-5555-5555-555555555555', '-', '')));
 
-INSERT INTO notes (title, content, privacy, rating, owner_id, likes, created, latitude, longitude, note_type, start, end)
-VALUES ('Prado Museum', 'One of the greatest art museums in the world', 'PUBLIC', 5, UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', '')), 20, '2023-01-05 11:30:00', 40.413756, -3.692094, 'EVENT', '2023-01-05 11:30:00', '2023-01-05 11:30:00');
+-- Also populate the user_followers and user_following tables for consistency
+-- (These would typically be maintained by application logic or triggers)
+INSERT INTO user_followers (user_id, follower_id)
+VALUES (UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')),
+        UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', ''))),
+       (UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')),
+        UNHEX(REPLACE('33333333-3333-3333-3333-333333333333', '-', ''))),
+       (UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')),
+        UNHEX(REPLACE('44444444-4444-4444-4444-444444444444', '-', ''))),
+       (UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')),
+        UNHEX(REPLACE('55555555-5555-5555-5555-555555555555', '-', ''))),
+       (UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', '')),
+        UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', ''))),
+       (UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', '')),
+        UNHEX(REPLACE('33333333-3333-3333-3333-333333333333', '-', ''))),
+       (UNHEX(REPLACE('33333333-3333-3333-3333-333333333333', '-', '')),
+        UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', ''))),
+       (UNHEX(REPLACE('33333333-3333-3333-3333-333333333333', '-', '')),
+        UNHEX(REPLACE('55555555-5555-5555-5555-555555555555', '-', '')));
 
--- Notes just outside 5km of Madrid center
-INSERT INTO notes (title, content, privacy, rating, owner_id, likes, created, latitude, longitude, note_type, start, end)
-VALUES ('Madrid Rio Park', 'Urban park along the Manzanares River', 'PUBLIC', 4, UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')), 7, '2023-01-06 16:20:00', 40.395857, -3.719488, 'CLASSIC', '2023-01-06 16:20:00', '2023-01-06 16:20:00');
+INSERT INTO user_following (user_id, following_id)
+VALUES (UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')),
+        UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', ''))),
+       (UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')),
+        UNHEX(REPLACE('33333333-3333-3333-3333-333333333333', '-', ''))),
+       (UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', '')),
+        UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', ''))),
+       (UNHEX(REPLACE('33333333-3333-3333-3333-333333333333', '-', '')),
+        UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', ''))),
+       (UNHEX(REPLACE('33333333-3333-3333-3333-333333333333', '-', '')),
+        UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', ''))),
+       (UNHEX(REPLACE('44444444-4444-4444-4444-444444444444', '-', '')),
+        UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', ''))),
+       (UNHEX(REPLACE('55555555-5555-5555-5555-555555555555', '-', '')),
+        UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', ''))),
+       (UNHEX(REPLACE('55555555-5555-5555-5555-555555555555', '-', '')),
+        UNHEX(REPLACE('33333333-3333-3333-3333-333333333333', '-', '')));
 
--- Barcelona (far from Madrid)
-INSERT INTO notes (title, content, privacy, rating, owner_id, likes, created, latitude, longitude, note_type, start, end)
-VALUES ('Sagrada Familia', 'Famous basilica designed by Antoni Gaudí', 'PUBLIC', 5, UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', '')), 25, '2023-01-07 09:45:00', 41.403706, 2.173504, 'EVENT', '2023-01-07 09:45:00', '2023-01-07 09:45:00');
+INSERT INTO notes (id,note_type, content, created, latitude, longitude, privacy, title, owner_id, likes,end,start)
+VALUES (1,'Note', 'Just visited the Eiffel Tower! Amazing view from the top.', '2023-05-15 10:30:00', 48.8584, 2.2945,
+        'PUBLIC', 'Eiffel Tower Visit', UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')), 3, null,null),
+       (2,'Note', 'Working on a new project. Can''t wait to share it with everyone!', '2023-05-16 14:15:00', 37.7749,
+        -122.4194, 'FOLLOWERS', 'New Project', UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')), 2, null,null),
+       (3,'Note', 'Personal thoughts about life and the universe.', '2023-05-17 22:45:00', 34.0522, -118.2437, 'PRIVATE',
+        'Private Journal', UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')), 0, null,null),
+       (4,'EventNote', 'Tech conference next month. Register now!', '2023-05-18 09:00:00', 37.7833, -122.4167, 'PUBLIC',
+        'Tech Conference', UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', '')), 5, '2023-06-15 09:00:00',
+        '2023-06-17 18:00:00'),
+       (5,'Note', 'Check out this cool café I found in downtown!', '2023-05-19 12:30:00', 40.7128, -74.0060, 'PUBLIC',
+        'Hidden Café', UNHEX(REPLACE('33333333-3333-3333-3333-333333333333', '-', '')), 1, null,null),
+       (6,'Note', 'My secret fishing spot. Shhh!', '2023-05-20 07:00:00', 45.4215, -75.6972, 'FOLLOWERS', 'Fishing Spot',
+        UNHEX(REPLACE('33333333-3333-3333-3333-333333333333', '-', '')), 1, null,null),
+       (7,'EventNote', 'Birthday party at my place!', '2023-05-21 18:00:00', 51.5074, -0.1278, 'FOLLOWERS',
+        'Birthday Party', UNHEX(REPLACE('44444444-4444-4444-4444-444444444444', '-', '')), 2, '2023-06-10 19:00:00',
+        '2023-06-11 02:00:00'),
+       (8,'Note', 'Just finished reading an amazing book!', '2023-05-22 21:15:00', 35.6762, 139.6503, 'PUBLIC',
+        'Book Recommendation', UNHEX(REPLACE('55555555-5555-5555-5555-555555555555', '-', '')), 0, null,null);
 
--- Valencia (far from Madrid)
-INSERT INTO notes (title, content, privacy, rating, owner_id, likes, created, latitude, longitude, note_type, start, end)
-VALUES ('City of Arts and Sciences', 'Cultural and architectural complex', 'PUBLIC', 5, UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')), 18, '2023-01-08 13:10:00', 39.454769, -0.351913, 'EVENT', '2023-01-08 13:10:00', '2023-01-08 13:10:00');
+-- Bob likes Alice's Eiffel Tower note and New Project note
+INSERT INTO user_likes_notes (note_id, user_id)
+VALUES (1, UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', ''))),
+       (2, UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', '')));
 
--- Seville (far from Madrid)
-INSERT INTO notes (title, content, privacy, rating, owner_id, likes, created, latitude, longitude, note_type, start, end)
-VALUES ('Plaza de España', 'Landmark square with beautiful architecture', 'PUBLIC', 4, UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', '')), 14, '2023-01-09 15:30:00', 37.377102, -5.986400, 'CULTURAL', '2023-01-09 15:30:00', '2023-01-09 15:30:00');
+-- Charlie likes Alice's Eiffel Tower note and Bob's Tech Conference note
+INSERT INTO user_likes_notes (note_id, user_id)
+VALUES (1, UNHEX(REPLACE('33333333-3333-3333-3333-333333333333', '-', ''))),
+       (4, UNHEX(REPLACE('33333333-3333-3333-3333-333333333333', '-', '')));
 
--- Event notes (Madrid area)
-INSERT INTO notes (title, content, privacy, rating, owner_id, likes, created, latitude, longitude, note_type, start, end)
-VALUES ('Summer Concert', 'Live music event at the park', 'PUBLIC', 4, UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')), 9, '2023-01-10 20:00:00', 40.419946, -3.699437, 'EVENT', '2023-07-15 19:00:00', '2023-07-15 23:00:00');
+-- Dave likes Bob's Tech Conference note and Charlie's Hidden Café note
+INSERT INTO user_likes_notes (note_id, user_id)
+VALUES (4, UNHEX(REPLACE('44444444-4444-4444-4444-444444444444', '-', ''))),
+       (5, UNHEX(REPLACE('44444444-4444-4444-4444-444444444444', '-', '')));
+
+-- Eve likes Alice's Eiffel Tower note, Bob's Tech Conference note, and Dave's Birthday Party note
+INSERT INTO user_likes_notes (note_id, user_id)
+VALUES (1, UNHEX(REPLACE('55555555-5555-5555-5555-555555555555', '-', ''))),
+       (4, UNHEX(REPLACE('55555555-5555-5555-5555-555555555555', '-', ''))),
+       (7, UNHEX(REPLACE('55555555-5555-5555-5555-555555555555', '-', '')));
+
+-- Alice saves Bob's Tech Conference note
+INSERT INTO user_saved_notes (note_id, user_id)
+VALUES (4, UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')));
+
+-- Bob saves Alice's Eiffel Tower note
+INSERT INTO user_saved_notes (note_id, user_id)
+VALUES (1, UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', '')));
+
+-- Charlie saves Alice's Eiffel Tower note and Bob's Tech Conference note
+INSERT INTO user_saved_notes (note_id, user_id)
+VALUES (1, UNHEX(REPLACE('33333333-3333-3333-3333-333333333333', '-', ''))),
+       (4, UNHEX(REPLACE('33333333-3333-3333-3333-333333333333', '-', '')));
+
+-- Eve saves Charlie's Hidden Café note
+INSERT INTO user_saved_notes (note_id, user_id)
+VALUES (5, UNHEX(REPLACE('55555555-5555-5555-5555-555555555555', '-', '')));

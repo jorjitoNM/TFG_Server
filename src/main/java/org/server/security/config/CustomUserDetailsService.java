@@ -16,11 +16,12 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final UserService service;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        org.server.dao.model.user.User user = service.findByUsername(email);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        org.server.dao.model.user.User user = service.findByUsername(username);
         return User.builder()
                 .username(user.getUsername())
                 .password(user.getPassword())
+                .accountLocked(!user.isEnabled())
                 .build();
     }
 }
