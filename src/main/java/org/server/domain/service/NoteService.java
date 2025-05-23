@@ -96,15 +96,16 @@ public class NoteService {
         return dto;
     }
 
-    public Note addNote(Note note, String username) {
+    public Note addNote(NoteDTO note, String username) {
         User user = userRepository.findByOwnUsername(username);
         if(user == null){
             throw new NoValidUserException("This user is not valid");
         }else{
             if(checkNote(note)){
-                note.setOwner(user);
-                note.setCreated(LocalDateTime.now());
-                return noteRepository.save(note);
+                Note noteConverted = convertDTOToNote(note);
+                noteConverted.setOwner(user);
+                noteConverted.setCreated(LocalDateTime.now());
+                return noteRepository.save(noteConverted);
             }else{
                 throw new InvalidNoteTypeException("Invalid note type");
             }
@@ -112,7 +113,25 @@ public class NoteService {
         }
     }
 
-    public boolean checkNote(Note note) {
+    private Note convertDTOToNote(NoteDTO note) {
+        Note noteConverted;
+        if (note.getType() == NoteType.EVENT) {
+            Event event = new Event();
+//            event.setStart(LocalDateTime.parse(note.getStart()));
+//            event.setEnd(LocalDateTime.parse(note.getEnd()));
+            noteConverted = event;
+        } else {
+            noteConverted = new Note();
+        }
+        noteConverted.setTitle(note.getTitle());
+        noteConverted.setContent(note.getContent());
+        noteConverted.setPrivacy(note.getPrivacy());
+        noteConverted.setLatitude(note.getLatitude());
+        noteConverted.setLongitude(note.getLongitude());
+        return noteConverted;
+    }
+
+    public boolean checkNote(NoteDTO note) {
         if (note == null || note.getType() == null || note.getTitle().isEmpty()) {
             return false;
         }
