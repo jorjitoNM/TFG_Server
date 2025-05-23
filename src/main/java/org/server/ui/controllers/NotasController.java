@@ -9,7 +9,6 @@ import org.server.domain.service.ImagesService;
 import org.server.domain.service.NoteService;
 import org.server.domain.service.UserService;
 import org.server.ui.model.NoteDTO;
-import org.server.ui.model.NoteMapDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,6 +57,18 @@ public class NotasController {
         return ResponseEntity.status(HttpServletResponse.SC_OK).body(savedNotes);
     }
 
+    @DeleteMapping("/saveds")
+    public ResponseEntity<Void> deleteSavedNote(@RequestParam int noteId) {
+        userService.removeSavedNotesForUser("user1", noteId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/liked")
+    public ResponseEntity<Void> deleteLikedNote(@RequestParam int noteId) {
+        userService.removeLikedNotesForUser("user1", noteId);
+        return ResponseEntity.noContent().build();
+    }
+
     @PatchMapping("/{id}/rate")
     public ResponseEntity<NoteDTO> rateNote(
             @PathVariable int id,
@@ -89,10 +100,10 @@ public class NotasController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Note> deleteNote(@PathVariable int id) {
+    public ResponseEntity<Void> deleteNote(@PathVariable int id) {
         Note note = noteService.getNoteByIdNote(id);
-        return noteService.deleteNote(note) ? ResponseEntity.status(HttpServletResponse.SC_NO_CONTENT).build()
-                : ResponseEntity.status(HttpServletResponse.SC_NOT_FOUND).build();
+        noteService.deleteNote(note);
+        return ResponseEntity.status(HttpServletResponse.SC_NO_CONTENT).build();
     }
 
     @GetMapping("/sorted")
@@ -101,9 +112,4 @@ public class NotasController {
         List<NoteDTO> sortedNotes = noteService.sortNoteList(ascending);
         return ResponseEntity.status(HttpServletResponse.SC_OK).body(sortedNotes);
     }
-
-
-
-
-
 }
