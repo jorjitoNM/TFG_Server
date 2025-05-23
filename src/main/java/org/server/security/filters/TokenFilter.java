@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.server.security.common.SecurityConstants;
 import org.server.security.jwt.JWTService;
 import org.server.ui.common.UiConstants;
 import org.springframework.lang.NonNull;
@@ -23,10 +24,6 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class TokenFilter extends OncePerRequestFilter {
 
-    private static final String BEARER = "Bearer ";
-    private static final String AUTHORIZATION = "Authorization";
-    private static final String PETICION_INCOMPLETA = "Peticion incompleta, porfavor, envie un token";
-
     private final JWTService jwtService;
     private final UserDetailsService userDetailsService;
 
@@ -37,17 +34,17 @@ public class TokenFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        final String authHeader = request.getHeader(AUTHORIZATION);
+        final String authHeader = request.getHeader(SecurityConstants.AUTHORIZATION);
         final String jwt;
-        final String userEmail;
-        if (authHeader == null || !authHeader.startsWith(BEARER)) {
-            response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE, PETICION_INCOMPLETA);
+        final String username;
+        if (authHeader == null || !authHeader.startsWith(SecurityConstants.BEARER)) {
+            response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE, SecurityConstants.PETICION_INCOMPLETA);
             return;
         }
         jwt = authHeader.split(" ")[1].trim();
-        userEmail = jwtService.extractUsername(jwt);
-        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+        username = jwtService.extractUsername(jwt);
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
             if (jwtService.isTokenValid(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(
@@ -68,6 +65,7 @@ public class TokenFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
         return path.equals(UiConstants.LOGIN_URL)
-                || path.equals(UiConstants.REGISTER_URL);
+                || path.equals(UiConstants.REGISTER_URL)
+                || path.equals(UiConstants.REFRESH_URL);
     }
 }
