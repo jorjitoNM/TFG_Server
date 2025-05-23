@@ -16,8 +16,11 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<UserDTO> getUser(@RequestParam String username) {
-        return ResponseEntity.ok(userService.getUser(username)); }
+    public ResponseEntity<UserDTO> getUser(@RequestParam String username) { return ResponseEntity.ok(userService.getUser(username)); }
+    @GetMapping("/all")
+    public ResponseEntity<List<UserDTO>> getAllUserStartsWithText(@RequestParam String text) { return ResponseEntity.ok(userService.getAllUserStartsWithText(text)); }
+
+
 
     @GetMapping("/notes")
     public ResponseEntity<List<NoteDTO>> getNote(@RequestParam String username) {

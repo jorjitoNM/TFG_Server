@@ -10,6 +10,7 @@ import org.server.dao.repositories.UserLikesNotesRepository;
 import org.server.dao.repositories.UserSavedRepository;
 import org.server.dao.repositories.NoteRepository;
 import org.server.dao.repositories.UserRepository;
+import org.server.domain.errors.UserNotFoundException;
 import org.server.ui.model.NoteDTO;
 import org.server.ui.model.UserDTO;
 import org.server.ui.model.EventNoteDTO;
@@ -24,6 +25,15 @@ public class UserService {
     private final UserLikesNotesRepository userLikesNotesRepository;
     private final UserRepository userRepository;
     private final NoteRepository noteRepository;
+
+    public List<UserDTO> getAllUserStartsWithText(String text) {
+
+        return userRepository.findAll().stream()
+                .filter(user -> user.getUsername().toLowerCase().startsWith(text.toLowerCase()))
+                .map(this::toDTO)
+                .toList();
+    }
+
     public List<NoteDTO> getSavedNotesForUser(String username) {
         return userSavedRepository.findByUserUsername(username)
                 .stream()
