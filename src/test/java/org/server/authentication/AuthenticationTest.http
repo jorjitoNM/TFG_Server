@@ -18,3 +18,7 @@ Content-Type: application/json
   "password": "user1",
   "email": "user1@example.com"
 }
+
+###
+GET http://localhost:8080/refresh
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVzZXIxIiwic3ViIjoidXNlcjEiLCJpYXQiOjE3NDgwMzQ2MjcsImV4cCI6MTc0ODYzOTQyN30.-ZetIf6bi6-OnbfBHvgjnJy8J8CGS-WfosnqtAWH4Qc

@@ -29,7 +29,7 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req ->
-                        req.requestMatchers(UiConstants.LOGIN_URL,UiConstants.REGISTER_URL)
+                        req.requestMatchers(UiConstants.LOGIN_URL,UiConstants.REGISTER_URL,UiConstants.REFRESH_URL)
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()
