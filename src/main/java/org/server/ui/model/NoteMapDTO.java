@@ -2,7 +2,6 @@ package org.server.ui.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.server.dao.model.note.NoteType;
 
 import java.util.List;
 

@@ -1,20 +1,20 @@
 package org.server.domain.service;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.server.dao.model.note.Event;
-import org.server.dao.model.note.Note;
-import org.server.dao.model.note.NoteType;
+import org.server.common.Mapper;
 import org.server.dao.model.user.User;
+import org.server.dao.model.user.UserLikedNote;
 import org.server.dao.model.user.UserSavedNote;
-import org.server.dao.repositories.UserLikesNotesRepository;
-import org.server.dao.repositories.UserSavedRepository;
 import org.server.dao.repositories.NoteRepository;
+import org.server.dao.repositories.UserLikesNotesRepository;
 import org.server.dao.repositories.UserRepository;
-import org.server.domain.errors.UserNotFoundException;
+import org.server.dao.repositories.UserSavedRepository;
+import org.server.domain.errors.NoteNotFoundException;
 import org.server.ui.model.NoteDTO;
 import org.server.ui.model.UserDTO;
-import org.server.ui.model.EventNoteDTO;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -25,6 +25,7 @@ public class UserService {
     private final UserLikesNotesRepository userLikesNotesRepository;
     private final UserRepository userRepository;
     private final NoteRepository noteRepository;
+    private final Mapper mapper;
 
     public List<UserDTO> getAllUserStartsWithText(String text) {
 
@@ -34,44 +35,42 @@ public class UserService {
                 .toList();
     }
 
+    public List<NoteDTO> getLikedNotes(String username) {
+        return userLikesNotesRepository.findAll().stream()
+                .map(UserLikedNote::getNote)
+                .map(it -> mapper.toDTO(it, username))
+                .toList();
+    }
+
     public List<NoteDTO> getSavedNotesForUser(String username) {
         return userSavedRepository.findByUserUsername(username)
                 .stream()
                 .map(UserSavedNote::getNote)
-                .map(note -> toDTO(note, username))
+                .map(note -> mapper.toDTO(note, username))
                 .toList();
     }
 
-    private NoteDTO toDTO(Note note, String username) {
-        if (note == null) {
-            return null;
-        }
-        NoteDTO dto;
 
-        if (note.getType() == NoteType.EVENT && note instanceof Event event) {
-            EventNoteDTO eventDto = new EventNoteDTO();
-            eventDto.setStart(event.getStart().toString());
-            eventDto.setEnd(event.getEnd().toString());
-            dto = eventDto;
-        } else {
-            dto = new NoteDTO();
-        }
+    @Transactional
+    public void removeSavedNotesForUser(String username, int noteId) {
+        int deletedCount = userSavedRepository.deleteByNoteAndUser(noteId, username);
 
-        dto.setId(note.getId());
-        dto.setTitle(note.getTitle());
-        dto.setContent(note.getContent());
-        dto.setPrivacy(note.getPrivacy());
-        dto.setRating(note.getRating());
-        dto.setOwnerUsername(note.getOwner() != null ? note.getOwner().getUsername() : null);
-        dto.setLikes(note.getLikes());
-        dto.setCreated(note.getCreated());
-        dto.setLatitude(note.getLatitude());
-        dto.setLongitude(note.getLongitude());
-        dto.setType(note.getType());
-        dto.setSaved(userSavedRepository.existsByUserUsernameAndNoteId(username, note.getId()));
-        dto.setLiked(userLikesNotesRepository.existsByUserUsernameAndNoteId(username, note.getId()));
-        return dto;
+        if (deletedCount == 0) {
+            throw new NoteNotFoundException(
+                    "Note with id " + noteId + " not found in saved notes for user " + username);
+        }
     }
+
+    @Transactional
+    public void removeLikedNotesForUser(String username, int noteId) {
+        int deletedCount = userLikesNotesRepository.deleteByNoteAndUser(noteId, username);
+
+        if (deletedCount == 0) {
+            throw new NoteNotFoundException(
+                    "Note with id " + noteId + " not found in liked notes for user " + username);
+        }
+    }
+
 
     public UserDTO getUser (String username) {
         User user = userRepository.findByOwnUsername(username);
@@ -79,7 +78,7 @@ public class UserService {
     }
     public List<NoteDTO> getNoteByUsername(String username) {
         return noteRepository.findByOwnerUsername(username).stream()
-                .map(note -> toDTO(note, username))
+                .map(note -> mapper.toDTO(note, username))
                 .toList();
     }
 

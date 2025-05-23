@@ -1,37 +1,30 @@
 package org.server.domain.service;
 
-import org.server.dao.model.note.Event;
+import lombok.RequiredArgsConstructor;
+import org.server.common.Mapper;
 import org.server.dao.model.note.Note;
 import org.server.dao.model.note.NoteType;
 import org.server.dao.model.user.User;
 import org.server.dao.repositories.NoteRepository;
 import org.server.dao.repositories.UserRepository;
-import org.server.dao.repositories.UserSavedRepository;
 import org.server.domain.errors.*;
-import org.server.ui.model.EventNoteDTO;
 import org.server.ui.model.NoteDTO;
-import org.server.ui.model.NoteMapDTO;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class NoteService {
     private final NoteRepository noteRepository;
     private final UserRepository userRepository;
+    private final Mapper mapper;
 
-    public NoteService(NoteRepository noteRepository, UserRepository userRepository) {
-        this.noteRepository = noteRepository;
-        this.userRepository = userRepository;
-    }
 
     public List<NoteDTO> findNotesByGeographicArea(double latitude, double longitude) {
-        return noteRepository.findNotesByGeographicArea(latitude, longitude).stream().map(this::toDTO).toList();
+        return noteRepository.findNotesByGeographicArea(latitude, longitude).stream().map(note -> mapper.toDTO(note,"user1")).toList();
     }
 
 
@@ -46,7 +39,7 @@ public class NoteService {
         existingNote.setLongitude(noteDTO.getLongitude());
 
         Note savedNote = noteRepository.save(existingNote);
-        return toDTO(savedNote);
+        return mapper.toDTO(savedNote,"user1");
     }
 
     public NoteDTO rateNoteAndReturnDTO(int noteId, int rating) {
@@ -59,59 +52,29 @@ public class NoteService {
 
         note.setRating(rating);
         Note savedNote = noteRepository.save(note);
-        return toDTO(savedNote);
+        return mapper.toDTO(savedNote,"user1");
     }
 
     public List<NoteDTO> getAllNotes() {
-        return noteRepository.findAll().stream().map(this::toDTO).toList();
+        return noteRepository.findAll().stream().map(note -> mapper.toDTO(note,"user1")).toList();
     }
 
     public NoteDTO getNoteById(int noteId) {
         Note n = noteRepository.findById(noteId).orElseThrow(() -> new NoteNotFoundException("Note not found with id: " + noteId));
-        return toDTO(n);
+        return mapper.toDTO(n,"user1");
     }
 
-
-    private NoteDTO toDTO(Note note) {
-        if (note == null) {
-            return null;
-        }
-        NoteDTO dto;
-
-        if (note.getType() == NoteType.EVENT && note instanceof Event event) {
-            EventNoteDTO eventDto = new EventNoteDTO();
-            eventDto.setStart(event.getStart().toString());
-            eventDto.setEnd(event.getEnd().toString());
-            dto = eventDto;
-        } else {
-            dto = new NoteDTO();
-        }
-
-        dto.setId(note.getId());
-        dto.setTitle(note.getTitle());
-        dto.setContent(note.getContent());
-        dto.setPrivacy(note.getPrivacy());
-        dto.setRating(note.getRating());
-        dto.setOwnerUsername(note.getOwner() != null ? note.getOwner().getUsername() : null);
-        dto.setLikes(note.getLikes());
-        dto.setCreated(note.getCreated());
-        dto.setLatitude(note.getLatitude());
-        dto.setLongitude(note.getLongitude());
-        dto.setType(note.getType());
-
-        return dto;
-    }
 
     public Note addNote(Note note, String username) {
         User user = userRepository.findByOwnUsername(username);
-        if(user == null){
+        if (user == null) {
             throw new NoValidUserException("This user is not valid");
-        }else{
-            if(checkNote(note)){
+        } else {
+            if (checkNote(note)) {
                 note.setOwner(user);
                 note.setCreated(LocalDateTime.now());
                 return noteRepository.save(note);
-            }else{
+            } else {
                 throw new InvalidNoteTypeException("Invalid note type");
             }
 
@@ -132,18 +95,17 @@ public class NoteService {
 
 
     public List<NoteDTO> findNotesByType(NoteType type) {
-        return noteRepository.findByType(type).stream().map(this::toDTO).toList();
+        return noteRepository.findByType(type).stream().map(note -> mapper.toDTO(note,"user1")).toList();
     }
+
     public List<NoteDTO> sortNoteList(boolean ascending) {
         Sort sort = Sort.by(ascending ? Sort.Direction.ASC : Sort.Direction.DESC, "likes");
         List<Note> notes = noteRepository.findAll(sort);
-        return notes.stream().map(this::toDTO).toList();
+        return notes.stream().map(note -> mapper.toDTO(note,"user1")).toList();
     }
 
-    public boolean deleteNote(Note note) {
+    public void deleteNote(Note note) {
         noteRepository.delete(note);
-
-        return false;
     }
 
     public Note getNoteByIdNote(int id) {
