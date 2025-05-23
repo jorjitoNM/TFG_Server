@@ -68,7 +68,7 @@ public class UserService {
         return toDTO(user);
     }
     public List<NoteDTO> getNoteByUsername(String username) {
-        return noteRepository.findByUsername(username).stream()
+        return noteRepository.findByOwnerUsername(username).stream()
                 .map(note -> toDTO(note, username))
                 .toList();
     }

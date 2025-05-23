@@ -1,14 +1,33 @@
 delete from user_likes_notes;
 delete from notes;
+DELETE FROM user_followed;
+DELETE FROM user_follower;
 delete from users;
 
-
--- Insert test users with UUIDs in binary(16) format
+-- Usuarios de prueba
 INSERT INTO users (user_id, username, password, email, code, rol)
-VALUES (UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')), 'user1', 'user1', 'user1@example.com', 1234, 'PREMIUM');
+VALUES
+    (UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')), 'user1', 'user1', 'user1@example.com', 1234, 'PREMIUM'),
+    (UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', '')), 'user2', 'user2', 'user2@example.com', 1234, 'FREE'),
+    (UNHEX(REPLACE('33333333-3333-3333-3333-333333333333', '-', '')), 'user3', 'user3', 'user3@example.com', 1234, 'FREE'),
+    (UNHEX(REPLACE('44444444-4444-4444-4444-444444444444', '-', '')), 'user4', 'user4', 'user4@example.com', 1234, 'PREMIUM'),
+    (UNHEX(REPLACE('55555555-5555-5555-5555-555555555555', '-', '')), 'user5', 'user5', 'user5@example.com', 1234, 'FREE');
 
-INSERT INTO users (user_id, username, password, email, code, rol)
-VALUES (UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', '')), 'user2', 'user2', 'user2@example.com', 1234, 'FREE');
+-- user_follower: owner_id = seguido, follower_id = seguidor
+INSERT INTO user_follower (owner_id, follower_id)
+VALUES
+    (UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')), UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', ''))), -- user2 sigue a user1
+    (UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')), UNHEX(REPLACE('33333333-3333-3333-3333-333333333333', '-', ''))), -- user3 sigue a user1
+    (UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', '')), UNHEX(REPLACE('44444444-4444-4444-4444-444444444444', '-', ''))), -- user4 sigue a user2
+    (UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', '')), UNHEX(REPLACE('55555555-5555-5555-5555-555555555555', '-', ''))); -- user5 sigue a user2
+-- user_followed: owner_id = quien sigue, followed_id = seguido
+INSERT INTO user_followed (owner_id, followed_id)
+VALUES
+    (UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')), UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', ''))), -- user1 sigue a user2
+    (UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')), UNHEX(REPLACE('33333333-3333-3333-3333-333333333333', '-', ''))), -- user1 sigue a user3
+    (UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', '')), UNHEX(REPLACE('44444444-4444-4444-4444-444444444444', '-', ''))), -- user2 sigue a user4
+    (UNHEX(REPLACE('33333333-3333-3333-3333-333333333333', '-', '')), UNHEX(REPLACE('55555555-5555-5555-5555-555555555555', '-', ''))); -- user3 sigue a user5
+
 INSERT INTO notes (title, content, privacy, rating, owner_id, likes, created, latitude, longitude, note_type, start, end) VALUES
 -- Madrid centro (varias notas en la misma ubicación)
 ('Gran Via', 'Famous shopping street', 'PUBLIC', 5, UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')), 30, '2023-01-11 12:00:00', 40.420000, -3.705000, 'CLASSIC', NULL, NULL),
