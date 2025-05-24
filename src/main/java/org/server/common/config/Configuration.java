@@ -1,6 +1,8 @@
 package org.server.common.config;
 
 import io.jsonwebtoken.security.Keys;
+import org.server.dao.repositories.UserRepository;
+import org.server.domain.service.AuthenticationService;
 import org.server.domain.service.UserService;
 import org.server.security.config.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,8 +38,8 @@ public class Configuration {
 
 
     @Bean
-    public UserDetailsService userDetailsService(UserService userService) {
-        return new CustomUserDetailsService(userService);
+    public UserDetailsService userDetailsService(UserRepository userRepository) {
+        return new CustomUserDetailsService(userRepository);
     }
 
     @Bean
