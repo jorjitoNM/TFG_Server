@@ -2,6 +2,7 @@ package org.server.security.config;
 
 
 import lombok.RequiredArgsConstructor;
+import org.server.domain.service.AuthenticationService;
 import org.server.domain.service.UserService;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final UserService service;
+    private final AuthenticationService service;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

@@ -1,7 +1,7 @@
 package org.server.domain.errors;
 
-public class DuplicatedUsernameOrPasswordException extends ApiError{
+public class DuplicatedUsernameOrPasswordException extends RuntimeException{
     public DuplicatedUsernameOrPasswordException(String message) {
-        super(400, message);
+        super(message);
     }
 }
