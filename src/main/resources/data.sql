@@ -1,8 +1,11 @@
 delete from user_likes_notes;
-delete from notes;
 DELETE FROM user_followed;
 DELETE FROM user_follower;
+DELETE from user_saved_notes;
+delete from notes;
 delete from users;
+
+
 
 -- Usuarios de prueba
 INSERT INTO users (user_id, username, password, email, code, rol)
