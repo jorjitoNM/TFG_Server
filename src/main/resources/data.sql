@@ -1,6 +1,5 @@
 delete from user_followed;
-delete from user_followers;
-delete from user_following;
+delete from user_follower;
 delete from user_likes_notes;
 delete from user_saved_notes;
 delete from notes;
@@ -52,7 +51,7 @@ VALUES (UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')),
 
 -- Also populate the user_followers and user_following tables for consistency
 -- (These would typically be maintained by application logic or triggers)
-INSERT INTO user_followers (user_id, follower_id)
+INSERT INTO user_follower (owner_id, follower_id)
 VALUES (UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')),
         UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', ''))),
        (UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')),
@@ -70,23 +69,6 @@ VALUES (UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')),
        (UNHEX(REPLACE('33333333-3333-3333-3333-333333333333', '-', '')),
         UNHEX(REPLACE('55555555-5555-5555-5555-555555555555', '-', '')));
 
-INSERT INTO user_following (user_id, following_id)
-VALUES (UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')),
-        UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', ''))),
-       (UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')),
-        UNHEX(REPLACE('33333333-3333-3333-3333-333333333333', '-', ''))),
-       (UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', '')),
-        UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', ''))),
-       (UNHEX(REPLACE('33333333-3333-3333-3333-333333333333', '-', '')),
-        UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', ''))),
-       (UNHEX(REPLACE('33333333-3333-3333-3333-333333333333', '-', '')),
-        UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', ''))),
-       (UNHEX(REPLACE('44444444-4444-4444-4444-444444444444', '-', '')),
-        UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', ''))),
-       (UNHEX(REPLACE('55555555-5555-5555-5555-555555555555', '-', '')),
-        UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', ''))),
-       (UNHEX(REPLACE('55555555-5555-5555-5555-555555555555', '-', '')),
-        UNHEX(REPLACE('33333333-3333-3333-3333-333333333333', '-', '')));
 
 INSERT INTO notes (id,note_type, content, created, latitude, longitude, privacy, title, owner_id, likes,end,start)
 VALUES (1,'Note', 'Just visited the Eiffel Tower! Amazing view from the top.', '2023-05-15 10:30:00', 48.8584, 2.2945,

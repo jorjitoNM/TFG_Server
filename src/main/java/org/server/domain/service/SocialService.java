@@ -26,20 +26,20 @@ public class SocialService {
     private final UserSavedRepository userSavedRepository;
 
     public boolean likeNote(Integer noteId, String username) {
-        User u = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFound(Constantes.USER_NOT_FOUND));
+        User u = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(Constantes.USER_NOT_FOUND));
         Note n = noteRepository.findById(noteId).orElseThrow(() -> new NoteNotFoundException(Constantes.NOTE_NOT_FOUND));
         Optional<UserLikedNote> likedNote = likesNotesRepository.findUserLikedNoteByUserAndNote(u, n);
         if (likedNote.isPresent())
             likedNote = Optional.of(likesNotesRepository.save(new UserLikedNote(u, n)));
         return likedNote.get().getUser().getUsername().equals(username);
-
-        Optional<UserLikedNote> existingLike = likesNotesRepository.findUserLikedNoteByUserAndNote(u, n);
-
-        if (existingLike.isPresent()) {
-            return false;
-        }
-        UserLikedNote newLike = likesNotesRepository.save(new UserLikedNote(u, n));
-        return newLike.getUser().getId().equals(userId);
+//
+//        Optional<UserLikedNote> existingLike = likesNotesRepository.findUserLikedNoteByUserAndNote(u, n);
+//
+//        if (existingLike.isPresent()) {
+//            return false;
+//        }
+//        UserLikedNote newLike = likesNotesRepository.save(new UserLikedNote(u, n));
+//        return newLike.getUser().getId().equals(userId);
     }
 
     public boolean addNoteToSaved(String username, int noteId) {
