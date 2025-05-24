@@ -15,7 +15,6 @@ public class UserDTO {
     private String username;
     private String password;
     private String email;
-    private String rol;
     private List<UserDTO> followers;
     private List<UserDTO> following;
     private List<NoteDTO> notes;
