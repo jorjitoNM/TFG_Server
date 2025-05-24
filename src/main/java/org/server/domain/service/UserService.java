@@ -3,13 +3,21 @@ package org.server.domain.service;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.server.common.Mapper;
+import org.server.common.Constantes;
+import org.server.dao.model.note.Note;
 import org.server.dao.model.user.User;
 import org.server.dao.model.user.UserLikedNote;
 import org.server.dao.model.user.UserSavedNote;
 import org.server.dao.repositories.NoteRepository;
 import org.server.dao.repositories.UserLikesNotesRepository;
+import org.server.dao.repositories.UserLikesNotesRepository;
 import org.server.dao.repositories.UserRepository;
 import org.server.dao.repositories.UserSavedRepository;
+import org.server.domain.errors.NoteNotFoundException;
+import org.server.ui.model.NoteDTO;
+import org.server.ui.model.UserDTO;
+import org.server.dao.repositories.UsersRepository;
+import org.server.domain.errors.UserNotFound;
 import org.server.domain.errors.NoteNotFoundException;
 import org.server.ui.model.NoteDTO;
 import org.server.ui.model.UserDTO;
@@ -137,5 +145,7 @@ public class UserService {
         );
     }
 
-
+    public User findByUsername(String username) {
+        return userRepository.findUserByUsername(username).orElseThrow(() -> new UserNotFound(Constantes.USER_NOT_FOUND));
+    }
 }
