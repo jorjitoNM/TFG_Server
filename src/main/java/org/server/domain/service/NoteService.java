@@ -24,11 +24,11 @@ public class NoteService {
 
 
     public List<NoteDTO> findNotesByGeographicArea(double latitude, double longitude) {
-        return noteRepository.findNotesByGeographicArea(latitude, longitude).stream().map(note -> mapper.toDTO(note,"user1")).toList();
+        return noteRepository.findNotesByGeographicArea(latitude, longitude).stream().map(note -> mapper.toDTO(note,"alice")).toList();
     }
 
 
-    public NoteDTO updateNoteFromDTO(NoteDTO noteDTO) {
+    public NoteDTO updateNoteFromDTO(NoteDTO noteDTO, String username) {
         Note existingNote = noteRepository.findById(noteDTO.getId())
                 .orElseThrow(() -> new NoteNotFoundException("Note not found with id: " + noteDTO.getId()));
 
@@ -39,10 +39,10 @@ public class NoteService {
         existingNote.setLongitude(noteDTO.getLongitude());
 
         Note savedNote = noteRepository.save(existingNote);
-        return mapper.toDTO(savedNote,"user1");
+        return mapper.toDTO(savedNote,username);
     }
 
-    public NoteDTO rateNoteAndReturnDTO(int noteId, int rating) {
+    public NoteDTO rateNoteAndReturnDTO(int noteId, int rating, String username) {
         if (rating < 0 || rating > 5) {
             throw new RatingOutOfBoundsException("Rating must be between 0 and 5");
         }
@@ -52,16 +52,16 @@ public class NoteService {
 
         note.setRating(rating);
         Note savedNote = noteRepository.save(note);
-        return mapper.toDTO(savedNote,"user1");
+        return mapper.toDTO(savedNote,username);
     }
 
-    public List<NoteDTO> getAllNotes() {
-        return noteRepository.findAll().stream().map(note -> mapper.toDTO(note,"user1")).toList();
+    public List<NoteDTO> getAllNotes(String username) {
+        return noteRepository.findAll().stream().map(note -> mapper.toDTO(note,username)).toList();
     }
 
-    public NoteDTO getNoteById(int noteId) {
+    public NoteDTO getNoteById(int noteId, String username) {
         Note n = noteRepository.findById(noteId).orElseThrow(() -> new NoteNotFoundException("Note not found with id: " + noteId));
-        return mapper.toDTO(n,"user1");
+        return mapper.toDTO(n,username);
     }
 
 
@@ -94,8 +94,8 @@ public class NoteService {
     }
 
 
-    public List<NoteDTO> findNotesByType(NoteType type) {
-        return noteRepository.findByType(type).stream().map(note -> mapper.toDTO(note,"user1")).toList();
+    public List<NoteDTO> findNotesByType(NoteType type, String username) {
+        return noteRepository.findByType(type).stream().map(note -> mapper.toDTO(note,username)).toList();
     }
 
     public List<NoteDTO> sortNoteList(boolean ascending) {

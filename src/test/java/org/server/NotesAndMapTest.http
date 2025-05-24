@@ -31,10 +31,28 @@ Content-Type: application/json
 PATCH http://localhost:8080/notes/550/rate?rating=8
 Content-Type: application/json
 
+### Login
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "username": "user1",
+  "password": "user1",
+  "email": "user1@example.com"
+}
+
+> {%
+    client.global.set("token", response.body.access);
+
+%}
 
 ### Obtener notas
 GET http://localhost:8080/notes
 Content-Type: application/json
+Authorization: Bearer {{token}}
+
+
+
 
 ### Obtener notas por id
 GET http://localhost:8080/notes/640

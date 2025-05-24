@@ -16,8 +16,6 @@ public interface NoteRepository extends JpaRepository<Note, Integer> {
     @Query("SELECT n FROM Note n WHERE n.latitude = :latitude AND n.longitude= :longitude AND n.privacy = 'PUBLIC'")
     List<Note> findNotesByGeographicArea(@Param("latitude") double latitude, @Param("longitude") double longitude);
 
-    @Query("SELECT n FROM Note n WHERE n.id = :noteId AND n.owner.username = :username")
-    Optional<Note> findByIdAndOwnerUsername(@Param("noteId") int noteId, @Param("username") String username);
 
     @Query("SELECT n FROM Note n WHERE n.type = :note_type")
     List<Note> findByType(@Param("note_type") NoteType noteType);

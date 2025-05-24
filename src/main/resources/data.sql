@@ -70,25 +70,25 @@ VALUES (UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')),
         UNHEX(REPLACE('55555555-5555-5555-5555-555555555555', '-', '')));
 
 
-INSERT INTO notes (id,note_type, content, created, latitude, longitude, privacy, title, owner_id, likes,end,start)
-VALUES (1,'Note', 'Just visited the Eiffel Tower! Amazing view from the top.', '2023-05-15 10:30:00', 48.8584, 2.2945,
-        'PUBLIC', 'Eiffel Tower Visit', UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')), 3, null,null),
-       (2,'Note', 'Working on a new project. Can''t wait to share it with everyone!', '2023-05-16 14:15:00', 37.7749,
-        -122.4194, 'FOLLOWERS', 'New Project', UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')), 2, null,null),
-       (3,'Note', 'Personal thoughts about life and the universe.', '2023-05-17 22:45:00', 34.0522, -118.2437, 'PRIVATE',
-        'Private Journal', UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')), 0, null,null),
-       (4,'EventNote', 'Tech conference next month. Register now!', '2023-05-18 09:00:00', 37.7833, -122.4167, 'PUBLIC',
+INSERT INTO notes (id,note_type, content, created, latitude, longitude, privacy, title, owner_id, likes,end,start, rating)
+VALUES (1,'CLASSIC', 'Just visited the Eiffel Tower! Amazing view from the top.', '2023-05-15 10:30:00', 48.8584, 2.2945,
+        'PUBLIC', 'Eiffel Tower Visit', UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')), 3, null,null,1),
+       (2,'CLASSIC', 'Working on a new project. Can''t wait to share it with everyone!', '2023-05-16 14:15:00', 37.7749,
+        -122.4194, 'FOLLOWERS', 'New Project', UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')), 2, null,null,1),
+       (3,'CLASSIC', 'Personal thoughts about life and the universe.', '2023-05-17 22:45:00', 34.0522, -118.2437, 'PRIVATE',
+        'Private Journal', UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')), 0, null,null,1),
+       (4,'EVENT', 'Tech conference next month. Register now!', '2023-05-18 09:00:00', 37.7833, -122.4167, 'PUBLIC',
         'Tech Conference', UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', '')), 5, '2023-06-15 09:00:00',
-        '2023-06-17 18:00:00'),
-       (5,'Note', 'Check out this cool café I found in downtown!', '2023-05-19 12:30:00', 40.7128, -74.0060, 'PUBLIC',
-        'Hidden Café', UNHEX(REPLACE('33333333-3333-3333-3333-333333333333', '-', '')), 1, null,null),
-       (6,'Note', 'My secret fishing spot. Shhh!', '2023-05-20 07:00:00', 45.4215, -75.6972, 'FOLLOWERS', 'Fishing Spot',
-        UNHEX(REPLACE('33333333-3333-3333-3333-333333333333', '-', '')), 1, null,null),
-       (7,'EventNote', 'Birthday party at my place!', '2023-05-21 18:00:00', 51.5074, -0.1278, 'FOLLOWERS',
+        '2023-06-17 18:00:00',1),
+       (5,'CLASSIC', 'Check out this cool café I found in downtown!', '2023-05-19 12:30:00', 40.7128, -74.0060, 'PUBLIC',
+        'Hidden Café', UNHEX(REPLACE('33333333-3333-3333-3333-333333333333', '-', '')), 1, null,null,1),
+       (6,'CLASSIC', 'My secret fishing spot. Shhh!', '2023-05-20 07:00:00', 45.4215, -75.6972, 'FOLLOWERS', 'Fishing Spot',
+        UNHEX(REPLACE('33333333-3333-3333-3333-333333333333', '-', '')), 1, null,null,1),
+       (7,'EVENT', 'Birthday party at my place!', '2023-05-21 18:00:00', 51.5074, -0.1278, 'FOLLOWERS',
         'Birthday Party', UNHEX(REPLACE('44444444-4444-4444-4444-444444444444', '-', '')), 2, '2023-06-10 19:00:00',
-        '2023-06-11 02:00:00'),
-       (8,'Note', 'Just finished reading an amazing book!', '2023-05-22 21:15:00', 35.6762, 139.6503, 'PUBLIC',
-        'Book Recommendation', UNHEX(REPLACE('55555555-5555-5555-5555-555555555555', '-', '')), 0, null,null);
+        '2023-06-11 02:00:00',1),
+       (8,'CLASSIC', 'Just finished reading an amazing book!', '2023-05-22 21:15:00', 35.6762, 139.6503, 'PUBLIC',
+        'Book Recommendation', UNHEX(REPLACE('55555555-5555-5555-5555-555555555555', '-', '')), 0, null,null,1);
 
 INSERT INTO notes (id,title, content, privacy, rating, owner_id, likes, created, latitude, longitude, note_type, start, end) VALUES
 -- Madrid centro (varias notas en la misma ubicación)

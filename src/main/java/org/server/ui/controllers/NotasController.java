@@ -10,6 +10,7 @@ import org.server.domain.service.NoteService;
 import org.server.domain.service.UserService;
 import org.server.ui.model.NoteDTO;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,12 +26,12 @@ public class NotasController {
 
     @GetMapping
     public ResponseEntity<List<NoteDTO>> getNotes() {
-        return ResponseEntity.ok(noteService.getAllNotes());
+        return ResponseEntity.ok(noteService.getAllNotes(SecurityContextHolder.getContext().getAuthentication().getName()));
     }
 
     @GetMapping("/{noteId}")
     public ResponseEntity<NoteDTO> getNote(@PathVariable int noteId) {
-        return ResponseEntity.ok(noteService.getNoteById(noteId));
+        return ResponseEntity.ok(noteService.getNoteById(noteId,SecurityContextHolder.getContext().getAuthentication().getName()));
     }
 
     @GetMapping("/area")
@@ -46,7 +47,7 @@ public class NotasController {
     public ResponseEntity<NoteDTO> updateNote(
             @RequestBody NoteDTO noteDTO
     ) {
-        NoteDTO updatedNote = noteService.updateNoteFromDTO(noteDTO);
+        NoteDTO updatedNote = noteService.updateNoteFromDTO(noteDTO, SecurityContextHolder.getContext().getAuthentication().getName());
         return ResponseEntity.ok(updatedNote);
     }
 
@@ -59,13 +60,13 @@ public class NotasController {
 
     @DeleteMapping("/saveds")
     public ResponseEntity<Void> deleteSavedNote(@RequestParam int noteId) {
-        userService.removeSavedNotesForUser("user1", noteId);
+        userService.removeSavedNotesForUser(SecurityContextHolder.getContext().getAuthentication().getName(), noteId);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/liked")
     public ResponseEntity<Void> deleteLikedNote(@RequestParam int noteId) {
-        userService.removeLikedNotesForUser("user1", noteId);
+        userService.removeLikedNotesForUser(SecurityContextHolder.getContext().getAuthentication().getName(), noteId);
         return ResponseEntity.noContent().build();
     }
 
@@ -74,23 +75,22 @@ public class NotasController {
             @PathVariable int id,
             @RequestParam int rating
     ) {
-        NoteDTO ratedNote = noteService.rateNoteAndReturnDTO(id, rating);
+        NoteDTO ratedNote = noteService.rateNoteAndReturnDTO(id, rating, SecurityContextHolder.getContext().getAuthentication().getName());
         return ResponseEntity.ok(ratedNote);
     }
 
 
     @PostMapping("/addNota")
     public ResponseEntity<Note> addNote(
-            @RequestBody Note note,
-            @RequestHeader(Constantes.X_USERNAME) String username
+            @RequestBody Note note
     ) {
-        Note createdNote = noteService.addNote(note, username);
+        Note createdNote = noteService.addNote(note, SecurityContextHolder.getContext().getAuthentication().getName());
         return ResponseEntity.ok(createdNote);
     }
 
     @GetMapping("/type")
     public ResponseEntity<List<NoteDTO>> getNotesByType(@RequestParam NoteType type) {
-        List<NoteDTO> notes = noteService.findNotesByType(type);
+        List<NoteDTO> notes = noteService.findNotesByType(type, SecurityContextHolder.getContext().getAuthentication().getName());
 
         if (notes.isEmpty()) {
             return ResponseEntity.noContent().build();
