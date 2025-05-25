@@ -1,4 +1,5 @@
 package org.server.domain.errors;
 
 
-public record ApiError(String message) {}
+public record ApiError(String message) {
+}

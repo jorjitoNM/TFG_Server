@@ -15,28 +15,31 @@ import org.server.domain.errors.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class SocialService {
+    private final UserLikesNotesRepository likesNotesRepository;
 
     private final UserRepository userRepository;
     private final NoteRepository noteRepository;
-    private final UserLikesNotesRepository likesNotesRepository;
     private final UserSavedRepository userSavedRepository;
 
-    public boolean likeNote(Integer noteId, UUID userId) {
-        User u = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(Constantes.USER_NOT_FOUND));
+    public boolean likeNote(Integer noteId, String username) {
+        User u = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(Constantes.USER_NOT_FOUND));
         Note n = noteRepository.findById(noteId).orElseThrow(() -> new NoteNotFoundException(Constantes.NOTE_NOT_FOUND));
-
-        Optional<UserLikedNote> existingLike = likesNotesRepository.findUserLikedNoteByUserAndNote(u, n);
-
-        if (existingLike.isPresent()) {
-            return false;
-        }
-        UserLikedNote newLike = likesNotesRepository.save(new UserLikedNote(u, n));
-        return newLike.getUser().getId().equals(userId);
+        Optional<UserLikedNote> likedNote = likesNotesRepository.findUserLikedNoteByUserAndNote(u, n);
+        if (likedNote.isPresent())
+            likedNote = Optional.of(likesNotesRepository.save(new UserLikedNote(u, n)));
+        return likedNote.get().getUser().getUsername().equals(username);
+//
+//        Optional<UserLikedNote> existingLike = likesNotesRepository.findUserLikedNoteByUserAndNote(u, n);
+//
+//        if (existingLike.isPresent()) {
+//            return false;
+//        }
+//        UserLikedNote newLike = likesNotesRepository.save(new UserLikedNote(u, n));
+//        return newLike.getUser().getId().equals(userId);
     }
 
     public boolean addNoteToSaved(String username, int noteId) {

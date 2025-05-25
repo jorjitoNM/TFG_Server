@@ -59,4 +59,10 @@ public class ExceptionHandlers {
         String message = ex.getMessage();
         return buildResponseEntity(new ApiError(message), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(DuplicatedUsernameOrPasswordException.class)
+    public ResponseEntity<ApiError> handleNoValidUserException(DuplicatedUsernameOrPasswordException ex) {
+        String message = ex.getMessage();
+        return buildResponseEntity(new ApiError(message), HttpStatus.BAD_REQUEST);
+    }
 }

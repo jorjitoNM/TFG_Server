@@ -5,11 +5,12 @@ import lombok.RequiredArgsConstructor;
 import org.server.common.Constantes;
 import org.server.dao.model.note.Note;
 import org.server.dao.model.note.NoteType;
+import org.server.domain.service.ImagesService;
 import org.server.domain.service.NoteService;
 import org.server.domain.service.UserService;
 import org.server.ui.model.NoteDTO;
-import org.server.ui.model.NoteMapDTO;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,19 +20,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NotasController {
 
-
-
+    private final ImagesService imagesService;
     private final NoteService noteService;
     private final UserService userService;
 
     @GetMapping
     public ResponseEntity<List<NoteDTO>> getNotes() {
-        return ResponseEntity.ok(noteService.getAllNotes());
+        return ResponseEntity.ok(noteService.getAllNotes(SecurityContextHolder.getContext().getAuthentication().getName()));
     }
 
     @GetMapping("/{noteId}")
     public ResponseEntity<NoteDTO> getNote(@PathVariable int noteId) {
-        return ResponseEntity.ok(noteService.getNoteById(noteId));
+        return ResponseEntity.ok(noteService.getNoteById(noteId,SecurityContextHolder.getContext().getAuthentication().getName()));
     }
 
     @GetMapping("/area")
@@ -57,6 +57,19 @@ public class NotasController {
         List<NoteDTO> savedNotes = userService.getSavedNotesForUser(username);
         return ResponseEntity.status(HttpServletResponse.SC_OK).body(savedNotes);
     }
+
+    @DeleteMapping("/saveds")
+    public ResponseEntity<Void> deleteSavedNote(@RequestParam int noteId) {
+        userService.removeSavedNotesForUser("user1", noteId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/liked")
+    public ResponseEntity<Void> deleteLikedNote(@RequestParam int noteId) {
+        userService.removeLikedNotesForUser("user1", noteId);
+        return ResponseEntity.noContent().build();
+    }
+
     @PatchMapping("/{id}/rate")
     public ResponseEntity<NoteDTO> rateNote(
             @PathVariable int id,
@@ -69,10 +82,9 @@ public class NotasController {
 
     @PostMapping("/addNota")
     public ResponseEntity<Note> addNote(
-            @RequestBody Note note,
-            @RequestHeader(Constantes.X_USERNAME) String username
+            @RequestBody Note note
     ) {
-        Note createdNote = noteService.addNote(note, username);
+        Note createdNote = noteService.addNote(note, SecurityContextHolder.getContext().getAuthentication().getName());
         return ResponseEntity.ok(createdNote);
     }
 
@@ -87,15 +99,17 @@ public class NotasController {
         return ResponseEntity.ok(notes);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteNote(@PathVariable int id) {
+        Note note = noteService.getNoteByIdNote(id);
+        noteService.deleteNote(note);
+        return ResponseEntity.status(HttpServletResponse.SC_NO_CONTENT).build();
+    }
+
     @GetMapping("/sorted")
     public ResponseEntity<List<NoteDTO>> getNotesSortedByLikes(
             @RequestParam boolean ascending) {
         List<NoteDTO> sortedNotes = noteService.sortNoteList(ascending);
         return ResponseEntity.status(HttpServletResponse.SC_OK).body(sortedNotes);
     }
-
-
-
-
-
 }
