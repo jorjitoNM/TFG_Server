@@ -84,29 +84,6 @@ public class UserService {
     }
 
     private UserDTO toDTO(User user) {
-//        List<UserDTO> followersDTO = user.getFollowers()
-//                .stream()
-//                .map(follower -> new UserDTO(
-//                        follower.getId(),
-//                        follower.getUsername(),
-//                        null,
-//                        follower.getEmail(),
-//                        null,
-//                        null,
-//                        null
-//                )).toList();
-//
-//        List<UserDTO> followingDTO = user.getFollowing()
-//                .stream()
-//                .map(following -> new UserDTO(
-//                        following.getId(),
-//                        following.getUsername(),
-//                        null,
-//                        following.getEmail(),
-//                        null,
-//                        null,
-//                        null
-//                )).toList();
 
         List<NoteDTO> notesDTO = user.getNotes()
                 .stream()

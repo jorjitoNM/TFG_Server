@@ -32,14 +32,7 @@ public class SocialService {
         if (likedNote.isPresent())
             likedNote = Optional.of(likesNotesRepository.save(new UserLikedNote(u, n)));
         return likedNote.get().getUser().getUsername().equals(username);
-//
-//        Optional<UserLikedNote> existingLike = likesNotesRepository.findUserLikedNoteByUserAndNote(u, n);
-//
-//        if (existingLike.isPresent()) {
-//            return false;
-//        }
-//        UserLikedNote newLike = likesNotesRepository.save(new UserLikedNote(u, n));
-//        return newLike.getUser().getId().equals(userId);
+
     }
 
     public boolean addNoteToSaved(String username, int noteId) {

@@ -6,7 +6,6 @@ import org.server.dao.model.user.User;
 import org.server.dao.repositories.UsersRepository;
 import org.server.domain.common.DomainConstants;
 import org.server.domain.errors.DuplicatedUsernameOrPasswordException;
-import org.server.domain.errors.UserNotFoundException;
 import org.server.security.jwt.JWTService;
 import org.server.security.jwt.Token;
 import org.server.ui.model.AuthenticationUser;
@@ -61,7 +60,5 @@ public class AuthenticationService {
         return jwtService.extractUsername(token);
     }
 
-    public User findByUsername(String username) {
-        return usersRepository.findUserByUsername(username).orElseThrow(() -> new UserNotFoundException(Constantes.USER_NOT_FOUND));
-    }
+
 }

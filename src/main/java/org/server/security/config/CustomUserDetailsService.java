@@ -23,7 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return User.builder()
                 .username(user.getUsername())
                 .password(user.getPassword())
-//                .accountLocked(!user.isEnabled())
+                .accountLocked(!user.isEnabled())
                 .build();
     }
 }

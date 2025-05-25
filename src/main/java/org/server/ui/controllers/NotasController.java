@@ -2,10 +2,8 @@ package org.server.ui.controllers;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.server.common.Constantes;
 import org.server.dao.model.note.Note;
 import org.server.dao.model.note.NoteType;
-import org.server.domain.service.ImagesService;
 import org.server.domain.service.NoteService;
 import org.server.domain.service.UserService;
 import org.server.ui.model.NoteDTO;
@@ -20,7 +18,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NotasController {
 
-    private final ImagesService imagesService;
     private final NoteService noteService;
     private final UserService userService;
 
@@ -47,7 +44,7 @@ public class NotasController {
     public ResponseEntity<NoteDTO> updateNote(
             @RequestBody NoteDTO noteDTO
     ) {
-        NoteDTO updatedNote = noteService.updateNoteFromDTO(noteDTO);
+        NoteDTO updatedNote = noteService.updateNoteFromDTO(noteDTO,SecurityContextHolder.getContext().getAuthentication().getName());
         return ResponseEntity.ok(updatedNote);
     }
 
@@ -75,7 +72,7 @@ public class NotasController {
             @PathVariable int id,
             @RequestParam int rating
     ) {
-        NoteDTO ratedNote = noteService.rateNoteAndReturnDTO(id, rating);
+        NoteDTO ratedNote = noteService.rateNoteAndReturnDTO(id, rating,SecurityContextHolder.getContext().getAuthentication().getName());
         return ResponseEntity.ok(ratedNote);
     }
 
@@ -90,7 +87,7 @@ public class NotasController {
 
     @GetMapping("/type")
     public ResponseEntity<List<NoteDTO>> getNotesByType(@RequestParam NoteType type) {
-        List<NoteDTO> notes = noteService.findNotesByType(type);
+        List<NoteDTO> notes = noteService.findNotesByType(type,SecurityContextHolder.getContext().getAuthentication().getName());
 
         if (notes.isEmpty()) {
             return ResponseEntity.noContent().build();
