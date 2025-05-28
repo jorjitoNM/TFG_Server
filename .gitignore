@@ -33,7 +33,7 @@ build/
 .vscode/
 
 ### .env ###
-src/*.env
+*.env
 
 ### Database initialization ###
 src/main/resources/data.sql
