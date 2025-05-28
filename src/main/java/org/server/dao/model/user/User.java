@@ -13,7 +13,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "users")
+@Table(
+        name = "users",
+        indexes = {@Index(name = "username_index", columnList = "username", unique = true)})
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
