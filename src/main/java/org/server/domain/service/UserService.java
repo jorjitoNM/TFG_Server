@@ -36,7 +36,7 @@ public class UserService {
     }
 
     public List<NoteDTO> getLikedNotes(String username) {
-        return userLikesNotesRepository.findAll().stream()
+        return userLikesNotesRepository.findAllByUserUsername(username).stream()
                 .map(UserLikedNote::getNote)
                 .map(it -> mapper.toDTO(it, username))
                 .toList();

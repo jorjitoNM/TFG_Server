@@ -49,21 +49,20 @@ public class NotasController {
     }
 
     @GetMapping("/saveds")
-    public ResponseEntity<List<NoteDTO>> getSavedNotes(
-            @RequestParam String username) {
-        List<NoteDTO> savedNotes = userService.getSavedNotesForUser(username);
+    public ResponseEntity<List<NoteDTO>> getSavedNotes() {
+        List<NoteDTO> savedNotes = userService.getSavedNotesForUser(SecurityContextHolder.getContext().getAuthentication().getName());
         return ResponseEntity.status(HttpServletResponse.SC_OK).body(savedNotes);
     }
 
     @DeleteMapping("/saveds")
     public ResponseEntity<Void> deleteSavedNote(@RequestParam int noteId) {
-        userService.removeSavedNotesForUser("user1", noteId);
+        userService.removeSavedNotesForUser(SecurityContextHolder.getContext().getAuthentication().getName(), noteId);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/liked")
     public ResponseEntity<Void> deleteLikedNote(@RequestParam int noteId) {
-        userService.removeLikedNotesForUser("user1", noteId);
+        userService.removeLikedNotesForUser(SecurityContextHolder.getContext().getAuthentication().getName(), noteId);
         return ResponseEntity.noContent().build();
     }
 
@@ -88,11 +87,9 @@ public class NotasController {
     @GetMapping("/type")
     public ResponseEntity<List<NoteDTO>> getNotesByType(@RequestParam NoteType type) {
         List<NoteDTO> notes = noteService.findNotesByType(type,SecurityContextHolder.getContext().getAuthentication().getName());
-
         if (notes.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-
         return ResponseEntity.ok(notes);
     }
 
