@@ -26,6 +26,7 @@ public class NotasController {
         return ResponseEntity.ok(noteService.getAllNotes(SecurityContextHolder.getContext().getAuthentication().getName()));
     }
 
+
     @GetMapping("/{noteId}")
     public ResponseEntity<NoteDTO> getNote(@PathVariable int noteId) {
         return ResponseEntity.ok(noteService.getNoteById(noteId,SecurityContextHolder.getContext().getAuthentication().getName()));
