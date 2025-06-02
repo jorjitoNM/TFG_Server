@@ -4,16 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-import java.util.UUID;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO {
-    private UUID id;
+public class AuthenticationUser {
     private String username;
     private String password;
     private String email;
-    private List<NoteDTO> notes;
 }

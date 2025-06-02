@@ -13,7 +13,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "users")
+@Table(
+        name = "users",
+        indexes = {@Index(name = "username_index", columnList = "username", unique = true)})
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -30,27 +32,20 @@ public class User {
     private String email;
 
     @Column(nullable = false)
-    private int code;
+    private String code;
 
     @Column(nullable = false)
-    private String rol;
+    private boolean enabled;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Note> notes;
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_followers",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "follower_id")
-    )
-    private List<User> followers;
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_following",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "following_id")
-    )
-    private List<User> following;
+    public User(String username, String password, String email, String code, boolean enabled) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.code = code;
+        this.enabled = enabled;
+    }
 }
