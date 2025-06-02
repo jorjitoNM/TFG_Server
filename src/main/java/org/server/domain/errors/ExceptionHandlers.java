@@ -1,10 +1,14 @@
 package org.server.domain.errors;
 
+import org.server.domain.common.DomainConstants;
 import org.server.domain.errors.images.CouldNotReadImageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.util.Map;
 
 @ControllerAdvice
 public class ExceptionHandlers {
@@ -65,4 +69,10 @@ public class ExceptionHandlers {
         String message = ex.getMessage();
         return buildResponseEntity(new ApiError(message), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ApiError> handleAuthenticationException() {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiError(DomainConstants.AUTH_ERROR));
+    }
+
 }
