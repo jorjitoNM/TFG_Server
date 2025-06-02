@@ -107,4 +107,11 @@ public class NotasController {
         List<NoteDTO> sortedNotes = noteService.sortNoteList(ascending);
         return ResponseEntity.status(HttpServletResponse.SC_OK).body(sortedNotes);
     }
+
+    @GetMapping("/antiquity")
+    public ResponseEntity<List<NoteDTO>> getNotesSortedByAntiquity(
+            @RequestParam boolean ascending) {
+        List<NoteDTO> sortedNotes = noteService.sortNoteListByAntiquity(ascending);
+        return ResponseEntity.status(HttpServletResponse.SC_OK).body(sortedNotes);
+    }
 }
