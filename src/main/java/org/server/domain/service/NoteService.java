@@ -111,4 +111,10 @@ public class NoteService {
     public Note getNoteByIdNote(int id) {
         return noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException("Note not found with id: " + id));
     }
+
+    public List<NoteDTO> sortNoteListByAntiquity(boolean ascending) {
+        Sort sort = Sort.by(ascending ? Sort.Direction.ASC : Sort.Direction.DESC, "created");
+        List<Note> notes = noteRepository.findAll(sort);
+        return notes.stream().map(note -> mapper.toDTO(note,"user1")).toList();
+    }
 }
