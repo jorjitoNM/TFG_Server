@@ -17,7 +17,6 @@ import org.server.ui.model.UserDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -37,51 +36,51 @@ public class UserService {
                 .toList();
     }
 
-    public List<NoteDTO> getLikedNotes(String username) {
-        return userLikesNotesRepository.findAllByUserUsername(username).stream()
+    public List<NoteDTO> getLikedNotes(String email) {
+        return userLikesNotesRepository.findAllByUserUsername(email).stream()
                 .map(UserLikedNote::getNote)
-                .map(it -> mapper.toDTO(it, username))
+                .map(it -> mapper.toDTO(it, email))
                 .toList();
     }
 
-    public List<NoteDTO> getSavedNotesForUser(String username) {
-        return userSavedRepository.findByUserUsername(username)
+    public List<NoteDTO> getSavedNotesForUser(String email) {
+        return userSavedRepository.findByUserEmail(email)
                 .stream()
                 .map(UserSavedNote::getNote)
-                .map(note -> mapper.toDTO(note, username))
+                .map(note -> mapper.toDTO(note, email))
                 .toList();
     }
 
 
     @Transactional
-    public void removeSavedNotesForUser(String username, int noteId) {
-        int deletedCount = userSavedRepository.deleteByNoteAndUser(noteId, username);
+    public void removeSavedNotesForUser(String email, int noteId) {
+        int deletedCount = userSavedRepository.deleteByNoteAndUser(noteId, email);
 
         if (deletedCount == 0) {
             throw new NoteNotFoundException(
-                    "Note with id " + noteId + " not found in saved notes for user " + username);
+                    "Note with id " + noteId + " not found in saved notes for user " + email);
         }
     }
 
     @Transactional
-    public void removeLikedNotesForUser(String username, int noteId) {
-        int deletedCount = userLikesNotesRepository.deleteByNoteAndUser(noteId, username);
+    public void removeLikedNotesForUser(String email, int noteId) {
+        int deletedCount = userLikesNotesRepository.deleteByNoteAndUser(noteId, email);
 
         if (deletedCount == 0) {
             throw new NoteNotFoundException(
-                    "Note with id " + noteId + " not found in liked notes for user " + username);
+                    "Note with id " + noteId + " not found in liked notes for user " + email);
         }
     }
 
 
-    public UserDTO getUser (String username) {
-        User user = userRepository.findByOwnUsername(username);
+    public UserDTO getUser (String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
         return toDTO(user);
     }
 
-    public List<NoteDTO> getNoteByUsername(String username) {
-        return noteRepository.findByOwnerUsername(username).stream()
-                .map(note -> mapper.toDTO(note, username))
+    public List<NoteDTO> getNoteByUsername(String email) {
+        return noteRepository.findByOwnerEmail(email).stream()
+                .map(note -> mapper.toDTO(note, email))
                 .toList();
     }
 
@@ -112,7 +111,7 @@ public class UserService {
         );
     }
 
-    public String getUserFirebaseId(String name) {
-        return userRepository.findByUsername(name).orElseThrow(UserNotFoundException::new).getFirebaseId().toString();
+    public String getUserFirebaseId(String email) {
+        return userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new).getFirebaseId().toString();
     }
 }

@@ -16,7 +16,7 @@ import java.util.UUID;
 @Table(
         schema = "nomada_tfg",
         name = "users",
-        indexes = {@Index(name = "username_index", columnList = "username", unique = true)})
+        indexes = {@Index(name = "email_index", columnList = "email", unique = true)})
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

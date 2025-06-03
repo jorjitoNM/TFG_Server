@@ -27,10 +27,10 @@ public class AuthenticationService {
     private final UsersRepository usersRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public Token generateToken(String username) {
+    public Token generateToken(String email) {
         return jwtService.generateToken(
-                Map.of(Constantes.USERNAME, username),
-                userDetailsService.loadUserByUsername(username));
+                Map.of(Constantes.EMAIL, email),
+                userDetailsService.loadUserByUsername(email));
     }
 
     public void register(AuthenticationUser authenticationUser) {
