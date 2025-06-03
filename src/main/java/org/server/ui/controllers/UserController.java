@@ -38,4 +38,9 @@ public class UserController {
     public ResponseEntity<List<NoteDTO>> likeNotes() {
         return ResponseEntity.ok(userService.getLikedNotes(SecurityContextHolder.getContext().getAuthentication().getName()));
     }
+
+    @GetMapping("/database_migration")
+    public void databaseMigration () {
+        userService.databaseMigration();
+    }
 }

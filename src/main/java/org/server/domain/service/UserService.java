@@ -11,11 +11,13 @@ import org.server.dao.repositories.UserLikesNotesRepository;
 import org.server.dao.repositories.UserRepository;
 import org.server.dao.repositories.UserSavedRepository;
 import org.server.domain.errors.NoteNotFoundException;
+import org.server.domain.errors.UserNotFoundException;
 import org.server.ui.model.NoteDTO;
 import org.server.ui.model.UserDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -106,8 +108,17 @@ public class UserService {
                 user.getUsername(),
                 null,
                 user.getEmail(),
-
                 notesDTO
         );
+    }
+
+    public String getUserFirebaseId(String name) {
+        return userRepository.findByUsername(name).orElseThrow(UserNotFoundException::new).getFirebaseId().toString();
+    }
+
+    public void databaseMigration () {
+        List<User> users = userRepository.findAll();
+        users.forEach(u -> u.setFirebaseId(UUID.randomUUID()));
+        userRepository.saveAll(users);
     }
 }

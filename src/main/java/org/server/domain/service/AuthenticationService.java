@@ -43,8 +43,7 @@ public class AuthenticationService {
                     authenticationUser.getUsername(),
                     passwordEncoder.encode(authenticationUser.getPassword()),
                     authenticationUser.getEmail(),
-                    code,
-                    false)
+                    code)
             );
         } catch (DataIntegrityViolationException e) {
             throw new DuplicatedUsernameOrPasswordException(DomainConstants.DUPLICATED_USERNAME_OR_PASSWORD);
