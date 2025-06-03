@@ -115,10 +115,4 @@ public class UserService {
     public String getUserFirebaseId(String name) {
         return userRepository.findByUsername(name).orElseThrow(UserNotFoundException::new).getFirebaseId().toString();
     }
-
-    public void databaseMigration () {
-        List<User> users = userRepository.findAll();
-        users.forEach(u -> u.setFirebaseId(UUID.randomUUID()));
-        userRepository.saveAll(users);
-    }
 }
