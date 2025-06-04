@@ -29,10 +29,9 @@ public class SocialService {
         User u = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(Constantes.USER_NOT_FOUND));
         Note n = noteRepository.findById(noteId).orElseThrow(() -> new NoteNotFoundException(Constantes.NOTE_NOT_FOUND));
         Optional<UserLikedNote> likedNote = likesNotesRepository.findUserLikedNoteByUserAndNote(u, n);
-        if (likedNote.isPresent())
+        if (likedNote.isEmpty())
             likedNote = Optional.of(likesNotesRepository.save(new UserLikedNote(u, n)));
         return likedNote.get().getUser().getUsername().equals(username);
-
     }
 
     public boolean addNoteToSaved(String username, int noteId) {

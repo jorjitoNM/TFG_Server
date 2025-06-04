@@ -36,7 +36,7 @@ public class UserService {
     }
 
     public List<NoteDTO> getLikedNotes(String username) {
-        return userLikesNotesRepository.findAll().stream()
+        return userLikesNotesRepository.findAllByUserUsername(username).stream()
                 .map(UserLikedNote::getNote)
                 .map(it -> mapper.toDTO(it, username))
                 .toList();
@@ -77,7 +77,7 @@ public class UserService {
         return toDTO(user);
     }
 
-    public List<NoteDTO> getNoteByUsername(String username) {
+    public List<NoteDTO> getNotesByUsername(String username) {
         return noteRepository.findByOwnerUsername(username).stream()
                 .map(note -> mapper.toDTO(note, username))
                 .toList();

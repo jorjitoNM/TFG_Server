@@ -4,11 +4,15 @@ import lombok.RequiredArgsConstructor;
 import org.server.dao.model.note.Event;
 import org.server.dao.model.note.Note;
 import org.server.dao.model.note.NoteType;
+import org.server.dao.model.user.User;
 import org.server.dao.repositories.UserLikesNotesRepository;
 import org.server.dao.repositories.UserSavedRepository;
 import org.server.ui.model.EventNoteDTO;
 import org.server.ui.model.NoteDTO;
+import org.server.ui.model.UserDTO;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -47,4 +51,20 @@ public class Mapper {
         dto.setLiked(userLikesNotesRepository.existsByUserUsernameAndNoteId(username, note.getId()));
         return dto;
     }
+
+    public UserDTO toUserDTO(User user) {
+        if (user == null) return null;
+        List<NoteDTO> noteDTOs = user.getNotes() != null
+                ? user.getNotes().stream().map(note -> toDTO(note, user.getUsername())).toList()
+                : List.of();
+
+        return new UserDTO(
+                user.getId(),
+                user.getUsername(),
+                null,
+                user.getEmail(),
+                noteDTOs
+        );
+    }
+
 }

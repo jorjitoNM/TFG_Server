@@ -1,13 +1,14 @@
 package org.server.domain.service;
 
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Not;
 import org.server.common.Mapper;
-import org.server.dao.model.note.Note;
-import org.server.dao.model.note.NoteType;
+import org.server.dao.model.note.*;
 import org.server.dao.model.user.User;
 import org.server.dao.repositories.NoteRepository;
 import org.server.dao.repositories.UserRepository;
 import org.server.domain.errors.*;
+import org.server.ui.model.EventNoteDTO;
 import org.server.ui.model.NoteDTO;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -43,7 +44,7 @@ public class NoteService {
     }
 
     public NoteDTO rateNoteAndReturnDTO(int noteId, int rating, String username) {
-        if (rating < 0 || rating > 5) {
+        if (rating < 0 || rating > 10) {
             throw new RatingOutOfBoundsException("Rating must be between 0 and 5");
         }
 
@@ -68,21 +69,44 @@ public class NoteService {
     }
 
 
-    public Note addNote(Note note, String username) {
+    public NoteDTO addNoteFromDTO(NoteDTO dto, String username) {
         User user = userRepository.findByOwnUsername(username);
-        if (user == null) {
-            throw new NoValidUserException("This user is not valid");
-        } else {
-            if (checkNote(note)) {
-                note.setOwner(user);
-                note.setCreated(LocalDateTime.now());
-                return noteRepository.save(note);
-            } else {
-                throw new InvalidNoteTypeException("Invalid note type");
-            }
+        if (user == null) throw new NoValidUserException("This user is not valid");
 
+        Note note;
+        switch(dto.getType()) {
+            case EVENT -> {
+                Event event = new Event();
+                EventNoteDTO eventDTO = (EventNoteDTO) dto;
+                event.setStart(LocalDateTime.parse(eventDTO.getStart()));
+                event.setEnd(LocalDateTime.parse(eventDTO.getEnd()));
+                note = event;
+            }
+            case HISTORICAL -> note = new Historical();
+            case FOOD -> note = new Food();
+            case LANDSCAPE -> note = new Landscape();
+            case CULTURAL -> note = new Cultural();
+            default -> note = new Note();
         }
+
+        // Campos comunes
+        note.setTitle(dto.getTitle());
+        note.setContent(dto.getContent());
+        note.setPrivacy(dto.getPrivacy());
+        note.setRating(dto.getRating());
+        note.setLatitude(dto.getLatitude());
+        note.setLongitude(dto.getLongitude());
+        note.setType(dto.getType());
+        note.setOwner(user);
+        note.setCreated(LocalDateTime.now());
+
+        Note savedNote = noteRepository.save(note);
+
+        // Mapear entidad a DTO usando el Mapper
+        return mapper.toDTO(savedNote, username);
     }
+
+
 
     public boolean checkNote(Note note) {
         if (note == null || note.getType() == null || note.getTitle().isEmpty()) {
@@ -113,5 +137,11 @@ public class NoteService {
 
     public Note getNoteByIdNote(int id) {
         return noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException("Note not found with id: " + id));
+    }
+
+    public List<NoteDTO> sortNoteListByAntiquity(boolean ascending) {
+        Sort sort = Sort.by(ascending ? Sort.Direction.ASC : Sort.Direction.DESC, "created");
+        List<Note> notes = noteRepository.findAll(sort);
+        return notes.stream().map(note -> mapper.toDTO(note,"user1")).toList();
     }
 }
