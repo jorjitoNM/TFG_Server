@@ -1,6 +1,7 @@
 package org.server.domain.service;
 
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Not;
 import org.server.common.Mapper;
 import org.server.dao.model.note.*;
 import org.server.dao.model.user.User;
@@ -43,7 +44,7 @@ public class NoteService {
     }
 
     public NoteDTO rateNoteAndReturnDTO(int noteId, int rating, String username) {
-        if (rating < 0 || rating > 5) {
+        if (rating < 0 || rating > 10) {
             throw new RatingOutOfBoundsException("Rating must be between 0 and 5");
         }
 
@@ -65,7 +66,7 @@ public class NoteService {
     }
 
 
-    public Note addNoteFromDTO(NoteDTO dto, String username) {
+    public NoteDTO addNoteFromDTO(NoteDTO dto, String username) {
         User user = userRepository.findByOwnUsername(username);
         if (user == null) throw new NoValidUserException("This user is not valid");
 
@@ -79,12 +80,13 @@ public class NoteService {
                 note = event;
             }
             case HISTORICAL -> note = new Historical();
-            case FOOD -> note = new Food(); // Si tienes Food
+            case FOOD -> note = new Food();
             case LANDSCAPE -> note = new Landscape();
             case CULTURAL -> note = new Cultural();
             default -> note = new Note();
         }
-        // set campos comunes
+
+        // Campos comunes
         note.setTitle(dto.getTitle());
         note.setContent(dto.getContent());
         note.setPrivacy(dto.getPrivacy());
@@ -94,7 +96,11 @@ public class NoteService {
         note.setType(dto.getType());
         note.setOwner(user);
         note.setCreated(LocalDateTime.now());
-        return noteRepository.save(note);
+
+        Note savedNote = noteRepository.save(note);
+
+        // Mapear entidad a DTO usando el Mapper
+        return mapper.toDTO(savedNote, username);
     }
 
 

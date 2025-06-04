@@ -75,4 +75,10 @@ public class ExceptionHandlers {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiError(DomainConstants.AUTH_ERROR));
     }
 
+    @ExceptionHandler(AutoFollowException.class)
+    public ResponseEntity<ApiError> handleAutoFollowException(AutoFollowException ex) {
+        String message = ex.getMessage();
+        return buildResponseEntity(new ApiError(message), HttpStatus.BAD_REQUEST);
+    }
+
 }

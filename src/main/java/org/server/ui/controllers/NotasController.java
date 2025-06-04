@@ -78,10 +78,10 @@ public class NotasController {
 
 
     @PostMapping("/addNota")
-    public ResponseEntity<Note> addNote(
+    public ResponseEntity<NoteDTO> addNote(
             @RequestBody NoteDTO noteDTO
     ) {
-        Note createdNote = noteService.addNoteFromDTO(noteDTO, SecurityContextHolder.getContext().getAuthentication().getName());
+        NoteDTO createdNote = noteService.addNoteFromDTO(noteDTO, SecurityContextHolder.getContext().getAuthentication().getName());
         return ResponseEntity.ok(createdNote);
     }
 
