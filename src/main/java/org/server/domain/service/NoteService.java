@@ -2,12 +2,12 @@ package org.server.domain.service;
 
 import lombok.RequiredArgsConstructor;
 import org.server.common.Mapper;
-import org.server.dao.model.note.Note;
-import org.server.dao.model.note.NoteType;
+import org.server.dao.model.note.*;
 import org.server.dao.model.user.User;
 import org.server.dao.repositories.NoteRepository;
 import org.server.dao.repositories.UserRepository;
 import org.server.domain.errors.*;
+import org.server.ui.model.EventNoteDTO;
 import org.server.ui.model.NoteDTO;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -65,21 +65,39 @@ public class NoteService {
     }
 
 
-    public Note addNote(Note note, String username) {
+    public Note addNoteFromDTO(NoteDTO dto, String username) {
         User user = userRepository.findByOwnUsername(username);
-        if (user == null) {
-            throw new NoValidUserException("This user is not valid");
-        } else {
-            if (checkNote(note)) {
-                note.setOwner(user);
-                note.setCreated(LocalDateTime.now());
-                return noteRepository.save(note);
-            } else {
-                throw new InvalidNoteTypeException("Invalid note type");
-            }
+        if (user == null) throw new NoValidUserException("This user is not valid");
 
+        Note note;
+        switch(dto.getType()) {
+            case EVENT -> {
+                Event event = new Event();
+                EventNoteDTO eventDTO = (EventNoteDTO) dto;
+                event.setStart(LocalDateTime.parse(eventDTO.getStart()));
+                event.setEnd(LocalDateTime.parse(eventDTO.getEnd()));
+                note = event;
+            }
+            case HISTORICAL -> note = new Historical();
+            case FOOD -> note = new Food(); // Si tienes Food
+            case LANDSCAPE -> note = new Landscape();
+            case CULTURAL -> note = new Cultural();
+            default -> note = new Note();
         }
+        // set campos comunes
+        note.setTitle(dto.getTitle());
+        note.setContent(dto.getContent());
+        note.setPrivacy(dto.getPrivacy());
+        note.setRating(dto.getRating());
+        note.setLatitude(dto.getLatitude());
+        note.setLongitude(dto.getLongitude());
+        note.setType(dto.getType());
+        note.setOwner(user);
+        note.setCreated(LocalDateTime.now());
+        return noteRepository.save(note);
     }
+
+
 
     public boolean checkNote(Note note) {
         if (note == null || note.getType() == null || note.getTitle().isEmpty()) {
