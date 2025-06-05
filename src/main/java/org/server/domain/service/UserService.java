@@ -28,10 +28,11 @@ public class UserService {
     private final NoteRepository noteRepository;
     private final Mapper mapper;
 
-    public List<UserDTO> getAllUserStartsWithText(String text) {
+    public List<UserDTO> getAllUserStartsWithTextExceptCurrent(String text, String username) {
 
         return userRepository.findAll().stream()
                 .filter(user -> user.getUsername().toLowerCase().startsWith(text.toLowerCase()))
+                .filter(user -> !user.getUsername().equals(username))
                 .map(this::toDTO)
                 .toList();
     }
