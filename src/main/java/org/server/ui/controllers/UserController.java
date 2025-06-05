@@ -25,8 +25,8 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<UserDTO>> getAllUserStartsWithText(@RequestParam String text) {
-        return ResponseEntity.ok(userService.getAllUserStartsWithText(text));
+    public ResponseEntity<List<UserDTO>> getAllUserStartsWithTextExceptCurrent(@RequestParam String text) {
+        return ResponseEntity.ok(userService.getAllUserStartsWithTextExceptCurrent(text, SecurityContextHolder.getContext().getAuthentication().getName()));
     }
 
     @GetMapping("/info/{username}")

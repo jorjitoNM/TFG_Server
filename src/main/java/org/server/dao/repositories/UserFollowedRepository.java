@@ -10,4 +10,5 @@ public interface UserFollowedRepository extends JpaRepository<UserFollowed, Inte
     boolean existsByOwnerAndFollowed(User owner, User followed);
     void deleteByOwnerAndFollowed(User owner, User followed);
     List<UserFollowed> findAllByOwner(User owner);
+    List<UserFollowed> findByOwnerUsername(String username);
 }

@@ -40,6 +40,16 @@ public class FollowController {
         return ResponseEntity.ok(userFollowService.getFollowing(username));
     }
 
+    @GetMapping("/followers")
+    public ResponseEntity<List<UserDTO>> getMyFollowers() {
+        return ResponseEntity.ok(userFollowService.getFollowers(SecurityContextHolder.getContext().getAuthentication().getName()));
+    }
+
+    @GetMapping("/following")
+    public ResponseEntity<List<UserDTO>> getMyFollowing() {
+        return ResponseEntity.ok(userFollowService.getFollowing(SecurityContextHolder.getContext().getAuthentication().getName()));
+    }
+
     @GetMapping("/is-following")
     public ResponseEntity<Boolean> isFollowing(@RequestParam String username) {
         String followerUsername = SecurityContextHolder.getContext().getAuthentication().getName();

@@ -16,6 +16,7 @@ import org.server.ui.model.UserDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -27,19 +28,21 @@ public class UserService {
     private final NoteRepository noteRepository;
     private final Mapper mapper;
 
-    public List<UserDTO> getAllUserStartsWithText(String text) {
+    public List<UserDTO> getAllUserStartsWithTextExceptCurrent(String text, String username) {
 
         return userRepository.findAll().stream()
                 .filter(user -> user.getUsername().toLowerCase().startsWith(text.toLowerCase()))
+                .filter(user -> !user.getUsername().equals(username))
                 .map(this::toDTO)
                 .toList();
     }
 
     public List<NoteDTO> getLikedNotes(String username) {
-        return userLikesNotesRepository.findAllByUserUsername(username).stream()
+        Optional<List<UserLikedNote>> likedNotes = userLikesNotesRepository.findAllByUserUsername(username);
+        return likedNotes.map(userLikedNotes -> userLikedNotes.stream()
                 .map(UserLikedNote::getNote)
-                .map(it -> mapper.toDTO(it, username))
-                .toList();
+                .map(note -> mapper.toDTO(note, username))
+                .toList()).orElseGet(List::of);
     }
 
     public List<NoteDTO> getSavedNotesForUser(String username) {
