@@ -32,27 +32,33 @@ PATCH http://localhost:8080/notes/550/rate?rating=8
 Content-Type: application/json
 
 ### Login
-POST http://localhost:8080/login
+POST https://informatica.iesquevedo.es/nomada/login
 Content-Type: application/json
 
 {
-  "username": "user1",
-  "password": "user1",
-  "email": "user1@example.com"
+  "username": "bob",
+  "password": "juan"
 }
 
 > {%
     client.global.set("token", response.body.access);
-
 %}
 
+
 ### Obtener notas
-GET http://localhost:8080/notes
+GET https://informatica.iesquevedo.es/nomada/notes
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
+### A
+GET https://informatica.iesquevedo.es/nomada/user/likes
+Content-Type: application/json
+Authorization: Bearer {{token}}
 
-
+### Buscar usuarios (con token si es necesario)
+GET https://informatica.iesquevedo.es/nomada/user/all?text=ali
+Content-Type: application/json
+Authorization: Bearer {{token}}
 
 ### Obtener notas por id
 GET http://localhost:8080/notes/640
