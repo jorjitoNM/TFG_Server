@@ -28,13 +28,23 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<UserDTO>> getAllUserStartsWithText(@RequestParam String text) {
-        return ResponseEntity.ok(userService.getAllUserStartsWithText(text));
+    public ResponseEntity<List<UserDTO>> getAllUserStartsWithTextExceptCurrent(@RequestParam String text) {
+        return ResponseEntity.ok(userService.getAllUserStartsWithTextExceptCurrent(text, SecurityContextHolder.getContext().getAuthentication().getName()));
+    }
+
+    @GetMapping("/info/{username}")
+    public ResponseEntity<UserDTO> getUserInfo(String username) {
+        return ResponseEntity.ok(userService.getUser(username));
     }
 
     @GetMapping("/notes")
     public ResponseEntity<List<NoteDTO>> getNote() {
-        return ResponseEntity.ok(userService.getNoteByUsername(SecurityContextHolder.getContext().getAuthentication().getName()));
+        return ResponseEntity.ok(userService.getNotesByUsername(SecurityContextHolder.getContext().getAuthentication().getName()));
+    }
+
+    @GetMapping("/notes/{username}")
+    public ResponseEntity<List<NoteDTO>> getNotesByUsername(@RequestParam String username) {
+        return ResponseEntity.ok(userService.getNotesByUsername(username));
     }
 
     @GetMapping("/likes")

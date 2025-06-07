@@ -78,12 +78,13 @@ public class NotasController {
 
 
     @PostMapping("/addNota")
-    public ResponseEntity<Note> addNote(
-            @RequestBody Note note
+    public ResponseEntity<NoteDTO> addNote(
+            @RequestBody NoteDTO noteDTO
     ) {
-        Note createdNote = noteService.addNote(note, SecurityContextHolder.getContext().getAuthentication().getName());
+        NoteDTO createdNote = noteService.addNoteFromDTO(noteDTO, SecurityContextHolder.getContext().getAuthentication().getName());
         return ResponseEntity.ok(createdNote);
     }
+
 
     @GetMapping("/type")
     public ResponseEntity<List<NoteDTO>> getNotesByType(@RequestParam NoteType type) {

@@ -8,7 +8,7 @@ delete from users;
 
 INSERT INTO users (user_id, code, email, enabled, password, username)
 VALUES (UNHEX(REPLACE('11111111-1111-1111-1111-111111111111', '-', '')), 'CODE111', 'alice@example.com', 1,
-        '$2a$10$XptfskLsT1l/bRTLRiiCgegjHmO79V3L/Ie6eXo1XzR1cF5W5JQ1O', 'alice'),
+        '$2a$10$NhOltW.hqtxA76eC3rX3C.e7iL7rvCiG0Id90qlAAR6zT72sFPYvi', 'alice'),
        (UNHEX(REPLACE('22222222-2222-2222-2222-222222222222', '-', '')), 'CODE222', 'bob@example.com', 1,
         '$2a$10$XptfskLsT1l/bRTLRiiCgegjHmO79V3L/Ie6eXo1XzR1cF5W5JQ1O', 'bob'),
        (UNHEX(REPLACE('33333333-3333-3333-3333-333333333333', '-', '')), 'CODE333', 'charlie@example.com', 1,

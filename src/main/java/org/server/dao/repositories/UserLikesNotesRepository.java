@@ -9,12 +9,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface UserLikesNotesRepository extends JpaRepository<UserLikedNote, Integer> {
 
-    Optional<UserLikedNote> findAllByUserUsername (String username);
+    Optional<List<UserLikedNote>> findAllByUserUsername (String username);
 
     Optional<UserLikedNote> findUserLikedNoteByUserAndNote(User user, Note note);
 
