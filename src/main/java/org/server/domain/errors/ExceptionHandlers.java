@@ -1,11 +1,15 @@
 package org.server.domain.errors;
 
+import lombok.Data;
 import org.server.domain.common.DomainConstants;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @ControllerAdvice
 public class ExceptionHandlers {
@@ -66,4 +70,17 @@ public class ExceptionHandlers {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiError(DomainConstants.AUTH_ERROR));
     }
 
+}
+
+@Data
+class ApiErrorResponse {
+    private int code;
+    private String message;
+    private LocalDateTime time;
+
+    public ApiErrorResponse (int code,String message, LocalDateTime time) {
+        this.code = code;
+        this.message = message;
+        this.time = time;
+    }
 }
