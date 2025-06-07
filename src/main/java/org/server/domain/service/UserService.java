@@ -38,11 +38,11 @@ public class UserService {
                 .toList();
     }
 
-    public List<NoteDTO> getLikedNotes(String username) {
-        Optional<List<UserLikedNote>> likedNotes = userLikesNotesRepository.findAllByUserEmail(username);
+    public List<NoteDTO> getLikedNotes(String email) {
+        Optional<List<UserLikedNote>> likedNotes = userLikesNotesRepository.findALlByUserEmail(email);
         return likedNotes.map(userLikedNotes -> userLikedNotes.stream()
                 .map(UserLikedNote::getNote)
-                .map(note -> mapper.toDTO(note, username))
+                .map(note -> mapper.toDTO(note, email))
                 .toList()).orElseGet(List::of);
     }
 
