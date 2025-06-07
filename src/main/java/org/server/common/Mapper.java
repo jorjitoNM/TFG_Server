@@ -21,7 +21,7 @@ public class Mapper {
     private final UserSavedRepository userSavedRepository;
     private final UserLikesNotesRepository userLikesNotesRepository;
 
-    public NoteDTO toDTO(Note note, String username) {
+    public NoteDTO toDTO(Note note, String email) {
         if (note == null) {
             return null;
         }
@@ -47,8 +47,8 @@ public class Mapper {
         dto.setLatitude(note.getLatitude());
         dto.setLongitude(note.getLongitude());
         dto.setType(note.getType());
-        dto.setSaved(userSavedRepository.existsByUserUsernameAndNoteId(username, note.getId()));
-        dto.setLiked(userLikesNotesRepository.existsByUserUsernameAndNoteId(username, note.getId()));
+        dto.setSaved(userSavedRepository.existsByUserEmailAndNoteId(email, note.getId()));
+        dto.setLiked(userLikesNotesRepository.existsByUserEmailAndNoteId(email, note.getId()));
         return dto;
     }
 

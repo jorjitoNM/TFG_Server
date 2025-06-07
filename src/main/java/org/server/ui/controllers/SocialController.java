@@ -24,7 +24,7 @@ public class SocialController {
 
     }
 
-    @PostMapping("/saveds")
+    @PostMapping("/saves")
     public ResponseEntity<Boolean> addNoteToSaved(@RequestParam int noteId) {
         return ResponseEntity.status(HttpServletResponse.SC_CREATED).body(service.addNoteToSaved(SecurityContextHolder.getContext().getAuthentication().getName(), noteId));
     }

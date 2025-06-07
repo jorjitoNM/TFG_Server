@@ -14,8 +14,8 @@ Content-Type: application/json
 %}
 
 
-### notas: ordena la lista ascendente
-DELETE http://localhost:8080/notes/1
-Authorization: Bearer  {{access}}
+### notas: eliminar una nota
+DELETE http://localhost:8080/notes/2
+Authorization: Bearer {{access}}
 Accept: application/json
 

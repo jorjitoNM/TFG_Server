@@ -3,11 +3,9 @@ POST http://localhost:8080/login
 Content-Type: application/json
 
 {
-  "username": "jorge",
-  "password": "1234",
-  "email": "jorge@gmail.com"
+  "password": "12345678",
+  "email": "hola@gmail.com"
 }
-
 
 > {%
     client.global.set("access", response.body.access)
@@ -15,24 +13,29 @@ Content-Type: application/json
 
 ### notas: ordena la lista ascendente
 GET http://localhost:8080/notes/sorted?ascending=true
+Authorization: Bearer {{access}}
 Accept: application/json
 
 ### notas: ordena la lista descendente
 GET http://localhost:8080/notes/sorted?ascending=false
+Authorization: Bearer {{access}}
 Accept: application/json
 
 ### savedNotas: da las notas guardadas de un usuario
-GET http://localhost:8080/notes/saveds?username=user1
+GET http://localhost:8080/notes/saves
+Authorization: Bearer {{access}}
 Accept: application/json
 
 ### savedNotas: guardar nota
-POST http://localhost:8080/social/saveds
+POST http://localhost:8080/social/saves
 Content-Type: application/x-www-form-urlencoded
+Authorization: Bearer {{access}}
 
-username=user1&noteId=409
+username=hola&noteId=3
 
-###
-DELETE http://localhost:8080/notes/saveds
+### savedNotas: Eliminar una nota de guardados
+DELETE http://localhost:8080/notes/saves
 Content-Type: application/x-www-form-urlencoded
+Authorization: Bearer {{access}}
 
 noteId=409

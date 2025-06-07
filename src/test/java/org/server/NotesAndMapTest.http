@@ -15,22 +15,27 @@ Content-Type: application/json
 
 ### ubicaciones: las de Madrid (devuelve 5)
 GET http://localhost:8080/notes/area?latitude=40.416775&longitude=-3.703790
+Authorization: Bearer {{access}}
 Accept: application/json
 
 ### lo mismo pero con menos radio
 GET http://localhost:8080/notes/area?latitude=40.416775&longitude=-3.703790
+Authorization: Bearer {{access}}
 Accept: application/json
 
 ### en Barcelona (1 nota)
 GET http://localhost:8080/notes/area?latitude=41.403706&longitude=2.173504
+Authorization: Bearer {{access}}
 Accept: application/json
 
 ### (vacio)
 GET http://localhost:8080/notes/area?latitude=42.0&longitude=-4.0
+Authorization: Bearer {{access}}
 Accept: application/json
 
 ### Actualizar nota
 PUT http://localhost:8080/notes
+Authorization: Bearer {{access}}
 Content-Type: application/json
 
 {
@@ -44,10 +49,12 @@ Content-Type: application/json
 
 ### Calificar nota
 PATCH http://localhost:8080/notes/550/rate?rating=8
+Authorization: Bearer {{access}}
 Content-Type: application/json
 
 ### Login
 POST http://localhost:8080/login
+Authorization: Bearer {{access}}
 Content-Type: application/json
 
 {
@@ -71,4 +78,5 @@ Authorization: Bearer {{token}}
 
 ### Obtener notas por id
 GET http://localhost:8080/notes/640
+Authorization: Bearer {{access}}
 Content-Type: application/json

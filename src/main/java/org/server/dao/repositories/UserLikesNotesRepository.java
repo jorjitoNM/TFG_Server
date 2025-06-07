@@ -19,7 +19,7 @@ public interface UserLikesNotesRepository extends JpaRepository<UserLikedNote, I
 
     Optional<UserLikedNote> findUserLikedNoteByUserAndNote(User user, Note note);
 
-    boolean existsByUserUsernameAndNoteId(String username, int noteId);
+    boolean existsByUserEmailAndNoteId(String email, int noteId);
 
     @Modifying
     @Query("DELETE FROM UserLikedNote us WHERE us.note.id = :noteId AND us.user.username = :username")

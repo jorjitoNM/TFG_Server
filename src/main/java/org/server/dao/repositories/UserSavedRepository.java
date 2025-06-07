@@ -12,7 +12,7 @@ public interface UserSavedRepository extends JpaRepository<UserSavedNote, Intege
     @Query("select u from UserSavedNote u join fetch u.note where u.user.email = :email")
     List<UserSavedNote> findByUserEmail (String email);
 
-    boolean existsByUserUsernameAndNoteId(String username, int noteId);
+    boolean existsByUserEmailAndNoteId(String email, int noteId);
 
     @Modifying
     @Query("DELETE FROM UserSavedNote us WHERE us.note.id = :noteId AND us.user.email = :email")

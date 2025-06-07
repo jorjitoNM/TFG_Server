@@ -49,13 +49,13 @@ public class NotasController {
         return ResponseEntity.ok(updatedNote);
     }
 
-    @GetMapping("/saveds")
+    @GetMapping("/saves")
     public ResponseEntity<List<NoteDTO>> getSavedNotes() {
         List<NoteDTO> savedNotes = userService.getSavedNotesForUser(SecurityContextHolder.getContext().getAuthentication().getName());
         return ResponseEntity.status(HttpServletResponse.SC_OK).body(savedNotes);
     }
 
-    @DeleteMapping("/saveds")
+    @DeleteMapping("/saves")
     public ResponseEntity<Void> deleteSavedNote(@RequestParam int noteId) {
         userService.removeSavedNotesForUser(SecurityContextHolder.getContext().getAuthentication().getName(), noteId);
         return ResponseEntity.noContent().build();
