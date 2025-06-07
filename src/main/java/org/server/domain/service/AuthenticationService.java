@@ -27,10 +27,10 @@ public class AuthenticationService {
     private final UsersRepository usersRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public Token generateToken(String username) {
+    public Token generateToken(String email) {
         return jwtService.generateToken(
-                Map.of(Constantes.USERNAME, username),
-                userDetailsService.loadUserByUsername(username));
+                Map.of(Constantes.EMAIL, email),
+                userDetailsService.loadUserByUsername(email));
     }
 
     public void register(AuthenticationUser authenticationUser) {
@@ -43,8 +43,7 @@ public class AuthenticationService {
                     authenticationUser.getUsername(),
                     passwordEncoder.encode(authenticationUser.getPassword()),
                     authenticationUser.getEmail(),
-                    code,
-                    false)
+                    code)
             );
         } catch (DataIntegrityViolationException e) {
             throw new DuplicatedUsernameOrPasswordException(DomainConstants.DUPLICATED_USERNAME_OR_PASSWORD);

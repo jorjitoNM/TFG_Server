@@ -28,9 +28,9 @@ public class AuthenticationController {
     public ResponseEntity<Token> login (@RequestBody AuthenticationUser authenticationUser) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        authenticationUser.getUsername(),
+                        authenticationUser.getEmail(),
                         authenticationUser.getPassword()));
-        return ResponseEntity.ok(service.generateToken(authenticationUser.getUsername()));
+        return ResponseEntity.ok(service.generateToken(authenticationUser.getEmail()));
     }
 
     @PostMapping(UiConstants.REGISTER_URL)

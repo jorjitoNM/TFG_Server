@@ -25,24 +25,24 @@ public class SocialService {
     private final NoteRepository noteRepository;
     private final UserSavedRepository userSavedRepository;
 
-    public boolean likeNote(Integer noteId, String username) {
-        User u = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(Constantes.USER_NOT_FOUND));
+    public boolean likeNote(Integer noteId, String email) {
+        User u = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(Constantes.USER_NOT_FOUND));
         Note n = noteRepository.findById(noteId).orElseThrow(() -> new NoteNotFoundException(Constantes.NOTE_NOT_FOUND));
         Optional<UserLikedNote> likedNote = likesNotesRepository.findUserLikedNoteByUserAndNote(u, n);
         if (likedNote.isEmpty())
             likedNote = Optional.of(likesNotesRepository.save(new UserLikedNote(u, n)));
-        return likedNote.get().getUser().getUsername().equals(username);
+        return likedNote.get().getUser().getEmail().equals(email);
     }
 
-    public boolean addNoteToSaved(String username, int noteId) {
-        boolean alreadyExists = userSavedRepository.findByUserUsername(username).stream()
+    public boolean addNoteToSaved(String email, int noteId) {
+        boolean alreadyExists = userSavedRepository.findByUserEmail(email).stream()
                 .anyMatch(savedNote -> savedNote.getNote().getId() == (noteId));
 
         if (alreadyExists) {
             return false;
         }
         UserSavedNote newSavedNote = new UserSavedNote();
-        User user = userRepository.findByUsername(username)
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado"));
         Note note = noteRepository.findById(noteId)
                 .orElseThrow(() -> new NoteNotFoundException("Nota no encontrada"));

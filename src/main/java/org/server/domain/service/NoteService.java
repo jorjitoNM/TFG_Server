@@ -67,7 +67,7 @@ public class NoteService {
 
 
     public NoteDTO addNoteFromDTO(NoteDTO dto, String username) {
-        User user = userRepository.findByOwnUsername(username);
+        User user = userRepository.findByEmail(username).orElseThrow(UserNotFoundException::new);
         if (user == null) throw new NoValidUserException("This user is not valid");
 
         Note note;

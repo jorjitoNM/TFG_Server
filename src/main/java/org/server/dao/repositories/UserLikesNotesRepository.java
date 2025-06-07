@@ -15,7 +15,7 @@ import java.util.Optional;
 @Repository
 public interface UserLikesNotesRepository extends JpaRepository<UserLikedNote, Integer> {
 
-    Optional<List<UserLikedNote>> findAllByUserUsername (String username);
+    Optional<List<UserLikedNote>> findALlByUserEmail (String username);
 
     Optional<UserLikedNote> findUserLikedNoteByUserAndNote(User user, Note note);
 

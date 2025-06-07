@@ -9,13 +9,13 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface UserSavedRepository extends JpaRepository<UserSavedNote, Integer> {
-    @Query("select u from UserSavedNote u join fetch u.note where u.user.username = :username")
-    List<UserSavedNote> findByUserUsername(String username);
+    @Query("select u from UserSavedNote u join fetch u.note where u.user.email = :email")
+    List<UserSavedNote> findByUserEmail (String email);
 
     boolean existsByUserUsernameAndNoteId(String username, int noteId);
 
     @Modifying
-    @Query("DELETE FROM UserSavedNote us WHERE us.note.id = :noteId AND us.user.username = :username")
-    int deleteByNoteAndUser(@Param("noteId") int noteId, @Param("username") String username);
+    @Query("DELETE FROM UserSavedNote us WHERE us.note.id = :noteId AND us.user.email = :email")
+    int deleteByNoteAndUser(@Param("noteId") int noteId, @Param("email") String email);
 
 }

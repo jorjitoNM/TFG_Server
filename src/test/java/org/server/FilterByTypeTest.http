@@ -1,12 +1,28 @@
+###
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "username": "jorge",
+  "password": "1234",
+  "email": "jorge@gmail.com"
+}
+
+
+> {%
+    client.global.set("access", response.body.access)
+%}
+
+
 ### GET request to get notes by type with no content
 GET http://localhost:8080/notes/type
     ?type=NON_EXISTENT_TYPE
+Authorization: Bearer {{access}}
 Content-Type: application/json
 
 
 ### GET request to get notes by type HISTORICAL
 GET http://localhost:8080/notes/type
     ?type=CLASSIC
+Authorization: Bearer {{access}}
 Content-Type: application/json
-
-###
