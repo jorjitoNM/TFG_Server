@@ -1,3 +1,18 @@
+###
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "username": "jorge",
+  "password": "1234",
+  "email": "jorge@gmail.com"
+}
+
+
+> {%
+    client.global.set("access", response.body.access)
+%}
+
 ### ubicaciones: las de Madrid (devuelve 5)
 GET http://localhost:8080/notes/area?latitude=40.416775&longitude=-3.703790
 Accept: application/json

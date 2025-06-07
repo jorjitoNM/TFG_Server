@@ -39,12 +39,12 @@ public class UserController {
 
     @GetMapping("/notes")
     public ResponseEntity<List<NoteDTO>> getNote() {
-        return ResponseEntity.ok(userService.getNotesByUsername(SecurityContextHolder.getContext().getAuthentication().getName()));
+        return ResponseEntity.ok(userService.getNoteByEmail(SecurityContextHolder.getContext().getAuthentication().getName()));
     }
 
     @GetMapping("/notes/{username}")
     public ResponseEntity<List<NoteDTO>> getNotesByUsername(@RequestParam String username) {
-        return ResponseEntity.ok(userService.getNotesByUsername(username));
+        return ResponseEntity.ok(userService.getNoteByEmail(username));
     }
 
     @GetMapping("/likes")

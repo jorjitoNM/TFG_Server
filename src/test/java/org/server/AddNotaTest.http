@@ -1,7 +1,22 @@
+###
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "username": "jorge",
+  "password": "1234",
+  "email": "jorge@gmail.com"
+}
+
+
+> {%
+    client.global.set("access", response.body.access)
+%}
+
 ### Añadimos la nota
 POST http://localhost:8080/notes/addNota
+Authorization: Bearer  {{access}}
 Content-Type: application/json
-X-Username: user1
 
 {
   "title": "Nota de prueba",

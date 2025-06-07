@@ -81,7 +81,7 @@ public class UserService {
         return toDTO(user);
     }
 
-    public List<NoteDTO> getNoteByUsername(String email) {
+    public List<NoteDTO> getNoteByEmail(String email) {
         return noteRepository.findByOwnerEmail(email).stream()
                 .map(note -> mapper.toDTO(note, email))
                 .toList();

@@ -31,7 +31,7 @@ public class SocialService {
         Optional<UserLikedNote> likedNote = likesNotesRepository.findUserLikedNoteByUserAndNote(u, n);
         if (likedNote.isEmpty())
             likedNote = Optional.of(likesNotesRepository.save(new UserLikedNote(u, n)));
-        return likedNote.get().getUser().getUsername().equals(email);
+        return likedNote.get().getUser().getEmail().equals(email);
     }
 
     public boolean addNoteToSaved(String email, int noteId) {
