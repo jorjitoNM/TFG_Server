@@ -44,6 +44,7 @@ public class UserService {
         return likedNotes.map(userLikedNotes -> userLikedNotes.stream()
                 .map(UserLikedNote::getNote)
                 .map(note -> mapper.toDTO(note, email))
+                .toList()).orElseGet(List::of);
     }
 
     public List<NoteDTO> getSavedNotesForUser(String email) {
