@@ -67,6 +67,7 @@ public class NotasController {
         return ResponseEntity.noContent().build();
     }
 
+
     @PatchMapping("/{id}/rate")
     public ResponseEntity<NoteDTO> rateNote(
             @PathVariable int id,
