@@ -61,7 +61,6 @@ public class Mapper {
         return new UserDTO(
                 user.getId(),
                 user.getUsername(),
-                null,
                 user.getEmail(),
                 noteDTOs
         );
