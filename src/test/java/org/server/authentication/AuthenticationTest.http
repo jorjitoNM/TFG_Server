@@ -3,10 +3,14 @@ POST http://localhost:8080/register
 Content-Type: application/json
 
 {
-  "username": "jorge",
-  "password": "1234",
-  "email": "jorge@gmail.com"
+  "username": "jorge_official",
+  "password": "12345678",
+  "email": "jorgenovillo2005@gmail.com"
 }
+
+###
+GET http://localhost:8080/confirm?
+    code=60wFPp_iXY2lywAv9Nyy1A==
 
 
 ###
@@ -19,8 +23,11 @@ Content-Type: application/json
   "email": "jorge@gmail.com"
 }
 
+> {%
+    client.global.set("access", response.body.access)
+%}
 
 
 ###
 GET http://localhost:8080/refresh
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVzZXIxIiwic3ViIjoidXNlcjEiLCJpYXQiOjE3NDgxMTE0NjYsImV4cCI6MTc0ODcxNjI2Nn0.nK8P9wc97_Rjakdj8vKFGXrnbaN8FP2RVewv9XRaOy4
+Authorization: Bearer {{access}}

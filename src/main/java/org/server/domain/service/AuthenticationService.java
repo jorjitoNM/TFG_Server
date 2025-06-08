@@ -6,9 +6,11 @@ import org.server.dao.model.user.User;
 import org.server.dao.repositories.UsersRepository;
 import org.server.domain.common.DomainConstants;
 import org.server.domain.errors.DuplicatedUsernameOrPasswordException;
+import org.server.domain.errors.UserNotFoundException;
 import org.server.security.jwt.JWTService;
 import org.server.security.jwt.Token;
 import org.server.ui.model.AuthenticationUser;
+import org.server.utils.MailComponent;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,6 +28,7 @@ public class AuthenticationService {
     private final UserDetailsService userDetailsService;
     private final UsersRepository usersRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MailComponent mailComponent;
 
     public Token generateToken(String email) {
         return jwtService.generateToken(
@@ -48,6 +51,8 @@ public class AuthenticationService {
         } catch (DataIntegrityViolationException e) {
             throw new DuplicatedUsernameOrPasswordException(DomainConstants.DUPLICATED_USERNAME_OR_PASSWORD);
         }
+        mailComponent.sendVerificationEmail(authenticationUser.getEmail(),authenticationUser.getUsername(),
+                "https://informatica.iesquevedo.es/nomada/confirm?code=" + code);
     }
 
     public boolean isTokenValid(String token) {
@@ -60,4 +65,9 @@ public class AuthenticationService {
     }
 
 
+    public void confirmUser(String code) {
+        User u = usersRepository.findUserByCode(code).orElseThrow(UserNotFoundException::new);
+        u.setEnabled(true);
+        usersRepository.save(u);
+    }
 }
