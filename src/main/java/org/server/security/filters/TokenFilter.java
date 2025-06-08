@@ -66,6 +66,7 @@ public class TokenFilter extends OncePerRequestFilter {
         String path = request.getServletPath();
         return path.equals(UiConstants.LOGIN_URL)
                 || path.equals(UiConstants.REGISTER_URL)
-                || path.equals(UiConstants.REFRESH_URL);
+                || path.equals(UiConstants.REFRESH_URL)
+                || path.equals(UiConstants.CONFIRM_URL);
     }
 }

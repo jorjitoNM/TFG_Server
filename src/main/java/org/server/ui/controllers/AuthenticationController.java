@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.server.common.Constantes;
 import org.server.domain.service.AuthenticationService;
 import org.server.security.common.SecurityConstants;
 import org.server.security.jwt.Token;
@@ -12,10 +13,7 @@ import org.server.ui.model.AuthenticationUser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -51,5 +49,11 @@ public class AuthenticationController {
                     service.extractUsername(token)));
         else
             return ResponseEntity.status(HttpServletResponse.SC_NOT_ACCEPTABLE).build();
+    }
+
+    @GetMapping(UiConstants.CONFIRM_URL)
+    public ResponseEntity<String> confirm(@RequestParam("code") String code) {
+        service.confirmUser(code);
+        return ResponseEntity.status(HttpServletResponse.SC_ACCEPTED).body(Constantes.ACCEPTED);
     }
 }
