@@ -52,6 +52,9 @@ public class NoteService {
                 .orElseThrow(() -> new NoteNotAccessException("Note not found or you don't have permission to rate it"));
 
         note.setRating(rating);
+
+
+
         Note savedNote = noteRepository.save(note);
         return mapper.toDTO(savedNote,username);
     }
