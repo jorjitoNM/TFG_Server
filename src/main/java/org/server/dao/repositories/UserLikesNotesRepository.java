@@ -22,6 +22,10 @@ public interface UserLikesNotesRepository extends JpaRepository<UserLikedNote, I
     boolean existsByUserEmailAndNoteId(String email, int noteId);
 
     @Modifying
+    @Query("DELETE FROM UserLikedNote uln WHERE uln.note.id = :noteId")
+    void deleteAllByNoteId(@Param("noteId") int noteId);
+
+    @Modifying
     @Query("DELETE FROM UserLikedNote us WHERE us.note.id = :noteId AND us.user.email = :email")
     int deleteByNoteAndUser(@Param("noteId") int noteId, @Param("email") String email);
 }

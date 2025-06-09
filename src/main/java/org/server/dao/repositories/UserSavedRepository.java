@@ -13,7 +13,9 @@ public interface UserSavedRepository extends JpaRepository<UserSavedNote, Intege
     List<UserSavedNote> findByUserEmail (String email);
 
     boolean existsByUserEmailAndNoteId(String email, int noteId);
-
+    @Modifying
+    @Query("DELETE FROM UserSavedNote usn WHERE usn.note.id = :noteId")
+    void deleteAllByNoteId(@Param("noteId") int noteId);
     @Modifying
     @Query("DELETE FROM UserSavedNote us WHERE us.note.id = :noteId AND us.user.email = :email")
     int deleteByNoteAndUser(@Param("noteId") int noteId, @Param("email") String email);

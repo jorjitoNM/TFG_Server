@@ -106,14 +106,14 @@ public class NotasController {
     @GetMapping("/sorted")
     public ResponseEntity<List<NoteDTO>> getNotesSortedByLikes(
             @RequestParam boolean ascending) {
-        List<NoteDTO> sortedNotes = noteService.sortNoteList(ascending);
+        List<NoteDTO> sortedNotes = noteService.sortNoteList(ascending, SecurityContextHolder.getContext().getAuthentication().getName());
         return ResponseEntity.status(HttpServletResponse.SC_OK).body(sortedNotes);
     }
 
     @GetMapping("/antiquity")
     public ResponseEntity<List<NoteDTO>> getNotesSortedByAntiquity(
             @RequestParam boolean ascending) {
-        List<NoteDTO> sortedNotes = noteService.sortNoteListByAntiquity(ascending);
+        List<NoteDTO> sortedNotes = noteService.sortNoteListByAntiquity(ascending, SecurityContextHolder.getContext().getAuthentication().getName());
         return ResponseEntity.status(HttpServletResponse.SC_OK).body(sortedNotes);
     }
 }

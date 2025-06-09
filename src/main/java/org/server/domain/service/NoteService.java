@@ -1,12 +1,15 @@
 package org.server.domain.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.weaver.ast.Not;
 import org.server.common.Mapper;
 import org.server.dao.model.note.*;
 import org.server.dao.model.user.User;
 import org.server.dao.repositories.NoteRepository;
+import org.server.dao.repositories.UserLikesNotesRepository;
 import org.server.dao.repositories.UserRepository;
+import org.server.dao.repositories.UserSavedRepository;
 import org.server.domain.errors.*;
 import org.server.ui.model.EventNoteDTO;
 import org.server.ui.model.NoteDTO;
@@ -22,7 +25,8 @@ public class NoteService {
     private final NoteRepository noteRepository;
     private final UserRepository userRepository;
     private final Mapper mapper;
-
+    private final UserSavedRepository userSavedNoteRepository;
+    private final UserLikesNotesRepository userLikedNoteRepository;
 
     public List<NoteDTO> findNotesByGeographicArea(double latitude, double longitude) {
         return noteRepository.findNotesByGeographicArea(latitude, longitude).stream().map(note -> mapper.toDTO(note,"alice")).toList();
@@ -125,23 +129,27 @@ public class NoteService {
         return noteRepository.findByType(type).stream().map(note -> mapper.toDTO(note,username)).toList();
     }
 
-    public List<NoteDTO> sortNoteList(boolean ascending) {
+    public List<NoteDTO> sortNoteList(boolean ascending, String email) {
         Sort sort = Sort.by(ascending ? Sort.Direction.ASC : Sort.Direction.DESC, "likes");
         List<Note> notes = noteRepository.findAll(sort);
-        return notes.stream().map(note -> mapper.toDTO(note,"user1")).toList();
+        return notes.stream().map(note -> mapper.toDTO(note,email)).toList();
     }
-
+    @Transactional
     public void deleteNote(Note note) {
+        // Eliminar de user_saved_notes
+        userSavedNoteRepository.deleteAllByNoteId(note.getId());
+        // Eliminar de user_liked_notes
+        userLikedNoteRepository.deleteAllByNoteId(note.getId());
+        // Finalmente eliminar la nota
         noteRepository.delete(note);
     }
-
     public Note getNoteByIdNote(int id) {
         return noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException("Note not found with id: " + id));
     }
 
-    public List<NoteDTO> sortNoteListByAntiquity(boolean ascending) {
+    public List<NoteDTO> sortNoteListByAntiquity(boolean ascending, String email) {
         Sort sort = Sort.by(ascending ? Sort.Direction.ASC : Sort.Direction.DESC, "created");
         List<Note> notes = noteRepository.findAll(sort);
-        return notes.stream().map(note -> mapper.toDTO(note,"user1")).toList();
+        return notes.stream().map(note -> mapper.toDTO(note,email)).toList();
     }
 }
