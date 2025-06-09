@@ -2,7 +2,6 @@ package org.server.domain.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ast.Not;
 import org.server.common.Mapper;
 import org.server.dao.model.note.*;
 import org.server.dao.model.user.User;
@@ -93,7 +92,6 @@ public class NoteService {
             default -> note = new Note();
         }
 
-        // Campos comunes
         note.setTitle(dto.getTitle());
         note.setContent(dto.getContent());
         note.setPrivacy(dto.getPrivacy());
@@ -106,7 +104,6 @@ public class NoteService {
 
         Note savedNote = noteRepository.save(note);
 
-        // Mapear entidad a DTO usando el Mapper
         return mapper.toDTO(savedNote, username);
     }
 
@@ -136,11 +133,8 @@ public class NoteService {
     }
     @Transactional
     public void deleteNote(Note note) {
-        // Eliminar de user_saved_notes
         userSavedNoteRepository.deleteAllByNoteId(note.getId());
-        // Eliminar de user_liked_notes
         userLikedNoteRepository.deleteAllByNoteId(note.getId());
-        // Finalmente eliminar la nota
         noteRepository.delete(note);
     }
     public Note getNoteByIdNote(int id) {

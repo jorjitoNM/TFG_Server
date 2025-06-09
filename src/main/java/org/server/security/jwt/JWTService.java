@@ -41,12 +41,6 @@ public class JWTService {
         return new Token(buildToken(extraClaims, userDetails, jwtExpiration), buildToken(extraClaims, userDetails, refreshExpiration));
     }
 
-    public String generateLogin (
-            Map<String, Object> extraClaims,
-            UserDetails userDetails
-    ) {
-        return buildToken(extraClaims, userDetails, jwtExpiration);
-    }
 
     private String buildToken(
             Map<String, Object> extraClaims,

@@ -9,7 +9,6 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.io.IOException;
 
 @Component
 @Log4j2
