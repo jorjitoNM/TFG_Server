@@ -12,6 +12,7 @@ import org.server.security.jwt.Token;
 import org.server.ui.model.AuthenticationUser;
 import org.server.utils.MailComponent;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,7 @@ public class AuthenticationService {
                 Map.of(Constantes.EMAIL, email),
                 userDetailsService.loadUserByUsername(email));
     }
-
+    @Async
     public void register(AuthenticationUser authenticationUser) {
         byte[] randomCode = new byte[16];
         SecureRandom sr = new SecureRandom();
